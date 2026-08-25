@@ -3,7 +3,27 @@
 Dated, honest log of what was tried, what worked, what didn't, and why.
 Negative results and abandoned approaches are kept here, not deleted —
 they're part of the evidence trail for the reviewer and for anyone picking
-this up later.
+this up later. Follow the working discipline in `README.md` — in
+particular, check this log before starting a new approach so a dead end
+isn't silently repeated.
+
+### Entry template for any attempted approach
+
+```
+### <date> — <approach name>
+
+- What it is / what it's trying to establish.
+- Lemmas or results invoked, with exact hypotheses, and confirmation each
+  hypothesis actually holds here (or an explicit "unverified assumption"
+  flag if it doesn't hold or can't be checked).
+- What was checked to try to break it (small cases, boundary cases,
+  counterexample search) before trusting it further.
+- Outcome: refined / recombined-with-<X> / abandoned / promising, pending.
+- Confidence: overall __%, weakest step (name it) __%. If these diverge,
+  say why.
+- Next rotation: refine this / recombine with <earlier attempt> / try a
+  genuinely different strategy (name the area).
+```
 
 ## 2026-08-25
 

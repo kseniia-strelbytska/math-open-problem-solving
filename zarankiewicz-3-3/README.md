@@ -96,6 +96,44 @@ who trusts nothing except the checker script and its test suite.
    resolved within budget, deliver one of the substantial-progress
    criteria (C)-(E) rather than leaving an inconclusive PR.
 
+## Working discipline
+
+This applies to every step of the work, not just the final write-up. It
+governs how approaches are attempted, logged, and reported — by the
+orchestrating session and by any subagent delegated a piece of this work.
+
+- **Try to break it before extending it.** Before building on any claim,
+  actively search for small counterexamples and check degenerate/boundary
+  cases first, rather than assuming a promising-looking argument holds.
+- **State lemma hypotheses precisely and confirm them here.** Never invoke
+  a result (a SAT solver's correctness, a symmetry/automorphism argument,
+  a combinatorial identity, a paper's claimed construction) without stating
+  exactly what it requires and checking that it actually holds in this
+  instance.
+- **Interrogate helper lemmas.** When a helper lemma or reformulation is
+  introduced to isolate the hard part, honestly assess whether it is
+  actually easier than the original problem, or just a restatement of the
+  same difficulty under a new name.
+- **No citation without certainty.** Never cite a theorem, paper, or named
+  result unless it can be stated precisely and its existence is certain.
+  If unsure, say so explicitly in the log and mark it an unverified
+  assumption rather than asserting it.
+- **Ground the riskiest step in something checkable.** A computation, a
+  small-case exhaustive search, or the independent checker decides whether
+  to proceed — not the stated confidence of whoever produced the step.
+- **Keep the running log current, and read it before starting a new
+  approach.** `PROGRESS.md` records every approach tried, including
+  abandoned ones and why, specifically so dead ends aren't silently
+  repeated and promising leads aren't lost.
+- **Rotate strategy after each attempt.** After each attempt, deliberately
+  choose one of: refine the current best approach, recombine ideas from
+  two earlier attempts, or try a genuinely different strategy from a
+  different area of math. Don't just keep pushing on one line of attack.
+- **Report calibrated confidence, split by step.** Any claimed result
+  needs an overall confidence score *and* a separate score for its single
+  weakest step. If the two diverge significantly, explain why — that gap
+  is itself information about where the risk actually lives.
+
 ## Independent verification
 
 The checker(s) used to certify any claimed result live in
