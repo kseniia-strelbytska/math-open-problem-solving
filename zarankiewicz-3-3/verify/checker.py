@@ -328,31 +328,31 @@ def edge_count(matrix: MatrixLike, n_cols: int | None = None) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Placeholder for a future literature-derived witness cross-check.
+# Literature-derived witness cross-check.
+#
+# Wired up 2026-08-25 against data/known_witnesses/ (see SOURCES.md there
+# for full provenance and independent-verification notes). This is used by
+# verify/test_known_witnesses.py, not just left as a hook.
 # ---------------------------------------------------------------------------
 
-# TODO(literature-cross-check): once a parallel research effort locates a
-# literature-cited exact witness matrix for a known small Zarankiewicz cell
-# (e.g. a published Z(m,n,3,3) construction with a citable source), drop it
-# in here and assert this checker reproduces the published edge count and
-# K_{3,3}-freeness verdict for it. This is a placeholder hook only -- it is
-# NOT yet wired to any real data and does not block the rest of the
-# checker's validation, which instead relies on the hand-verifiable cases
-# in test_checker.py.
-def check_against_known_exact_value(matrix: MatrixLike, published_value: int, n_cols: int | None = None) -> None:
+def check_against_known_exact_value(matrix: MatrixLike, published_value: int, n_cols: int | None = None) -> dict:
     """
-    Verify `matrix` reproduces a published exact Zarankiewicz value.
+    Verify `matrix` reproduces a published exact Zarankiewicz value: raises
+    unless `matrix` is K_{3,3}-free with exactly `published_value` edges.
+    Returns the underlying `verify()` result dict on success.
 
-    NOT YET IMPLEMENTED WITH REAL DATA. Intended usage once a witness is
-    available:
-
-        check_against_known_exact_value(some_literature_matrix, published_value=42)
-
-    should raise unless `matrix` is K_{3,3}-free with exactly
-    `published_value` edges.
+    This does not "trust" the word "published" in any way -- it runs the
+    exact same independent verify() pipeline as every other matrix checked
+    by this module. What makes a call "a known-value cross-check" rather
+    than an ordinary verification is purely how the caller uses the
+    result (see verify/test_known_witnesses.py), not anything special
+    this function does internally.
     """
-    raise NotImplementedError(
-        "check_against_known_exact_value is a placeholder hook -- no "
-        "literature-derived witness matrix has been wired in yet. See "
-        "TODO(literature-cross-check) above."
-    )
+    result = verify(matrix, expected_edges=published_value, n_cols=n_cols)
+    if result["has_k33"]:
+        raise CheckerDisagreement(
+            f"Matrix claimed to witness Zarankiewicz value {published_value} "
+            f"actually contains a K_3,3 -- the claimed value is wrong or the "
+            f"matrix does not match its source."
+        )
+    return result

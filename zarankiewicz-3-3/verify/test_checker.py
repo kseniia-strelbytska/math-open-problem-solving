@@ -318,15 +318,34 @@ def test_convenience_wrappers():
 
 
 # ---------------------------------------------------------------------------
-# Placeholder hook test: confirm it's wired up and clearly not-yet-usable,
-# rather than silently missing.
+# check_against_known_exact_value: basic behavior (real literature witness
+# cross-checks live in test_known_witnesses.py, not here).
 # ---------------------------------------------------------------------------
 
-def test_literature_cross_check_hook_is_placeholder():
+def test_known_exact_value_accepts_matching_matrix():
+    m = np.ones((3, 3), dtype=np.uint8)
+    m[0, 0] = 0  # 8 edges, K_3,3-free (see test_k33_minus_one_edge_is_free)
+    result = checker.check_against_known_exact_value(m, published_value=8)
+    assert result["edges"] == 8
+    assert result["is_k33_free"] is True
+
+
+def test_known_exact_value_rejects_wrong_edge_count():
+    m = np.ones((3, 3), dtype=np.uint8)
+    m[0, 0] = 0  # 8 edges
     try:
-        checker.check_against_known_exact_value(np.ones((3, 3), dtype=np.uint8), published_value=9)
-        assert False, "expected NotImplementedError -- no literature witness wired in yet"
-    except NotImplementedError:
+        checker.check_against_known_exact_value(m, published_value=9)
+        assert False, "expected ValueError for edge-count mismatch"
+    except ValueError:
+        pass
+
+
+def test_known_exact_value_rejects_matrix_containing_k33():
+    m = np.ones((3, 3), dtype=np.uint8)  # 9 edges, but IS K_3,3
+    try:
+        checker.check_against_known_exact_value(m, published_value=9)
+        assert False, "expected CheckerDisagreement -- matrix contains K_3,3"
+    except checker.CheckerDisagreement:
         pass
 
 

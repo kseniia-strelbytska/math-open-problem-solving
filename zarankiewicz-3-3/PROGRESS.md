@@ -93,3 +93,87 @@ isn't silently repeated.
   returns a real witness matrix, use it to fill in
   `check_against_known_exact_value` and close the remaining gap named
   above, before trusting this checker on the real 16x17 target.
+
+### 2026-08-25 — literature re-verification: citation chain and witness data
+
+- What it is: independently re-verify the sources behind the published
+  `132 <= Z(16,17,3,3) <= 133` bounds. A subagent did the initial research
+  pass; per the acceptance criteria ("never rely on an external paper's
+  own unverified assertion") and the working discipline ("no citation
+  without certainty"), I re-derived the load-bearing claims myself rather
+  than trusting either the subagent's report or the papers' own prose.
+- What was checked, and by what:
+  - Confirmed `github.com/KAVentures/z1322-exact` is a real, public repo
+    (GitHub API `repos/.../` and `git/trees/main?recursive=1`), and its
+    file tree matches what was reported.
+  - Downloaded `z16_17_132_witness_seed201.csv`/`.json` directly from
+    GitHub's raw content (not the subagent's transcription of it, which
+    was visibly garbled) and ran it through **our own**
+    `verify/checker.py` from scratch: confirmed exactly 132 edges,
+    genuinely `K_{3,3}`-free, all three internal methods agree.
+  - Cross-checked five more witnesses from the same repo
+    (`z13_18_116`, `z14_17_118`, `z14_18_124`, `z15_17_126`,
+    `z15_18_132`) the same way — all independently confirmed. These
+    overlap with the separately-authored Hou paper's (arXiv:2608.08549)
+    claimed values, so this is cross-source corroboration, not just
+    re-checking one paper's own numbers.
+  - Traced the 133 upper bound to Collins, Riasanovsky, Wallace,
+    Radziszowski, "Zarankiewicz Numbers and Bipartite Ramsey Numbers,"
+    arXiv:1604.01257 (2016). Downloaded the actual PDF myself and
+    extracted Table 4 with `pdftotext`: row `m=16` reads
+    `... 128* 133 140` for `n = 16,17,18`, i.e. `z(16,17;3) = 133` in
+    their table, unmarked (no `*`/`†` superscript).
+  - Went one step past the subagent's "looks italic" claim: used
+    `pdftohtml -xml` to read the **embedded font name** on that exact
+    table cell, not just a visual impression. The "133" glyph is set in
+    font `PJYSJE+CMTI10` (Computer Modern Text *Italic*), while
+    neighboring undecorated entries (e.g. "140") use `CMR10` (roman) and
+    bold-starred entries (e.g. "128*") use `CMBX10` (bold). The paper's
+    own legend: *"An italicized entry indicates that the bound or value
+    was determined with exhaustive computations. Otherwise, an
+    undecorated number indicates the bound was obtained by using Lemmas
+    2, 3 and 4... without exhaustive enumeration."* So 133 is confirmed
+    (by typesetting, not just narrative) to be the 2016 authors'
+    exhaustive-computation upper bound — not bold, so per their own
+    convention not claimed exact, i.e. they never found a matching
+    133-edge construction.
+  - Found direct textual corroboration that the original authors
+    themselves flagged this exact region as suspect: *"The interested
+    reader may note other weak-looking bounds in Table 4, such as for
+    z(k, 17; 3) for 13 <= k <= 17"* (p.12 of the PDF) — our target,
+    k=16, falls inside that self-flagged range.
+- Precise claim this licenses: *the 133 upper bound for Z(16,17,3,3) is a
+  10-year-old, exhaustively-computed-but-uncertified result, with no
+  known matching construction, on a cell the original authors themselves
+  called weak-looking.* This is what makes acceptance criterion (C) a
+  real, non-trivial target — reproducing or refuting a specific,
+  identifiable, decade-old computer-search claim with no available
+  certificate, not just re-citing a number.
+- What could break this: the whole citation chain rests on trusting that
+  a LaTeX author used italics consistently with their own stated legend.
+  Mitigated (not eliminated) by the bold+asterisk pattern matching the
+  plain-text `*` markers consistently across the row I inspected — but I
+  did not audit every cell in the table by hand, only the target cell and
+  its immediate neighbors.
+- Did **not** independently fetch the Zenodo DOI (`10.5281/zenodo.21768210`)
+  the subagent cited for the Hou paper's supplement — considered
+  unnecessary, since re-deriving and re-checking the underlying witness
+  matrices directly from GitHub with our own checker (done above) is
+  strictly stronger evidence than validating a SHA-256 manifest would be.
+  Flagged here rather than silently skipped, per the working discipline.
+- Calibration note: arXiv:2608.08154 (the paper citing the 133 bound) has
+  a wrong author name in its own reference list and self-discloses
+  "OpenAI GPT 5.6 Sol High was used for assistance" — it's a non-peer-
+  reviewed, small-author 2026 preprint. Treated as a pointer to real data
+  (which checked out), not as an authority in itself.
+- Outcome: both ends of the gap are now independently grounded — 132 is a
+  real, checked, explicit witness; 133 is a real, traced, but genuinely
+  never-certified bound. Promising; proceed to attacking the gap directly.
+- Confidence: overall 92% that this is an accurate characterization of
+  the current state of published knowledge on `Z(16,17,3,3)`. Weakest
+  step: 80% — the font-name-based italic detection, cross-checked against
+  neighboring cells but not audited across the full table.
+- Next rotation: refine — attack the gap directly per plan steps 3/4: a
+  constructive search for a 133rd edge (seeded from, but not copied from,
+  the verified 132-edge witness), in parallel with a SAT encoding aimed
+  at an UNSAT proof.
