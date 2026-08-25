@@ -1,0 +1,9 @@
+Trial PR to verify the Claude reviewer gate fires end-to-end.
+
+Not a real math problem submission - just checking that:
+1. The claude-review workflow triggers on this PR.
+2. The reviewer agent reads .github/reviewer.md and posts a review comment.
+3. It writes .claude/review-verdict.txt with ACCEPTED or REJECT.
+4. The claude-review status check reflects that verdict.
+
+This PR should not be merged.
