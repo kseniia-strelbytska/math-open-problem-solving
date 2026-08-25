@@ -29,6 +29,7 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          show_full_output: true
           prompt: |
             You are reviewing pull request #${{ github.event.pull_request.number }}
             in this repository, which targets the `${{ github.event.pull_request.base.ref }}`
