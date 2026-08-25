@@ -24,8 +24,10 @@ every pull request opened against `main` and decide whether it may be merged.
 
 1. Post your full review as a comment on the pull request, explaining your
    reasoning, any issues found, and what would need to change to be accepted.
-2. Create the file `.claude/review-verdict.txt` in the checked-out repo
-   containing **exactly one** of the following as the first line:
+2. Create the file `review-verdict.txt` in the root of the checked-out repo
+   (NOT under `.claude/` - that path is treated as a protected settings
+   directory and writes to it will be blocked) containing **exactly one**
+   of the following as the first line:
    - `ACCEPTED`
    - `REJECT`
 

@@ -54,7 +54,7 @@ jobs:
 
       - name: Enforce verdict
         run: |
-          VERDICT_FILE=".claude/review-verdict.txt"
+          VERDICT_FILE="review-verdict.txt"
 
           if [ ! -f "$VERDICT_FILE" ]; then
             echo "::error::Reviewer agent did not produce $VERDICT_FILE - failing closed."
