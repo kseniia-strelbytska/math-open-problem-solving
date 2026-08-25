@@ -1,0 +1,62 @@
+name: Claude reviewer gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Run reviewer agent
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            You are reviewing pull request #${{ github.event.pull_request.number }}
+            in this repository, which targets the `${{ github.event.pull_request.base.ref }}`
+            branch. Follow the persona, review criteria, and output contract
+            defined in `.github/reviewer.md` exactly - read that file first.
+
+            Diff the PR against the base branch (e.g. `git diff origin/${{ github.event.pull_request.base.ref }}...HEAD`)
+            to see what changed, then produce your review and verdict file as
+            described in `.github/reviewer.md`.
+          claude_args: |
+            --allowedTools "Read,Write,Bash(git diff:*),Bash(git log:*),Bash(gh pr comment:*)"
+            --max-turns 30
+
+      - name: Enforce verdict
+        run: |
+          VERDICT_FILE=".claude/review-verdict.txt"
+
+          if [ ! -f "$VERDICT_FILE" ]; then
+            echo "::error::Reviewer agent did not produce $VERDICT_FILE - failing closed."
+            exit 1
+          fi
+
+          verdict=$(head -n1 "$VERDICT_FILE" | tr -d '[:space:]')
+          echo "Reviewer verdict: $verdict"
+
+          if [ "$verdict" != "ACCEPTED" ]; then
+            echo "::error::Reviewer agent verdict was '$verdict', not ACCEPTED. Blocking merge."
+            exit 1
+          fi
+
+          echo "Reviewer agent accepted this PR."
