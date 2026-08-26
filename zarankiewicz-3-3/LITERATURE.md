@@ -28,8 +28,13 @@ sequence `(a_i)` and `e = m*d_L + r_L` (`0 <= r_L < m`):
 The middle term counts left-centred `K_{1,s}` stars; exceeding
 `(s-1)*C(n,s)` forces, by pigeonhole, some `s` columns to be the leaves of
 `s` such stars, i.e. a `K_{s,s}`. Mirror statement holds right-to-left.
-(For `s=3, n=17` the right-hand bound is `2*C(17,3) = 1360` — the same
-budget derived independently in `STRATEGY_V2.md`.)
+(For `s=3, n=17` the right-hand bound is `2*C(17,3) = 1360`. This project
+re-derived the same budget independently, from the observation that
+`K_{3,3}`-freeness says exactly that every 3-subset of columns lies in the
+neighbourhood of at most 2 rows, so counting (row, column-triple)
+incidences two ways gives `sum_r C(d_r,3) <= 2*C(17,3)`. The derivation is
+one line and is reproduced here rather than cited, so this document does
+not depend on any file outside this PR.)
 
 **Lemma 3 (density).** Removing a minimum-left-degree vertex from an
 `(m,n,e+)_P`-graph leaves an induced `(m-1,n,f+)_P`-subgraph with
@@ -64,8 +69,15 @@ the row mixes both proof types.
 
 ## The hand-derivable bound, and why it matters
 
-Applying Lemma 3 directly with `z(15,17;3) = 126` (re-derived and verified
-independently in this project — see `PROGRESS.md`):
+Applying Lemma 3 directly with `z(15,17;3) = 126`. **Only half of that
+equality is independently established here.** The lower bound
+`z(15,17;3) >= 126` rests on the 126-edge witness in
+`data/known_witnesses/z15_17_126_witness.csv`, which this project
+re-verified from scratch with `verify/checker.py`. The upper bound
+`z(15,17;3) <= 126` — which is the half the derivation below actually
+uses — is **cited from Afrasyab and has not been re-derived here**. So the
+`<= 134` conclusion below is conditional on a published result, exactly
+like the `<= 133` bound it is meant to help certify:
 
 ```
 e - floor(e/16) <= 126
@@ -73,7 +85,9 @@ e - floor(e/16) <= 126
   e = 134 -> 134 - 8 = 126         consistent
 ```
 
-**`z(16,17;3) <= 134`, provable by hand in one line, no computer.**
+**`z(16,17;3) <= 134`, provable by hand in one line, no computer** — but
+only *given* the cited `z(15,17;3) <= 126`. It is a one-line derivation,
+not a from-scratch proof.
 
 The structural consequence is the useful part:
 
@@ -87,14 +101,25 @@ The structural consequence is the useful part:
 Both cases therefore reduce to an **extension problem**: enumerate
 near-extremal 15x17 graphs up to isomorphism, then test single-row
 extensions — far smaller than searching all 16x17 graphs. This is exactly
-the backwards-path-extension technique, and it is the current plan
-(see `prover/idea-ledger.md` [L13]).
+the backwards-path-extension technique, and it is the current plan. (The
+plan's own idea ledger, which tracks this line of attack alongside the
+abandoned ones, is not part of this PR and lands in a later PR in this
+series; nothing in this document depends on it.)
 
 Note the ladder this creates:
-- `134` refuted => `z(16,17;3) <= 133`, an **independent re-certification of
-  the published bound**, which has never been certified by anyone
-  (acceptance criterion (C)).
+- `134` refuted => `z(16,17;3) <= 133`, matching the published bound, which
+  has never been certified by anyone (acceptance criterion (C)).
 - `133` refuted => `z(16,17;3) = 132` exactly, full resolution.
+
+**A caveat on the word "independent" here.** Refuting `134` by this route
+earns the label only if the enumeration of `Ext(15,17,126)` is itself done
+from scratch — which entails re-deriving `z(15,17;3) <= 126` rather than
+citing it, since an exhaustive enumeration at 126 edges that found a
+127-edge graph would refute the input. If instead the cited value is used
+as a shortcut, the result is a *conditional* re-derivation: correct, but
+resting on the same published computation whose independence is the point.
+Which of the two this project delivers is a fact about the eventual
+enumeration code, not something this document can assert in advance.
 
 ## Approaches confirmed *not* to work for this cell
 

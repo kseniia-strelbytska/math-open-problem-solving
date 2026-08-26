@@ -3,8 +3,11 @@
 All files in this directory are 0/1 adjacency matrices (CSV, rows = one
 side of the bipartite graph, columns = the other), copied verbatim from a
 third-party source and then **independently re-verified** with
-`verify/checker.py` before being trusted — see `PROGRESS.md`,
-2026-08-25 entry, for the full verification log.
+`verify/checker.py` before being trusted. The verification is reproducible
+from this PR alone: `verify/test_known_witnesses.py` re-reads every file in
+this directory, re-counts its edges, and re-checks `K_{3,3}`-freeness
+through all three of the checker's detectors, which must agree or the run
+raises. Nothing here asks the reader to trust a log.
 
 ## Source
 
@@ -47,7 +50,8 @@ description; it only depends on the matrix itself.
 The published upper bound for the same cell, `Z(16,17,3,3) <= 133`, comes
 from a different, older, independently-traced source (Collins, Riasanovsky,
 Wallace, Radziszowski, arXiv:1604.01257, 2016, Table 4) and has **no**
-known matching 133-edge construction as of this writing — see
-`PROGRESS.md` for the full citation-chain verification, including
-font-level confirmation that the 2016 authors marked this specific bound
-as obtained by exhaustive computation without claiming it exact.
+known matching 133-edge construction as of this writing. The citation-chain
+check for that bound, including the font-level evidence that the 2016
+authors marked this specific cell as obtained by exhaustive computation
+rather than claiming it exact, is written out in full in `../../LITERATURE.md`
+("Which method produced 133") — in this PR, not in an external log.
