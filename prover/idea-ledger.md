@@ -262,3 +262,63 @@ logged `PROMISING-UNEXPLORED` should be revived instead of starting fresh.
   sequences to 3167) — an explicit, human-checkable, parallelisable case
   reduction. Counting alone does NOT rule out 133 (balanced sequences give
   1036 and 889, both within budget), so search is genuinely required.
+
+### [L11] REVIVED and RESOLVED: reproduce Collins et al.'s Lemmas 2-4
+- Status: REVIVED -> partially RESOLVED (a real result extracted; see below)
+- First appeared: iteration ~8 as PROMISING-UNEXPLORED; picked up on the
+  prover-reviewer's recommendation (it cost zero CPU while solvers ran).
+- Outcome: the paper's method was recovered and read (see
+  `zarankiewicz-3-3/LITERATURE.md` for precise statements of Lemmas 2, 3, 4
+  and the "backwards path extension" algorithm). Their Lemma 3 (density
+  lemma) applied by hand yields, in ONE LINE and with no computation:
+  **`z(16,17;3) <= 134`**, given `z(15,17;3) = 126`. Arithmetic verified
+  independently: e=135 forces a 127-edge 15x17 graph, contradicting 126.
+- This does NOT close the problem (134 vs the published 133 vs the
+  conjectured 132), but it is a genuine, human-checkable, citation-light
+  partial result, and it produced [L14] below, which is the real prize.
+- Also settled negatively, so nobody re-tries it: LP/ILP *relaxation
+  bounds* are far too weak for this cell — Roman's classical bound gives
+  142, and the state-of-the-art strengthening (Davies-Gill-Horsley 2025,
+  Discrete Math) gives 141, both way above 133. Flag algebras/SDP: no
+  finite-cell result found. So [L10]'s value, if any, is purely as a search
+  *engine*, never as a bound.
+
+### [L14] Extremal-parent extension reduction (the backwards-path method)
+- Status: ACTIVE — now the most promising route, folded into [L13]
+- First appeared: iteration ~9, derived from [L11]'s density lemma
+- The key structural observation, verified by direct arithmetic:
+  - At `e = 134`: deleting a min-degree row leaves `>= 134 - 8 = 126`
+    edges on 15x17, which *equals* `z(15,17;3)`. So any 134-edge graph
+    contains an **extremal** 126-edge 15x17 graph, extended by a row of
+    degree exactly 8.
+  - At `e = 133`: the parent has 125 or 126 edges on 15x17.
+- Therefore both cases reduce to: **enumerate near-extremal 15x17 graphs up
+  to isomorphism, then test single-row extensions.** Vastly smaller than
+  searching all 16x17 graphs. This is precisely the technique Collins et al.
+  used, now aimed one cell further than they took it.
+- The ladder this creates, in increasing difficulty and value:
+  1. Refute `e=134` => `z(16,17;3) <= 133`, an **independent
+     re-certification of a published bound that nobody has ever certified**
+     (acceptance criterion (C) — real publishable progress).
+  2. Refute `e=133` => `z(16,17;3) = 132` exactly, full resolution.
+- Note `e=134` is strictly *more constrained* than `e=133`, so it is the
+  easier and higher-expected-value target. **Correcting an earlier error of
+  mine:** I killed a running K=134 SAT job as a "low-value sanity check".
+  That was wrong — it is the load-bearing case. Relaunched with proof
+  logging.
+- Named risk: the isomorph-free enumeration step. An unsound deduplication
+  that silently drops a parent graph yields a false "no" — the single worst
+  failure mode available here. Instruction given: prefer a sound
+  over-approximation (keep possible duplicates) over a clever-but-risky
+  canonical form.
+
+### [L15] Monotonicity lemma (needed to read any "exactly-K UNSAT" result)
+- Status: RESOLVED (trivial, but load-bearing and was implicit until now)
+- Our CNF encodes "exactly K edges", so UNSAT literally means "no
+  `K_{3,3}`-free graph with exactly K edges". To read that as an upper
+  bound one needs: if a `K_{3,3}`-free graph with `e` edges exists, so does
+  one with `e-1` edges — delete any edge; deleting edges cannot create a
+  `K_{3,3}`. Hence achievable edge counts are downward closed, and
+  exactly-K UNSAT gives `z <= K-1`.
+- Recorded because without it, "exactly-134 UNSAT" would not formally
+  imply `z(16,17;3) <= 133`.
