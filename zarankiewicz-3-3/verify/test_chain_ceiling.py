@@ -1,0 +1,313 @@
+"""Tests for verify/chain_ceiling.py.
+
+The module states a *negative* result, which is a genre that fails in its own
+particular way: a negative result is easy to state too broadly, and no amount
+of testing the arithmetic catches an overbroad statement. So the tests here
+split into three groups:
+
+  1. The arithmetic (`density_ceiling`, the search window, monotonicity).
+  2. The lemma the arithmetic encodes, checked against brute force on small
+     cells rather than against itself.
+  3. The theorem's own hypotheses -- in particular that the witness it rests
+     on is real, and that the ceiling is genuinely *attained* so the result
+     is sharp rather than merely an inequality.
+"""
+
+from __future__ import annotations
+
+import csv
+
+import pytest
+
+import chain_ceiling as cc
+from checker import verify
+import lower_bounds as lb
+
+
+# ---------------------------------------------------------------- arithmetic
+
+def test_density_ceiling_matches_its_definition_by_brute_force():
+    """density_ceiling(B,m) really is max{e : e - floor(e/m) <= B}."""
+    for m in range(2, 20):
+        for B in range(0, 140):
+            got = cc.density_ceiling(B, m)
+            # Independently: scan a much wider window and take the max.
+            admissible = [e for e in range(0, B + 40 * m + 100) if e - e // m <= B]
+            assert got == max(admissible), (m, B, got, max(admissible))
+
+
+def test_search_window_never_binds():
+    """The answer is never the top of the window -- so the window is not the answer.
+
+    This test found a genuine bug. The original window was a fixed
+    `B + 4m + 8`, which is correct at m=16 (the only m the project uses) but
+    truncates the answer for every B > 15 at m=2, where the true answer is
+    2B. The window is now derived from `e - floor(e/m) >= e(m-1)/m`, and this
+    test sweeps m down to 2 so a window that is right only in the cell we
+    care about cannot pass.
+    """
+    for m in range(2, 20):
+        for B in range(0, 140):
+            got = cc.density_ceiling(B, m)
+            window_top = B * m // (m - 1) + m + 2
+            assert got < window_top, f"window bound reached at m={m} B={B}"
+
+
+def test_density_ceiling_is_nondecreasing_in_its_input():
+    """Monotonicity in B, which the theorem's proof uses explicitly."""
+    for m in range(2, 20):
+        prev = -1
+        for B in range(0, 140):
+            got = cc.density_ceiling(B, m)
+            assert got >= prev
+            prev = got
+
+
+def test_density_ceiling_rejects_degenerate_m():
+    with pytest.raises(ValueError):
+        cc.density_ceiling(100, 0)
+    with pytest.raises(ValueError):
+        cc.density_ceiling(100, -3)
+
+
+def test_density_ceiling_rejects_vacuous_m_equals_1():
+    """m=1 must raise, not return a number.
+
+    This test earned its place. `e - floor(e/1) = 0` for every e, so the set
+    {e : e - floor(e/1) <= B} is unbounded and has no maximum. The first
+    version of `density_ceiling` accepted m=1 and returned the top of its own
+    internal search window -- a value produced by an implementation detail
+    rather than by mathematics. A function that answers a question with no
+    answer is worse than one that raises, because the caller cannot tell.
+    """
+    with pytest.raises(ValueError, match="vacuous"):
+        cc.density_ceiling(100, 1)
+    # And confirm the underlying reason, so the test documents the maths.
+    for e in (0, 1, 50, 1000):
+        assert e - e // 1 == 0
+
+
+def test_max_input_for_target_is_the_inverse():
+    """max_input_for_target inverts density_ceiling, at the boundary too."""
+    for m in range(2, 20):
+        for target in range(m, 140):
+            B = cc.max_input_for_target(target, m)
+            if B is None:
+                continue
+            assert cc.density_ceiling(B, m) <= target
+            # And it is maximal: one more input overshoots the target.
+            assert cc.density_ceiling(B + 1, m) > target
+
+
+# --------------------------------------------------------------- the lemma
+
+def _brute_force_z(m: int, n: int) -> int:
+    """Exhaustive z(m,n;3) for tiny m,n, over all 2^(mn) matrices.
+
+    Deliberately the dumbest possible implementation, using the checker as
+    the K33 oracle. Only viable for m*n <= 12 or so; that is enough to
+    validate the lemma the whole module encodes.
+    """
+    best = 0
+    for bits in range(1 << (m * n)):
+        matrix = [[(bits >> (r * n + c)) & 1 for c in range(n)] for r in range(m)]
+        res = verify(matrix)
+        if not res["has_k33"]:
+            best = max(best, res["edges"])
+    return best
+
+
+@pytest.mark.parametrize("n", [3, 4])
+def test_density_lemma_holds_against_brute_forced_small_values(n):
+    """The inference rule is SOUND on cells small enough to solve exactly.
+
+    For each such cell, the bound the lemma licenses from the true value one
+    level down must actually hold. This is the test that would catch an
+    off-by-one in the rule itself -- something no amount of self-consistent
+    arithmetic testing can find.
+    """
+    values = {m: _brute_force_z(m, n) for m in range(1, 4)}
+    for m in range(2, 4):
+        licensed = cc.density_ceiling(values[m - 1], m)
+        assert values[m] <= licensed, (
+            f"density lemma VIOLATED at ({m},{n}): true z={values[m]} "
+            f"but lemma licenses only <= {licensed}"
+        )
+
+
+def test_density_lemma_is_sound_on_the_cells_this_project_proved():
+    """z(10,17) = 90 must satisfy the bound licensed by z(9,17) = 81."""
+    licensed = cc.density_ceiling(cc.PROVED_HERE[9], 10)
+    assert cc.PROVED_HERE[10] <= licensed
+    # And here the lemma happens to be exactly tight, which the log claims.
+    assert cc.PROVED_HERE[10] == licensed
+
+
+# ------------------------------------------------------------- the theorem
+
+def test_the_witness_the_theorem_rests_on_is_real():
+    """z(15,17) >= 126 is backed by a matrix, not by a remembered number.
+
+    If this fails, the theorem has no proof -- so it is checked directly
+    against the CSV rather than against the module's constant.
+    """
+    path = lb.WITNESS_DIR / "z15_17_126_witness.csv"
+    assert path.exists(), f"missing witness: {path}"
+    with open(path, newline="") as fh:
+        matrix = [[int(x) for x in row] for row in csv.reader(fh) if row]
+    res = verify(matrix, expected_edges=126)
+    assert res["is_k33_free"]
+    assert res["shape"] == (15, 17)
+    assert res["edges"] >= cc.VERIFIED_LOWER_BOUND_15_17
+
+
+def test_theorem_133_is_unreachable_by_the_chain():
+    """The negative result itself."""
+    t = cc.theorem_133_unreachable()
+    assert t["required_bound_on_z15_17"] == 125
+    assert t["verified_lower_bound_on_z15_17"] == 126
+    assert t["required_bound_is_false"] is True
+
+
+def test_the_chain_ceiling_is_134_and_is_attained():
+    """Sharpness. Without this the result is just an inequality.
+
+    134 must be reachable (so the ceiling is real and not merely an upper
+    estimate of what the chain can do) and 133 must not be.
+    """
+    assert cc.density_ceiling(126, 16) == 134
+    assert cc.density_ceiling(125, 16) == 133
+    # Sharp in the other direction too: 126 is exactly the crossover.
+    assert cc.density_ceiling(127, 16) == 135
+
+
+def test_theorem_is_robust_to_the_route_taken_below_level_15():
+    """The result does not depend on HOW the chain reaches level 15.
+
+    The proof only uses that the last step happens at m=16 and needs
+    B <= 125. This sweeps every conceivable level-15 input and confirms that
+    the only ones reaching 133 are the false ones.
+    """
+    for B in range(1, 200):
+        reaches_133 = cc.density_ceiling(B, 16) <= 133
+        is_true_bound = B >= cc.VERIFIED_LOWER_BOUND_15_17
+        assert not (reaches_133 and is_true_bound), (
+            f"B={B} both reaches 133 and is a true bound -- theorem is WRONG"
+        )
+
+
+def test_theorem_would_fail_loudly_if_the_witness_were_weaker():
+    """Guards against the theorem quietly surviving a bad premise.
+
+    If z(15,17) >= 126 were ever retracted down to 125, the theorem would
+    become false. Asserting that here documents the exact dependency, so the
+    result cannot drift into looking stronger than its premise.
+    """
+    assert cc.density_ceiling(125, 16) == 133, (
+        "with only z(15,17) >= 125 the chain WOULD reach 133 -- the theorem "
+        "depends entirely on the 126-edge witness"
+    )
+
+
+def test_column_route_is_analysed_and_is_NOT_blocked_by_our_own_data():
+    """The honest state of Theorem B: our own bound is exactly one edge short.
+
+    This test asserts a *gap in our own result*. It exists so the gap cannot
+    quietly disappear: if someone later strengthens the 16x16 lower bound to
+    127, this test fails and forces CHAIN_CEILING.md to be updated to claim
+    the stronger, unconditional result -- rather than the repo silently
+    holding a proof it no longer states.
+    """
+    t = cc.theorem_133_column_route()
+    assert t["required_bound_on_z16_16"] == 126
+    assert t["verified_lower_bound_on_z16_16"] == 126
+    assert t["blocked_by_our_own_data"] is False, (
+        "our 16x16 bound now blocks the column route -- Theorem B is "
+        "unconditional and the document must be updated to say so"
+    )
+    assert t["blocked_if_z16_16_at_least"] == 127
+    # The published value would discharge it, but that is a citation.
+    assert t["published_16_16_would_block"] is True
+    assert t["ceiling_from_published"] == 136
+
+
+def test_our_16x16_lower_bound_is_backed_by_a_real_matrix():
+    """z(16,16) >= 126 must come from a matrix, derived here, not remembered.
+
+    Column deletion is monotone for the same reason row deletion is, so
+    dropping any column of the verified 132-edge 16x17 witness yields a
+    K33-free 16x16 graph. This reproduces the best such deletion and checks
+    it, rather than trusting the constant in the module.
+    """
+    path = lb.WITNESS_DIR / "z16_17_132_witness_seed201.csv"
+    with open(path, newline="") as fh:
+        matrix = [[int(x) for x in row] for row in csv.reader(fh) if row]
+    assert verify(matrix, expected_edges=132)["is_k33_free"]
+    m, n = len(matrix), len(matrix[0])
+    best = -1
+    for drop in range(n):
+        sub = [[matrix[r][c] for c in range(n) if c != drop] for r in range(m)]
+        res = verify(sub)
+        assert res["is_k33_free"], "column deletion created a K33 -- impossible"
+        assert res["shape"] == (16, 16)
+        best = max(best, res["edges"])
+    assert best == cc.VERIFIED_LOWER_BOUND_16_16, (
+        f"best 16x16 subgraph has {best} edges, module says "
+        f"{cc.VERIFIED_LOWER_BOUND_16_16}"
+    )
+
+
+def test_published_16_16_is_not_used_to_support_a_truth_claim():
+    """PUBLISHED_16_16 may inform the corollary, never Theorem B.
+
+    Recomputes the column-route analysis with the published constant set to
+    an absurd value. Everything about what we can *prove* must be unchanged;
+    only the corollary-facing fields may move. If this fails, a citation has
+    leaked into a claim about what is true.
+    """
+    saved = cc.PUBLISHED_16_16
+    try:
+        cc.PUBLISHED_16_16 = 9999
+        t = cc.theorem_133_column_route()
+        assert t["required_bound_on_z16_16"] == 126
+        assert t["verified_lower_bound_on_z16_16"] == 126
+        assert t["blocked_by_our_own_data"] is False
+        assert t["blocked_if_z16_16_at_least"] == 127
+    finally:
+        cc.PUBLISHED_16_16 = saved
+
+
+def test_gap_table_matches_the_committed_log():
+    """The tight/loose pattern quoted in CHAIN_CEILING.md."""
+    gaps = {row["m"]: row["gap"] for row in cc.tight_gaps()}
+    assert gaps == {10: 0, 14: 0, 15: 0, 16: 1}
+
+
+def test_chain_propagation_from_k11_matches_the_recorded_values():
+    """The 94/95/96/97 -> 134/135/136/137 table, machine-asserted here too."""
+    for start, expected in [(94, 134), (95, 135), (96, 136), (97, 137)]:
+        assert cc.chain(start, 11, 16)[-1] == expected
+
+
+def test_chain_rejects_a_backwards_range():
+    with pytest.raises(ValueError):
+        cc.chain(94, 16, 11)
+
+
+def test_no_published_value_is_needed_for_the_theorem():
+    """Independence check: the theorem uses only the verified lower bound.
+
+    Recomputes the whole result with PUBLISHED emptied out, to confirm no
+    citation leaks into the proof. If this ever fails, the result is
+    conditional on the literature and must not be described as
+    self-contained.
+    """
+    saved = dict(cc.PUBLISHED)
+    try:
+        cc.PUBLISHED.clear()
+        t = cc.theorem_133_unreachable()
+        assert t["required_bound_is_false"] is True
+        assert t["ceiling_from_true_value"] == 134
+    finally:
+        cc.PUBLISHED.clear()
+        cc.PUBLISHED.update(saved)
