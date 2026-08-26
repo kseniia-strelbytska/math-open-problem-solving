@@ -1,0 +1,4674 @@
+{
+  "phase3_structural": [
+    {
+      "name": "QR_mod17_16rows",
+      "connection_set": [
+        1,
+        2,
+        4,
+        8,
+        9,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 8,
+      "edges": 128,
+      "energy": 0
+    },
+    {
+      "name": "QR_plus_zero_mod17_16rows",
+      "connection_set": [
+        0,
+        1,
+        2,
+        4,
+        8,
+        9,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 168
+    },
+    {
+      "name": "non_QR_mod17_16rows",
+      "connection_set": [
+        3,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        14
+      ],
+      "conn_set_size": 8,
+      "edges": 128,
+      "energy": 0
+    },
+    {
+      "name": "QR_mod17_17rows_truncated16",
+      "connection_set": [
+        1,
+        2,
+        4,
+        8,
+        9,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 8,
+      "edges": 128,
+      "energy": 0
+    },
+    {
+      "name": "QR_mod17_plus_3",
+      "connection_set": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        9,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 224
+    },
+    {
+      "name": "QR_mod17_plus_5",
+      "connection_set": [
+        1,
+        2,
+        4,
+        5,
+        8,
+        9,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 224
+    },
+    {
+      "name": "QR_mod17_plus_6",
+      "connection_set": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        9,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 224
+    },
+    {
+      "name": "QR_mod17_plus_7",
+      "connection_set": [
+        1,
+        2,
+        4,
+        7,
+        8,
+        9,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 224
+    },
+    {
+      "name": "QR_mod17_plus_10",
+      "connection_set": [
+        1,
+        2,
+        4,
+        8,
+        9,
+        10,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 224
+    },
+    {
+      "name": "QR_mod17_plus_11",
+      "connection_set": [
+        1,
+        2,
+        4,
+        8,
+        9,
+        11,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 224
+    },
+    {
+      "name": "QR_mod17_plus_12",
+      "connection_set": [
+        1,
+        2,
+        4,
+        8,
+        9,
+        12,
+        13,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 224
+    },
+    {
+      "name": "QR_mod17_plus_14",
+      "connection_set": [
+        1,
+        2,
+        4,
+        8,
+        9,
+        13,
+        14,
+        15,
+        16
+      ],
+      "conn_set_size": 9,
+      "edges": 144,
+      "energy": 224
+    }
+  ],
+  "phase1_summary": [
+    {
+      "label": "phase1_seeded",
+      "seed": 100000,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          11,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.3500537872314453,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100001,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          5,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.2846271991729736,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100002,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          6,
+          9
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 7,
+      "iters_run": 20000,
+      "wall_time": 1.33785080909729,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100003,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          1,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.2486679553985596,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100004,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          0,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 131,
+      "best_energy_at_target": 2,
+      "iters_run": 20000,
+      "wall_time": 0.8253560066223145,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100005,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          2,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 0.842505931854248,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100006,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          1,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 22,
+      "iters_run": 20000,
+      "wall_time": 0.7390081882476807,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100007,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          3,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 0.7806041240692139,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100008,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          15,
+          5
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 0.7645812034606934,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100009,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          11,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.1055569648742676,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100010,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          3,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 5,
+      "iters_run": 20000,
+      "wall_time": 1.0280449390411377,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100011,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          15,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 9,
+      "iters_run": 20000,
+      "wall_time": 0.8088293075561523,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100012,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          2,
+          6
+        ]
+      },
+      "best_edges_at_zero_energy": 131,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 0.8591649532318115,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100013,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          9,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 6,
+      "iters_run": 20000,
+      "wall_time": 0.8357508182525635,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100014,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          3,
+          9
+        ]
+      },
+      "best_edges_at_zero_energy": 126,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 0.7940731048583984,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100015,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          8,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 0.7715950012207031,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100016,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          11,
+          0
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 0.7958221435546875,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100017,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          2,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 7,
+      "iters_run": 20000,
+      "wall_time": 1.0668573379516602,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100018,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          7,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 16,
+      "iters_run": 20000,
+      "wall_time": 0.7382447719573975,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100019,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          8,
+          0
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.0368499755859375,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100020,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          7,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 16,
+      "iters_run": 20000,
+      "wall_time": 1.429332971572876,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100021,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          2,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.4561209678649902,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100022,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          11,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.313331127166748,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100023,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          11,
+          5
+        ]
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 22,
+      "iters_run": 20000,
+      "wall_time": 1.3048310279846191,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100024,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          7,
+          0
+        ]
+      },
+      "best_edges_at_zero_energy": 126,
+      "best_energy_at_target": 18,
+      "iters_run": 20000,
+      "wall_time": 1.2151618003845215,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100025,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          12,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.202336072921753,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100026,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          7,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 16,
+      "iters_run": 20000,
+      "wall_time": 1.225785732269287,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100027,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          14,
+          5
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.186777114868164,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100028,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          15,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2603583335876465,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100029,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          4,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.2869598865509033,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100030,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          15,
+          4
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.3039491176605225,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100031,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          5,
+          6
+        ]
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.2378160953521729,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100032,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          14,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.2902610301971436,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100033,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          0,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 22,
+      "iters_run": 20000,
+      "wall_time": 1.4684720039367676,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100034,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          8,
+          14
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.2501766681671143,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100035,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          0,
+          14
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.2079417705535889,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100036,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          4,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 9,
+      "iters_run": 20000,
+      "wall_time": 1.262289047241211,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100037,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          5,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 6,
+      "iters_run": 20000,
+      "wall_time": 1.2184162139892578,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100038,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          12,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 125,
+      "best_energy_at_target": 12,
+      "iters_run": 20000,
+      "wall_time": 1.2220196723937988,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100039,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          3,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 5,
+      "iters_run": 20000,
+      "wall_time": 1.2213177680969238,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100040,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          9,
+          14
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.1802551746368408,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100041,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          11,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 125,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.2614688873291016,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100042,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          4,
+          16
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2447028160095215,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100043,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          13,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.1833081245422363,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100044,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          0,
+          14
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.216629981994629,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100045,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          6,
+          15
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 4,
+      "iters_run": 20000,
+      "wall_time": 1.2178449630737305,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100046,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          5,
+          6
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.2277419567108154,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100047,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          12,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.1884088516235352,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100048,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          9,
+          6
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 16,
+      "iters_run": 20000,
+      "wall_time": 1.2277090549468994,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100049,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          2,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.192000150680542,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100050,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          13,
+          9
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.3066918849945068,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100051,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          2,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.405357837677002,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100052,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          7,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 131,
+      "best_energy_at_target": 7,
+      "iters_run": 20000,
+      "wall_time": 1.3946592807769775,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100053,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          0,
+          5
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 17,
+      "iters_run": 20000,
+      "wall_time": 1.3392829895019531,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100054,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          10,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 6,
+      "iters_run": 20000,
+      "wall_time": 1.3661251068115234,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100055,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          12,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.3121669292449951,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100056,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          12,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.39158296585083,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100057,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          3,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 126,
+      "best_energy_at_target": 17,
+      "iters_run": 20000,
+      "wall_time": 1.3417930603027344,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100058,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          11,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 124,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.4515900611877441,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100059,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          13,
+          5
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.8205840587615967,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100060,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          12,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.3102819919586182,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100061,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          15,
+          5
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2569079399108887,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100062,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          5,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.1922569274902344,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100063,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          7,
+          0
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 18,
+      "iters_run": 20000,
+      "wall_time": 1.233806848526001,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100064,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          13,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.259631872177124,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100065,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          14,
+          14
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.2876579761505127,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100066,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          12,
+          9
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.2779898643493652,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100067,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          10,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.2212259769439697,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100068,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          4,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 130,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.3205690383911133,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100069,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          5,
+          15
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2223060131072998,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100070,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          5,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.2622122764587402,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100071,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          4,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 18,
+      "iters_run": 20000,
+      "wall_time": 1.2062640190124512,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100072,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          3,
+          7
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.2460620403289795,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100073,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          4,
+          16
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.285677194595337,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100074,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          3,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 22,
+      "iters_run": 20000,
+      "wall_time": 1.236604928970337,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100075,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          15,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2342989444732666,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100076,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          12,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.2767510414123535,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100077,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          9,
+          15
+        ]
+      },
+      "best_edges_at_zero_energy": 128,
+      "best_energy_at_target": 13,
+      "iters_run": 20000,
+      "wall_time": 1.1921930313110352,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100078,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          12,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 9,
+      "iters_run": 20000,
+      "wall_time": 1.2333948612213135,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100079,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          1,
+          5
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 25,
+      "iters_run": 20000,
+      "wall_time": 1.2135138511657715,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100080,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          14,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 4,
+      "iters_run": 20000,
+      "wall_time": 1.202120065689087,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100081,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          11,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.3125669956207275,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100082,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          13,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 5,
+      "iters_run": 20000,
+      "wall_time": 1.2501730918884277,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100083,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          6,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 4,
+      "iters_run": 20000,
+      "wall_time": 1.1658592224121094,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100084,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          14,
+          7
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.1758370399475098,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100085,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          7,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 2,
+      "iters_run": 20000,
+      "wall_time": 1.2008299827575684,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100086,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          14,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 123,
+      "best_energy_at_target": 4,
+      "iters_run": 20000,
+      "wall_time": 1.282322883605957,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100087,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          4,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.1910920143127441,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100088,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          5,
+          7
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 22,
+      "iters_run": 20000,
+      "wall_time": 1.2354490756988525,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100089,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          13,
+          5
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.241055965423584,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100090,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          0,
+          14
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.1893460750579834,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100091,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          10,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 17,
+      "iters_run": 20000,
+      "wall_time": 1.211125135421753,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100092,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          7,
+          0
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 18,
+      "iters_run": 20000,
+      "wall_time": 1.259504795074463,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100093,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          6,
+          6
+        ]
+      },
+      "best_edges_at_zero_energy": 126,
+      "best_energy_at_target": 7,
+      "iters_run": 20000,
+      "wall_time": 1.3001899719238281,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100094,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          7,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 2,
+      "iters_run": 20000,
+      "wall_time": 1.1996879577636719,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100095,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          15,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 7,
+      "iters_run": 20000,
+      "wall_time": 1.1569910049438477,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100096,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          11,
+          16
+        ]
+      },
+      "best_edges_at_zero_energy": 124,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.2713263034820557,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100097,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          0,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 2,
+      "iters_run": 20000,
+      "wall_time": 1.2153751850128174,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100098,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          0,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 123,
+      "best_energy_at_target": 2,
+      "iters_run": 20000,
+      "wall_time": 1.4670281410217285,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100099,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          12,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 124,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.5108668804168701,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100100,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          7,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 2,
+      "iters_run": 20000,
+      "wall_time": 1.4304168224334717,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100101,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          13,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 5,
+      "iters_run": 20000,
+      "wall_time": 1.3450360298156738,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100102,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          13,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 125,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.3872792720794678,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100103,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          0,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 22,
+      "iters_run": 20000,
+      "wall_time": 1.3399548530578613,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100104,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          5,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.386807918548584,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100105,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          6,
+          0
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 7,
+      "iters_run": 20000,
+      "wall_time": 1.4034850597381592,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100106,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          4,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.7210361957550049,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100107,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          8,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 129,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.2851548194885254,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100108,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          4,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.2827000617980957,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100109,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          4,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.176232099533081,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100110,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          4,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.236163854598999,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100111,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          0,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 22,
+      "iters_run": 20000,
+      "wall_time": 1.2089190483093262,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100112,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          13,
+          15
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 22,
+      "iters_run": 20000,
+      "wall_time": 1.2522339820861816,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100113,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          9,
+          9
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 11,
+      "iters_run": 20000,
+      "wall_time": 1.2873461246490479,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100114,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          12,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 130,
+      "best_energy_at_target": 12,
+      "iters_run": 20000,
+      "wall_time": 1.2889728546142578,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100115,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          1,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 17,
+      "iters_run": 20000,
+      "wall_time": 1.2355148792266846,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100116,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          11,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 6,
+      "iters_run": 20000,
+      "wall_time": 1.203453779220581,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100117,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          5,
+          15
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.1740312576293945,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100118,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          3,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.2092888355255127,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100119,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          4,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 18,
+      "iters_run": 20000,
+      "wall_time": 1.2010700702667236,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100120,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          3,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 123,
+      "best_energy_at_target": 5,
+      "iters_run": 20000,
+      "wall_time": 1.281398057937622,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100121,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          3,
+          9
+        ]
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.255444049835205,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100122,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          11,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 6,
+      "iters_run": 20000,
+      "wall_time": 1.1721360683441162,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100123,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          9,
+          0
+        ]
+      },
+      "best_edges_at_zero_energy": 125,
+      "best_energy_at_target": 16,
+      "iters_run": 20000,
+      "wall_time": 1.328610897064209,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100124,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          0,
+          4
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.2641537189483643,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100125,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          15,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 8,
+      "iters_run": 20000,
+      "wall_time": 1.1935429573059082,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100126,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          14,
+          13
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2014110088348389,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100127,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          11,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 116,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.2040581703186035,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100128,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          15,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 126,
+      "best_energy_at_target": 8,
+      "iters_run": 20000,
+      "wall_time": 1.1752262115478516,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100129,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          11,
+          16
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 24,
+      "iters_run": 20000,
+      "wall_time": 1.194242000579834,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100130,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          7,
+          4
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 16,
+      "iters_run": 20000,
+      "wall_time": 1.249016284942627,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100131,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          11,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 125,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.278007984161377,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100132,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          7,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 132,
+      "best_energy_at_target": 2,
+      "iters_run": 20000,
+      "wall_time": 1.2861461639404297,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100133,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          14,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.263801097869873,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100134,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          8,
+          1
+        ]
+      },
+      "best_edges_at_zero_energy": 128,
+      "best_energy_at_target": 6,
+      "iters_run": 20000,
+      "wall_time": 1.2358758449554443,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100135,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          15,
+          4
+        ]
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.220080852508545,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100136,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          3,
+          9
+        ]
+      },
+      "best_edges_at_zero_energy": 132,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.2942800521850586,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100137,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          8,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.2163140773773193,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100138,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          2,
+          8
+        ]
+      },
+      "best_edges_at_zero_energy": 132,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2881100177764893,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100139,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          2,
+          16
+        ]
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2433381080627441,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100140,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          2,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 123,
+      "best_energy_at_target": 8,
+      "iters_run": 20000,
+      "wall_time": 1.2084720134735107,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100141,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          14,
+          14
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 20,
+      "iters_run": 20000,
+      "wall_time": 1.260185718536377,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100142,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          14,
+          7
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.2759790420532227,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100143,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          7,
+          4
+        ]
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 16,
+      "iters_run": 20000,
+      "wall_time": 1.6058712005615234,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100144,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          15,
+          3
+        ]
+      },
+      "best_edges_at_zero_energy": 126,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.2911486625671387,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100145,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          11,
+          12
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 10,
+      "iters_run": 20000,
+      "wall_time": 1.5318257808685303,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100146,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 200.0,
+        "first_added_cell": [
+          2,
+          16
+        ]
+      },
+      "best_edges_at_zero_energy": 126,
+      "best_energy_at_target": 21,
+      "iters_run": 20000,
+      "wall_time": 1.5170650482177734,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100147,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "edge_weight": 1.0,
+        "big_penalty": 5000.0,
+        "first_added_cell": [
+          15,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 8,
+      "iters_run": 20000,
+      "wall_time": 1.6028170585632324,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100148,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          11,
+          11
+        ]
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 19,
+      "iters_run": 20000,
+      "wall_time": 1.522348165512085,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase1_seeded",
+      "seed": 100149,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "edge_weight": 1.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          3,
+          10
+        ]
+      },
+      "best_edges_at_zero_energy": 127,
+      "best_energy_at_target": 5,
+      "iters_run": 20000,
+      "wall_time": 1.6480388641357422,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    }
+  ],
+  "phase2_summary": [
+    {
+      "label": "phase2_random_start",
+      "seed": 200000,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 270,
+      "iters_run": 30000,
+      "wall_time": 1.9813299179077148,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200001,
+      "params": {
+        "mode": "reward",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 248,
+      "iters_run": 30000,
+      "wall_time": 2.1248679161071777,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200002,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 229,
+      "iters_run": 30000,
+      "wall_time": 2.1012380123138428,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200003,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 282,
+      "iters_run": 30000,
+      "wall_time": 1.7624101638793945,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200004,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 290,
+      "iters_run": 30000,
+      "wall_time": 2.2100448608398438,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200005,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 276,
+      "iters_run": 30000,
+      "wall_time": 1.8266408443450928,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200006,
+      "params": {
+        "mode": "target",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 202,
+      "iters_run": 30000,
+      "wall_time": 2.109484910964966,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200007,
+      "params": {
+        "mode": "reward",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 249,
+      "iters_run": 30000,
+      "wall_time": 1.7618827819824219,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200008,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 290,
+      "iters_run": 30000,
+      "wall_time": 1.7598850727081299,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200009,
+      "params": {
+        "mode": "reward",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 216,
+      "iters_run": 30000,
+      "wall_time": 1.7793951034545898,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200010,
+      "params": {
+        "mode": "target",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 265,
+      "iters_run": 30000,
+      "wall_time": 1.7447419166564941,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200011,
+      "params": {
+        "mode": "reward",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 231,
+      "iters_run": 30000,
+      "wall_time": 1.7586760520935059,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200012,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 233,
+      "iters_run": 30000,
+      "wall_time": 1.8805601596832275,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200013,
+      "params": {
+        "mode": "reward",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 172,
+      "iters_run": 30000,
+      "wall_time": 1.729416847229004,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200014,
+      "params": {
+        "mode": "target",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 276,
+      "iters_run": 30000,
+      "wall_time": 1.6864080429077148,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200015,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 225,
+      "iters_run": 30000,
+      "wall_time": 1.7918169498443604,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200016,
+      "params": {
+        "mode": "target",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 264,
+      "iters_run": 30000,
+      "wall_time": 1.710817813873291,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200017,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 274,
+      "iters_run": 30000,
+      "wall_time": 1.8316950798034668,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200018,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 248,
+      "iters_run": 30000,
+      "wall_time": 1.8299760818481445,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200019,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 247,
+      "iters_run": 30000,
+      "wall_time": 1.785696029663086,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200020,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 289,
+      "iters_run": 30000,
+      "wall_time": 1.8674650192260742,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200021,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 325,
+      "iters_run": 30000,
+      "wall_time": 1.8671600818634033,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200022,
+      "params": {
+        "mode": "target",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 241,
+      "iters_run": 30000,
+      "wall_time": 1.758650779724121,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200023,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 296,
+      "iters_run": 30000,
+      "wall_time": 1.7562248706817627,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200024,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 232,
+      "iters_run": 30000,
+      "wall_time": 1.775151252746582,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200025,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 252,
+      "iters_run": 30000,
+      "wall_time": 1.7582628726959229,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200026,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 264,
+      "iters_run": 30000,
+      "wall_time": 1.827484130859375,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200027,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 253,
+      "iters_run": 30000,
+      "wall_time": 1.8363900184631348,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200028,
+      "params": {
+        "mode": "target",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 226,
+      "iters_run": 30000,
+      "wall_time": 2.0745468139648438,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200029,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 246,
+      "iters_run": 30000,
+      "wall_time": 2.185999870300293,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200030,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 304,
+      "iters_run": 30000,
+      "wall_time": 1.9765188694000244,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200031,
+      "params": {
+        "mode": "reward",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 262,
+      "iters_run": 30000,
+      "wall_time": 1.9990301132202148,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200032,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": 256,
+      "iters_run": 30000,
+      "wall_time": 2.1987082958221436,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200033,
+      "params": {
+        "mode": "reward",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 348,
+      "iters_run": 30000,
+      "wall_time": 2.358524799346924,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200034,
+      "params": {
+        "mode": "target",
+        "t0": 8.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": 310,
+      "iters_run": 30000,
+      "wall_time": 2.0493199825286865,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200035,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": 186,
+      "iters_run": 30000,
+      "wall_time": 1.8543570041656494,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200036,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 270,
+      "iters_run": 30000,
+      "wall_time": 1.7248730659484863,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200037,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 234,
+      "iters_run": 30000,
+      "wall_time": 1.8424770832061768,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200038,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": 305,
+      "iters_run": 30000,
+      "wall_time": 1.8308486938476562,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_random_start",
+      "seed": 200039,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "start_edges": 133
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": 259,
+      "iters_run": 30000,
+      "wall_time": 1.7797338962554932,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300000,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.798849105834961,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300001,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "greedy_start_edges": 116
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.788686990737915,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300002,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "greedy_start_edges": 115
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.9092910289764404,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300003,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 3.654599905014038,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300004,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 3.631643056869507,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300005,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "greedy_start_edges": 113
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1550769805908203,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300006,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 5.139857053756714,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300007,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "greedy_start_edges": 117
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 5.71498703956604,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300008,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "greedy_start_edges": 116
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.3454229831695557,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300009,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "greedy_start_edges": 116
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1823010444641113,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300010,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "greedy_start_edges": 115
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.3543939590454102,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300011,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 5.512675046920776,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300012,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1149260997772217,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300013,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "greedy_start_edges": 115
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.0785791873931885,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300014,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.7864561080932617,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300015,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 117,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.8491358757019043,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300016,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.2673699855804443,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300017,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1517260074615479,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300018,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1487791538238525,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300019,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "greedy_start_edges": 111
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1562628746032715,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300020,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1599931716918945,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300021,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "greedy_start_edges": 113
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.158541202545166,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300022,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "greedy_start_edges": 113
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.2122399806976318,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300023,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "greedy_start_edges": 116
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.0955009460449219,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300024,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "greedy_start_edges": 115
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1215150356292725,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300025,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "greedy_start_edges": 115
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.152411937713623,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300026,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "greedy_start_edges": 117
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.118821144104004,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300027,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "greedy_start_edges": 113
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.156933069229126,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300028,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "greedy_start_edges": 115
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.094897747039795,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300029,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "greedy_start_edges": 112
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1252498626708984,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300030,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "greedy_start_edges": 113
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1572449207305908,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300031,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.0919878482818604,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300032,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "greedy_start_edges": 117
+      },
+      "best_edges_at_zero_energy": 120,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1244940757751465,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300033,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "greedy_start_edges": 118
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1176221370697021,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300034,
+      "params": {
+        "mode": "target",
+        "t0": 4.0,
+        "greedy_start_edges": 117
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.091282844543457,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300035,
+      "params": {
+        "mode": "reward",
+        "t0": 4.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.0816099643707275,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300036,
+      "params": {
+        "mode": "target",
+        "t0": 2.0,
+        "greedy_start_edges": 115
+      },
+      "best_edges_at_zero_energy": 118,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1215949058532715,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300037,
+      "params": {
+        "mode": "reward",
+        "t0": 1.0,
+        "greedy_start_edges": 112
+      },
+      "best_edges_at_zero_energy": 119,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1528728008270264,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300038,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "greedy_start_edges": 112
+      },
+      "best_edges_at_zero_energy": 121,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1515529155731201,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    },
+    {
+      "label": "phase2_greedy_start",
+      "seed": 300039,
+      "params": {
+        "mode": "reward",
+        "t0": 2.0,
+        "greedy_start_edges": 114
+      },
+      "best_edges_at_zero_energy": 122,
+      "best_energy_at_target": -1,
+      "iters_run": 30000,
+      "wall_time": 1.1246180534362793,
+      "hit_target_zero": false,
+      "best_rows_at_zero_energy": "omitted",
+      "best_rows_at_target": "omitted"
+    }
+  ],
+  "certification_report": {
+    "hits_at_133_zero_energy": [],
+    "best_overall": null,
+    "best_overall_run": {
+      "label": "phase1_seeded",
+      "seed": 100132,
+      "params": {
+        "mode": "target",
+        "t0": 1.0,
+        "edge_weight": 3.0,
+        "big_penalty": 1000.0,
+        "first_added_cell": [
+          7,
+          2
+        ]
+      },
+      "best_edges_at_zero_energy": 132,
+      "best_energy_at_target": 2
+    },
+    "best_overall_certified": {
+      "shape": [
+        16,
+        17
+      ],
+      "edges": 132,
+      "has_k33": false,
+      "is_k33_free": true,
+      "methods": {
+        "row_triples": false,
+        "col_triples": false,
+        "networkx": false
+      }
+    }
+  },
+  "total_wall_time": 329.75889587402344
+}

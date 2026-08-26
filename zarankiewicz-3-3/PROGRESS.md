@@ -177,3 +177,89 @@ isn't silently repeated.
   constructive search for a 133rd edge (seeded from, but not copied from,
   the verified 132-edge witness), in parallel with a SAT encoding aimed
   at an UNSAT proof.
+
+### 2026-08-25/26 — constructive/local-search attack: no 133-edge witness found
+
+Full detail in `search/LOCAL_SEARCH_LOG.md`; summarized here.
+
+- What it is: an independent (non-SAT) attack on "does a 133-edge
+  K_{3,3}-free 16x17 graph exist?", via simulated annealing (seeded from
+  the known 132-edge witness, and separately from scratch) plus a
+  structurally-motivated algebraic construction attempt (circulant graphs
+  from quadratic residues mod 17).
+- Lemma relied on: the same row-triple-intersection K_{3,3} characterization
+  `verify/checker.py` uses, reimplemented here as an *incremental* energy
+  function (`search/zark_core.py`) for speed. Its incremental-vs-full
+  consistency was checked continuously (every 4,000 SA iterations, and
+  after every exhaustive-swap/reheat pass) across ~4M+ operations with
+  zero disagreements — I independently re-ran its self-test myself before
+  handing this off to a subagent, and the subagent re-ran it again
+  independently before starting; both passed.
+- What was checked to try to break the negative result, specifically: not
+  just "SA didn't find one" — the 7 best near-misses found (each at 133
+  edges, conflict energy 2 — genuinely K_{3,3}-containing, never
+  `certify()`-ed as anything positive) were each subjected to an
+  *exhaustive* (not sampled) single-swap search of their entire
+  distance-1 neighborhood (18,487 pairs each) plus 100,000 further SA
+  iterations across 5 reheat cycles. All 7 are strict local optima under
+  both. This is meaningfully stronger than "a search didn't happen to
+  find it."
+- Outcome: 0/230 fresh SA restarts (150 seeded + 80 from-scratch) and 0/7
+  refined near-misses reached 133 edges at zero conflict energy. The
+  structural quadratic-residue-mod-17 construction is clean but caps out
+  at 128 edges (below the known 132), and single-residue extensions of it
+  fail catastrophically (energy 168-224) for an identifiable structural
+  reason (vertex-transitivity replicates any violation across all 16
+  rotations at once) — a real explanation, not just a failed tuning
+  attempt. A back-of-envelope Kővári–Sós–Turán-style counting bound
+  (`16*C(9,3)=1344 <= 2*C(17,3)=1360`) confirms this simple relaxation
+  alone doesn't even rule out 144 edges, consistent with the literature's
+  133 bound needing a finer case-based argument.
+- Best certified candidate: 132 edges / energy 0 (the known witness,
+  re-certified as a byproduct — not a new result).
+- Confidence (this workstream's evidence only, before combining with the
+  parallel SAT workstream): **~20%** that 133 is achievable. Named
+  weakest point of the methodology: the SA move set was uniform random
+  single-cell toggles throughout, never biased toward cells in currently
+  violated triples despite the tooling for that existing
+  (`conflict_triples()`), and multi-cell compound moves were only used as
+  a one-off diagnostic on the 7 near-misses, not as a primary search
+  driver — a genuinely different search design (conflict-biased or
+  large-neighborhood search) is the most likely place a stronger attempt
+  could still move this number in either direction.
+- Next rotation: recombine with the SAT workstream's result (in
+  progress, see below) — a search-side "no" plus a proof-side answer
+  together are much stronger than either alone.
+
+### 2026-08-25/26 — SAT attack, step 1: symmetry-breaking gadget validated
+
+Full detail in `search/SAT_LOG.md`; summarized here. Steps 2 (known-value
+validation) and 3 (the real target) are still running as of this entry —
+see the next log entry for their outcome.
+
+- What it is: before trusting a SAT-based UNSAT/witness search on the
+  real target, validate the encoding itself — especially the
+  symmetry-breaking ("double lex" row/column lexicographic ordering)
+  clauses, whose own soundness argument (in `search/sat_encoding.py`'s
+  module docstring) explicitly flagged a gap in its informal reasoning
+  and named exhaustive empirical validation as the actual load-bearing
+  justification.
+- What was checked: (1a) the lex-order gadget in total isolation, fully
+  enumerated (not sampled) against an independent from-scratch Python
+  implementation across 336 bit-pairs (bit-lengths 2/3/4) — zero
+  disagreements. (1b) the full pipeline on 6 small shapes, WITH vs.
+  WITHOUT symmetry breaking, including 4 tiny shapes checked against a
+  true brute-force ground truth (full `2^(mn)` enumeration) — zero
+  disagreements, and every SAT witness produced was independently
+  re-verified with `verify/checker.py`, never trusted from the solver
+  model directly.
+- I independently re-ran this validation suite myself
+  (`pytest search/test_sat_encoding.py -v`) rather than trusting the
+  report: 3/3 passed.
+- Outcome: promising, symmetry breaking is trusted going forward.
+- Confidence: overall 90%; weakest step 80% — validation is only at
+  `m,n <= 5`, not yet at the structural regime (13x18, 16x17) it will
+  actually be relied on for; step 2 (running) directly addresses this.
+- Next rotation: refine — proceed to step 2 (known-value validation at
+  Z(13,18,3,3)=116) before trusting the pipeline on the real target,
+  exactly as planned.

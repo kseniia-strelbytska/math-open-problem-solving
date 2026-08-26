@@ -1,0 +1,26 @@
+Reproducing 7 energy=2-at-133 near-miss states...
+seed=100004: reproduced best_energy_at_target=2 (expected 2) in 0.8s
+  exhaustive swap: base_energy=2 best_energy_after_1_swap=2 (18487 pairs) in 0.7s
+  reheat anneal (5x20000): best_energy_at_target=2 best_edges_at_zero_energy=130 in 3.9s
+seed=100085: reproduced best_energy_at_target=2 (expected 2) in 0.7s
+  exhaustive swap: base_energy=2 best_energy_after_1_swap=2 (18487 pairs) in 0.7s
+  reheat anneal (5x20000): best_energy_at_target=2 best_edges_at_zero_energy=128 in 4.8s
+seed=100094: reproduced best_energy_at_target=2 (expected 2) in 1.2s
+  exhaustive swap: base_energy=2 best_energy_after_1_swap=2 (18487 pairs) in 0.9s
+  reheat anneal (5x20000): best_energy_at_target=2 best_edges_at_zero_energy=130 in 3.9s
+seed=100097: reproduced best_energy_at_target=2 (expected 2) in 0.8s
+  exhaustive swap: base_energy=2 best_energy_after_1_swap=2 (18487 pairs) in 0.7s
+  reheat anneal (5x20000): best_energy_at_target=2 best_edges_at_zero_energy=128 in 4.2s
+seed=100098: reproduced best_energy_at_target=2 (expected 2) in 0.8s
+  exhaustive swap: base_energy=2 best_energy_after_1_swap=2 (18487 pairs) in 0.7s
+  reheat anneal (5x20000): best_energy_at_target=2 best_edges_at_zero_energy=120 in 3.9s
+seed=100100: reproduced best_energy_at_target=2 (expected 2) in 0.8s
+  exhaustive swap: base_energy=2 best_energy_after_1_swap=2 (18487 pairs) in 0.7s
+  reheat anneal (5x20000): best_energy_at_target=2 best_edges_at_zero_energy=127 in 4.0s
+seed=100132: reproduced best_energy_at_target=2 (expected 2) in 0.8s
+  exhaustive swap: base_energy=2 best_energy_after_1_swap=2 (18487 pairs) in 0.7s
+  reheat anneal (5x20000): best_energy_at_target=2 best_edges_at_zero_energy=125 in 3.9s
+
+=== Summary ===
+Best exhaustive-swap result: seed=100004 base_energy=2 -> best_energy=2
+Best reheat-anneal result: seed=100004 best_energy_at_target=2
