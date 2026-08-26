@@ -62,16 +62,31 @@ def _write(out_path: Path, result: dict) -> None:
     out_path.write_text(json.dumps(result, indent=2))
 
 
-def _build_cmd(solver: str, cnf_path: Path, time_limit: int | None) -> list[str]:
+def _build_cmd(solver: str, cnf_path: Path, time_limit: int | None,
+               memory_limit_mb: int | None = None,
+               proof_path: Path | None = None) -> list[str]:
     if solver == "kissat":
-        cmd = [KISSAT_BIN, "-q", str(cnf_path)]
+        # kissat's CLI is `kissat [options] <dimacs> [<proof>]` -- the proof
+        # file is a bare POSITIONAL argument, not a flag (verified against
+        # `kissat --help`, kissat 4.0.4). With a real file path kissat writes
+        # a BINARY DRAT proof by default; `--force` is needed to overwrite an
+        # existing path. The proof positional must come AFTER the dimacs
+        # positional, so options are appended before it.
+        cmd = [KISSAT_BIN, "-q"]
         if time_limit:
             cmd.append(f"--time={time_limit}")
+        if proof_path is not None:
+            cmd.append("--force")
+        cmd.append(str(cnf_path))
+        if proof_path is not None:
+            cmd.append(str(proof_path))
         return cmd
     elif solver == "z3":
         cmd = [Z3_BIN, "-dimacs"]
         if time_limit:
             cmd.append(f"-T:{time_limit}")
+        if memory_limit_mb:
+            cmd.append(f"-memory:{memory_limit_mb}")
         cmd.append(str(cnf_path))
         return cmd
     else:
@@ -104,6 +119,14 @@ def _parse_dimacs_output(solver: str, stdout: str, returncode: int) -> tuple[str
     saw_v = False
     for line in stdout.splitlines():
         line = line.strip()
+        # z3 -dimacs, on hitting -T:/-memory:, prints a bare "timeout" or
+        # "unknown" line and exits 0 -- NOT an "s UNKNOWN" line. Recognize
+        # these explicitly so the JSON distinguishes "solver gave up within
+        # its budget" from "we could not parse the output at all"; both are
+        # non-verdicts, but they mean different things when read later.
+        if line in ("timeout", "unknown", "memout"):
+            status = f"resource_limit:{line}"
+            continue
         if line.startswith("s "):
             tag = line[2:].strip()
             if tag == "SATISFIABLE":
@@ -150,19 +173,57 @@ def main() -> int:
     ap.add_argument("--solver", required=True, choices=["kissat", "z3"])
     ap.add_argument("--no-symmetry-breaking", action="store_true")
     ap.add_argument("--card-encoding", default="seqcounter")
+    ap.add_argument("--card-mode", default="equals", choices=["equals", "atleast"],
+                     help="'equals' = exactly-K edges (original validated "
+                          "path). 'atleast' = at-least-K edges: a smaller "
+                          "one-sided cardinality constraint that asks the "
+                          "SAME question by the monotonicity lemma proved in "
+                          "sat_encoding.build_instance's docstring. NOTE: "
+                          "under 'atleast' a SAT model may have MORE than K "
+                          "edges, so the witness check below asserts "
+                          "edges >= K rather than edges == K.")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--proof", default=None,
+                     help="Path for the solver's DRAT refutation proof "
+                          "(kissat only). If UNSAT, kissat writes a binary "
+                          "DRAT proof here, which can then be independently "
+                          "checked with tools/drat-trim (and, after "
+                          "conversion to LRAT via `drat-trim -L`, with the "
+                          "HOL4-verified tools/cake_lpr). WARNING: DRAT "
+                          "proofs for hard instances grow without bound -- "
+                          "monitor free disk space. On a SAT result the "
+                          "proof file is meaningless (no refutation exists) "
+                          "and is reported as such. If the path ends in "
+                          "'.gz' kissat pipes the proof through gzip "
+                          "(measured 1.92x smaller on a real binary DRAT "
+                          "proof); such a proof is checked by streaming, "
+                          "`gzip -dc proof.drat.gz | drat-trim <cnf> -i`, "
+                          "which was smoke-tested to report VERIFIED.")
     ap.add_argument("--cnf-path", default=None,
                      help="Where to write the intermediate DIMACS CNF file "
                           "(default: alongside --out, same stem, .cnf ext).")
     ap.add_argument("--time-limit", type=int, default=None,
                      help="Solver-internal wall-clock limit in seconds "
                           "(kissat --time=, z3 -T:). Omit for unlimited.")
+    ap.add_argument("--memory-limit-mb", type=int, default=None,
+                     help="Solver-internal memory cap in MB (z3 -memory: "
+                          "only). Setting this lets the solver give up "
+                          "gracefully and self-report instead of being "
+                          "silently SIGKILLed by the OS under memory "
+                          "pressure -- see SAT_LOG_EXTRA_SOLVERS.md.")
     args = ap.parse_args()
 
     sym = not args.no_symmetry_breaking
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     cnf_path = Path(args.cnf_path) if args.cnf_path else out_path.with_suffix(".cnf")
+
+    proof_path = Path(args.proof) if args.proof else None
+    if proof_path is not None:
+        if args.solver != "kissat":
+            ap.error("--proof is only supported for --solver kissat "
+                     "(z3 -dimacs emits no DRAT proof)")
+        proof_path.parent.mkdir(parents=True, exist_ok=True)
 
     result = {
         "m": args.m,
@@ -172,7 +233,10 @@ def main() -> int:
         "backend": "external-dimacs-subprocess",
         "symmetry_breaking": sym,
         "card_encoding": args.card_encoding,
+        "card_mode": args.card_mode,
         "time_limit_s": args.time_limit,
+        "memory_limit_mb": args.memory_limit_mb,
+        "proof_path": str(proof_path) if proof_path else None,
         "status": "building",
     }
     _write(out_path, result)
@@ -181,6 +245,7 @@ def main() -> int:
     cnf, x, vpool = se.build_instance(
         args.m, args.n, args.K, symmetry_breaking=sym,
         card_encoding=_card_enc(args.card_encoding),
+        card_mode=args.card_mode,
     )
     build_time = time.time() - t0
 
@@ -206,7 +271,8 @@ def main() -> int:
     print(f"[external_sat_runner] wrote CNF to {cnf_path} in {cnf_write_time:.2f}s",
           flush=True)
 
-    cmd = _build_cmd(args.solver, cnf_path, args.time_limit)
+    cmd = _build_cmd(args.solver, cnf_path, args.time_limit, args.memory_limit_mb,
+                     proof_path)
     result["cmd"] = cmd
     _write(out_path, result)
     print(f"[external_sat_runner] running: {' '.join(cmd)}", flush=True)
@@ -241,6 +307,18 @@ def main() -> int:
               flush=True)
         return 0
 
+    if returncode is not None and returncode < 0:
+        # Negative returncode == killed by signal N. On macOS under memory
+        # pressure this is how the OS's memory killer (jetsam) terminates a
+        # process: SIGKILL (-9), with no output and no solver-side warning.
+        # Record it explicitly -- a solver that was killed proved NOTHING,
+        # and must never be conflated with a solver that returned UNSAT.
+        result["killed_by_signal"] = -returncode
+        print(f"[external_sat_runner] KILLED BY SIGNAL {-returncode} -- the "
+              "solver was terminated externally (on macOS, most likely the "
+              "OS memory killer). This is NOT a SAT/UNSAT result and proves "
+              "nothing about the instance.", flush=True)
+
     status, model = _parse_dimacs_output(args.solver, stdout, returncode)
     result["solver_status"] = status
     result["status"] = "done"
@@ -251,21 +329,66 @@ def main() -> int:
         result["sat"] = True
         matrix = se.model_to_matrix(model, x, args.m, args.n)
         result["matrix"] = matrix
-        check = checker.verify(matrix, expected_edges=args.K)
+        # Under card_mode="atleast" a model legitimately has >= K edges, so
+        # pinning expected_edges=K would make the checker reject a perfectly
+        # good witness. Ask the checker for the unconstrained verdict and
+        # apply the mode-appropriate edge-count test ourselves.
+        if args.card_mode == "atleast":
+            check = checker.verify(matrix)
+            edges_ok = check["edges"] >= args.K
+        else:
+            check = checker.verify(matrix, expected_edges=args.K)
+            edges_ok = check["edges"] == args.K
         result["checker"] = {
             "shape": check["shape"],
             "edges": check["edges"],
             "is_k33_free": check["is_k33_free"],
             "methods": check["methods"],
         }
-        result["checker_verified"] = bool(
-            check["is_k33_free"] and check["edges"] == args.K
+        result["checker_edge_test"] = (
+            f"edges >= {args.K}" if args.card_mode == "atleast"
+            else f"edges == {args.K}"
         )
+        result["checker_verified"] = bool(check["is_k33_free"] and edges_ok)
         print(f"[external_sat_runner] checker_verified={result['checker_verified']} "
               f"(edges={check['edges']}, is_k33_free={check['is_k33_free']})",
               flush=True)
+        if proof_path is not None:
+            # A SAT result has no refutation, so whatever kissat left in the
+            # proof file is a partial derivation log, NOT a certificate of
+            # anything. Say so explicitly rather than leaving a file that
+            # looks like a proof lying around unlabelled.
+            result["proof_written"] = proof_path.exists()
+            result["proof_bytes"] = (proof_path.stat().st_size
+                                     if proof_path.exists() else 0)
+            result["proof_verified"] = False
+            result["proof_note"] = (
+                "Instance is SATISFIABLE -- there is no refutation to "
+                "certify. This file is a partial DRAT derivation log with no "
+                "certificate value. The trust anchor for a SAT result is "
+                "verify/checker.py on the decoded witness (checker_verified)."
+            )
     elif status == "unsat":
         result["sat"] = False
+        if proof_path is not None:
+            # Report the proof artifact but make NO claim about it here. The
+            # solver's own "UNSATISFIABLE" is not evidence; the proof file is
+            # only a *candidate* certificate until an independent checker
+            # (tools/drat-trim, and tools/cake_lpr on the LRAT conversion)
+            # says VERIFIED. Verification is deliberately a separate step run
+            # by a separate program -- see search/CERTIFICATE_LOG.md.
+            exists = proof_path.exists()
+            result["proof_written"] = exists
+            result["proof_bytes"] = proof_path.stat().st_size if exists else 0
+            result["proof_verified"] = None
+            result["proof_note"] = (
+                "UNVERIFIED candidate DRAT refutation. Run "
+                "tools/drat-trim <cnf> <proof> (and cake_lpr on the -L LRAT "
+                "output) before treating this as a certificate."
+            )
+            print(f"[external_sat_runner] UNSAT; candidate DRAT proof at "
+                  f"{proof_path} ({result['proof_bytes']} bytes). NOT yet "
+                  "verified -- run drat-trim/cake_lpr on it.", flush=True)
     else:
         result["sat"] = None
         print("[external_sat_runner] solver returned no definitive "

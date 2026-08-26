@@ -1,0 +1,9 @@
+PARAMS n=17 m=15 triple_cap=1360
+F k=1 dcap=17 value=17 nodes=0 secs=0.000 cum_secs=0.000 rss_mib=3.5
+F k=2 dcap=17 value=34 nodes=0 secs=0.000 cum_secs=0.000 rss_mib=3.6
+F k=3 dcap=17 value=36 nodes=296 secs=0.000 cum_secs=0.000 rss_mib=3.6
+F k=4 dcap=17 value=42 nodes=943 secs=0.001 cum_secs=0.001 rss_mib=3.6
+F k=5 dcap=17 value=52 nodes=121 secs=0.003 cum_secs=0.003 rss_mib=3.6
+F k=6 dcap=17 value=58 nodes=5646 secs=0.026 cum_secs=0.026 rss_mib=3.7
+F k=7 dcap=17 value=66 nodes=21437 secs=0.494 cum_secs=0.494 rss_mib=3.9
+F k=8 dcap=17 value=74 nodes=73007 secs=3.697 cum_secs=3.697 rss_mib=3.9

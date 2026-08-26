@@ -1,0 +1,26 @@
+{
+  "m": 16,
+  "n": 17,
+  "K": 134,
+  "solver": "kissat",
+  "backend": "external-dimacs-subprocess",
+  "symmetry_breaking": false,
+  "card_encoding": "seqcounter",
+  "card_mode": "atleast",
+  "time_limit_s": null,
+  "memory_limit_mb": null,
+  "proof_path": "search/results/proofs/z16_17_134_kissat_proof.drat.gz",
+  "status": "solving",
+  "build_time_s": 0.47,
+  "num_vars": 18764,
+  "num_clauses": 417780,
+  "cnf_path": "search/results/proofs/z16_17_134_kissat_proof.cnf",
+  "cnf_write_time_s": 0.5,
+  "cmd": [
+    "kissat",
+    "-q",
+    "--force",
+    "search/results/proofs/z16_17_134_kissat_proof.cnf",
+    "search/results/proofs/z16_17_134_kissat_proof.drat.gz"
+  ]
+}

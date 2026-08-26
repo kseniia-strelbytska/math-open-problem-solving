@@ -6,16 +6,19 @@
   "backend": "external-dimacs-subprocess",
   "symmetry_breaking": false,
   "card_encoding": "seqcounter",
-  "time_limit_s": null,
+  "time_limit_s": 2400,
+  "memory_limit_mb": 2500,
   "status": "solving",
-  "build_time_s": 1.38,
+  "build_time_s": 0.77,
   "num_vars": 37246,
   "num_clauses": 454748,
   "cnf_path": "search/results/z16_17_133_z3.cnf",
-  "cnf_write_time_s": 1.86,
+  "cnf_write_time_s": 1.1,
   "cmd": [
     "/opt/homebrew/bin/z3",
     "-dimacs",
+    "-T:2400",
+    "-memory:2500",
     "search/results/z16_17_133_z3.cnf"
   ]
 }

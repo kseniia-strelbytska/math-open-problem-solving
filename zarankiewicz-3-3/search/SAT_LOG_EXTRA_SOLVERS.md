@@ -105,4 +105,70 @@ task brief, these are allowed to run long; status will be updated below
 as they progress or are left running past the end of this workstream's
 active work.
 
+## 18:05 BST — system-wide memory-pressure kill event (IMPORTANT, affects the parallel workstream too)
+
+At ~22 minutes into the runs, a routine health check (`ps`) found that the
+z3 process had vanished — both the `z3 -dimacs` binary and its parent
+Python wrapper were gone, with `z16_17_133_z3.json` still reading
+`"status": "solving"` and the `.log` showing no result line. Investigated
+rather than just restarting it, and the cause is systemic, not z3-specific
+bad luck:
+
+- Machine has 24 GB RAM; at the time of the check, **swap was at 12.9 GB
+  used of 14.3 GB total**, with only ~700 MB of pages free. That is severe
+  memory pressure, and on macOS the kernel's memory killer (jetsam)
+  SIGKILLs processes in that situation with no warning and no output.
+- **Three of the parallel workstream's four `sat_attack.py` processes were
+  killed in the same event** — only PID 7176 (`16 17 133 --no-symmetry-
+  breaking`, Cadical153) survived. The other three
+  (`z16_17_133_sym`, `z16_17_133_glucose_nosym`, `z16_17_134_nosym`) are
+  gone, and **their JSON files still say `"status": "solving"`**, which is
+  exactly the "killed mid-solve" state their own file-overwrite design was
+  built to make distinguishable. Per instructions I did **not** touch
+  those files or processes — flagging it here because the orchestrating
+  session must not read those three `solving` files as
+  "still running" or, worse, infer anything from their non-completion.
+- My two kissat runs **survived** the event, with a much smaller
+  footprint (~165 MB RSS each) than the python-sat wrapper processes
+  (~500 MB) or z3's DIMACS frontend. This is a real, practical advantage
+  of kissat as a backend here, not just a speed question: a dedicated
+  CDCL solver reading a DIMACS file uses dramatically less memory than
+  either a pysat-bootstrapped in-process solver or z3's general-purpose
+  frontend, which matters when several instances share one machine.
+
+**Critical discipline point, stated explicitly because it is the exact
+kind of error this project's acceptance criteria forbid: a solver that was
+SIGKILLed proved nothing.** A killed run is not a weak UNSAT, not
+evidence of hardness, and not evidence of anything at all about the
+instance. It must never be conflated with a returned verdict.
+
+### Hardening done in response (before relaunching)
+
+1. Added `--memory-limit-mb` (maps to z3's `-memory:<MB>`), so z3 hits its
+   *own* cap and exits gracefully with a self-reported non-verdict instead
+   of being silently SIGKILLed by the OS.
+2. The runner now records `killed_by_signal: N` and prints a loud warning
+   whenever the subprocess returncode is negative (killed by signal),
+   specifically so a future reader cannot mistake an OS kill for a result.
+3. Verified z3 signals resource exhaustion in `-dimacs` mode by printing a
+   bare `timeout` line and exiting **0** — *not* an `s UNKNOWN` line, and
+   *not* a nonzero exit code. Confirmed by hand
+   (`z3 -dimacs -T:20 -memory:2000 <the real 133 cnf>` -> `timeout`,
+   exit 0). Without handling this, a naive parser keying off exit code 0
+   could have read a resource-exhausted z3 run as a successful one. The
+   parser now maps these to an explicit
+   `solver_status: "resource_limit:timeout"` (with `sat: null`), kept
+   distinct from a generic unparseable `"unknown"`.
+4. Re-ran the full smoke-test set after these edits — both backends, UNSAT
+   case (3x3 K=9) and SAT case (4x4 K=8, `checker_verified: true` for
+   both), plus the new resource-limit path — all still correct.
+
+### z3 relaunched (bounded)
+
+`external_sat_runner.py 16 17 133 --solver z3 --no-symmetry-breaking
+--time-limit 2400 --memory-limit-mb 2500`, PID 81907. Bounded at 40
+minutes / 2.5 GB so that it terminates with a recorded, honest non-verdict
+rather than either being killed silently or adding to the memory pressure
+that killed four processes already.
+
 (Status updates continue below as runs progress.)

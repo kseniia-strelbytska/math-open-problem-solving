@@ -307,22 +307,73 @@ def build_instance(
     K: int,
     symmetry_breaking: bool = True,
     card_encoding: int = EncType.seqcounter,
+    card_mode: str = "equals",
 ):
     """
-    Build the full CNF for "m x n, exactly K edges, K_{3,3}-free [,
-    symmetry-broken]".
+    Build the full CNF for "m x n, [exactly|at least] K edges, K_{3,3}-free
+    [, symmetry-broken]".
+
+    card_mode:
+      "equals"  -- exactly K edges (the original, default, validated path).
+      "atleast" -- at least K edges. See the MONOTONICITY LEMMA below for why
+                   this asks the same question, and why it is the more direct
+                   encoding of the upper-bound claim we actually want.
+
+    MONOTONICITY LEMMA (stated precisely and proved, per working discipline).
+
+      Claim: if an m x n K_{3,3}-free bipartite graph with e edges exists,
+      then for every 0 <= e' <= e an m x n K_{3,3}-free graph with exactly e'
+      edges exists.
+
+      Proof: delete any one edge. Edge count drops by exactly 1. Deleting an
+      edge cannot create a K_{3,3}: a K_{3,3} in the smaller graph is a set of
+      3+3 vertices with all 9 cross edges present, and every edge present
+      after deletion was already present before, so that same K_{3,3} would
+      have been present before the deletion too -- contradicting
+      K_{3,3}-freeness of the original. Iterate e - e' times. QED.
+
+      Corollary (this is what licenses reading UNSAT as an upper bound):
+        * "exactly K" UNSAT  ==>  no K_{3,3}-free graph with >= K edges
+          exists (if one with e >= K edges existed, the lemma would give one
+          with exactly K, satisfying the CNF) ==> z(m,n;3) <= K-1.
+        * "at least K" UNSAT ==>  z(m,n;3) <= K-1 directly, no lemma needed
+          on the UNSAT side.
+      The two modes are therefore EQUIVALENT AS QUESTIONS: the exactly-K CNF
+      is satisfiable iff the at-least-K CNF is (the lemma gives one
+      direction; a >= K solution trimmed down to K gives... note the
+      trimming direction: an at-least-K model has e >= K edges, and the lemma
+      yields an exactly-K K_{3,3}-free graph from it; conversely an exactly-K
+      model already has >= K edges). Hence UNSAT of either implies UNSAT of
+      the other, and z <= K-1 either way.
+
+      Why bother with "atleast" then: CardEnc.atleast is a ONE-SIDED
+      cardinality constraint, so it is smaller and propagates only in the
+      direction that matters, whereas CardEnc.equals is atleast AND atmost
+      glued together. Fewer auxiliary variables, fewer clauses.
+
+      CAVEAT for SAT results: a model of the atleast-K instance may have
+      MORE than K edges. Any consumer must therefore verify "edges >= K",
+      not "edges == K". external_sat_runner.py does exactly that.
 
     Returns (cnf, x, vpool):
       cnf   -- pysat.formula.CNF with all clauses
       x     -- x[i][j] variable-id matrix
       vpool -- the IDPool used (for decoding models / extending further)
     """
+    if card_mode not in ("equals", "atleast"):
+        raise ValueError(f"card_mode must be 'equals' or 'atleast', got {card_mode!r}")
+
     vpool = IDPool()
     x, vpool = build_vars(m, n, vpool)
     cnf = CNF()
 
     all_lits = [x[i][j] for i in range(m) for j in range(n)]
-    card = CardEnc.equals(lits=all_lits, bound=K, vpool=vpool, encoding=card_encoding)
+    if card_mode == "equals":
+        card = CardEnc.equals(lits=all_lits, bound=K, vpool=vpool,
+                              encoding=card_encoding)
+    else:
+        card = CardEnc.atleast(lits=all_lits, bound=K, vpool=vpool,
+                               encoding=card_encoding)
     cnf.extend(card.clauses)
 
     cnf.extend(k33_clauses(x, m, n))

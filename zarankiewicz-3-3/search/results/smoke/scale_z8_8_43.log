@@ -1,0 +1,5 @@
+[external_sat_runner] built instance: m=8 n=8 K=43 sym=False solver=kissat nvars=967 nclauses=4964 build_time=0.01s
+[external_sat_runner] wrote CNF to search/results/smoke/scale_z8_8_43.cnf in 0.01s
+[external_sat_runner] running: kissat -q --time=300 --force search/results/smoke/scale_z8_8_43.cnf search/results/smoke/scale_z8_8_43.drat
+[external_sat_runner] solve finished: solver_status=unknown exit_code=0 solve_time=300.04s
+[external_sat_runner] solver returned no definitive SAT/UNSAT verdict (unknown/anomaly) -- see solver_status, stderr_tail, and exit_code above.

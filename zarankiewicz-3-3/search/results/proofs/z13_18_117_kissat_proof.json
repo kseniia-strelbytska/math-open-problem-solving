@@ -1,0 +1,26 @@
+{
+  "m": 13,
+  "n": 18,
+  "K": 117,
+  "solver": "kissat",
+  "backend": "external-dimacs-subprocess",
+  "symmetry_breaking": false,
+  "card_encoding": "seqcounter",
+  "card_mode": "atleast",
+  "time_limit_s": null,
+  "memory_limit_mb": null,
+  "proof_path": "search/results/proofs/z13_18_117_kissat_proof.drat.gz",
+  "status": "solving",
+  "build_time_s": 0.3,
+  "num_vars": 13923,
+  "num_clauses": 260754,
+  "cnf_path": "search/results/proofs/z13_18_117_kissat_proof.cnf",
+  "cnf_write_time_s": 0.34,
+  "cmd": [
+    "kissat",
+    "-q",
+    "--force",
+    "search/results/proofs/z13_18_117_kissat_proof.cnf",
+    "search/results/proofs/z13_18_117_kissat_proof.drat.gz"
+  ]
+}
