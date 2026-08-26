@@ -322,3 +322,85 @@ logged `PROMISING-UNEXPLORED` should be revived instead of starting fresh.
   exactly-K UNSAT gives `z <= K-1`.
 - Recorded because without it, "exactly-134 UNSAT" would not formally
   imply `z(16,17;3) <= 133`.
+
+### [L16] Certificate pipeline (kissat -> DRAT -> drat-trim -> LRAT -> cake_lpr)
+- Status: RESOLVED — pipeline built, validated, and it produced a real result
+- First appeared: iteration ~9, executing [L12]
+- Chain: kissat emits binary DRAT; `drat-trim -L` transforms it to LRAT
+  (untrusted, only a transformer); `cake_lpr` (formally verified in HOL4)
+  is the trusted checker.
+- **Real certified result: `z(7,7;3) <= 33`.** A 133.7 MB refutation of the
+  7x7 K=34 instance was accepted by both checkers — `s VERIFIED`
+  (drat-trim) and `s VERIFIED UNSAT` (cake_lpr), both strings confirmed
+  present in committed logs. Matches the published exact value.
+- **This closes the epistemic gap from [L7]/step 3**: we finally have an
+  UNSAT-at-scale validation against a known answer, not just "solver finds
+  a witness that should exist". That was the failure mode a subtly
+  over-constrained encoding would have sailed through while emitting a
+  bogus UNSAT.
+- **Footgun documented:** both checkers exit 0 whether they accept OR
+  reject. Verification MUST require the literal `s VERIFIED` on stdout;
+  anything keyed on `$?` would silently accept a forged certificate.
+- Hard limits, measured not assumed:
+  - **This machine can produce a certificate it cannot check.** cake_lpr
+    needs ~9x the LRAT size in RAM => ceiling around 660 MB raw DRAT,
+    roughly 17 minutes of solving. Both live jobs are already past it.
+  - Verification costs ~2.6x the solve (drat-trim took 470s on a proof
+    kissat produced in 180s).
+  - Disk: uncompressed proofs burned 5.4 MB/s (18 GB in ~56 min). Now
+    gzipped at ~0.71 MB/s behind `search/proof_disk_guard.sh` (per-run
+    proof + RSS budgets, 3 GB free-disk floor). macOS supports neither
+    `ulimit -v` nor `-d`, and kissat has no memory flag, so the guard is
+    the only cap available.
+- Also folded in: the at-least-K encoding from [L15] halved auxiliary
+  variables (37,256 -> 18,764), plus a 148-case equals-vs-atleast
+  cross-validation with zero disagreements.
+
+### [L17] SAT/CDCL is definitively out of reach for the real target
+- Status: DEAD-END-CONFIRMED — with a hard measurement behind it
+- First appeared: iteration ~9
+- **The decisive datum: 8x8 at K=43 — a mere 967 variables — failed to
+  resolve in 300 seconds.** Compare 6x6 (fast) and 7x7 (180s solve, 470s
+  to verify). Growth from 49 to 64 cells already broke a 5-minute budget;
+  the real target has 272 cells. If 8x8 is not a five-minute problem,
+  16x17 is not a five-hour one.
+- Combined with ~5 CPU-hours across six solver configurations producing
+  zero verdicts, this retires monolithic SAT as a route to *settling* the
+  question. Estimated termination probability on the real target:
+  10-15%.
+- What SAT is still good for, and is being kept for: certified refutations
+  of *small* instances (see [L16]), which is how the whole pipeline earned
+  its trust. Proof-logged K=134 and K=117 runs are left running as cheap
+  lottery tickets, not as the plan.
+
+### [L18] The extremal ladder along n=17 is TIGHT — the key feasibility unlock
+- Status: ACTIVE — now the core of [L13]/[L14]
+- First appeared: iteration ~10
+- Published values down the column differ by exactly +8: z(13,17)=110,
+  z(14,17)=118, z(15,17)=126, and the conjectured-by-pattern 134. Applying
+  the density lemma at each step (arithmetic verified):
+  ```
+  126 - floor(126/15) = 118 = z(14,17)   EXACTLY extremal
+  118 - floor(118/14) = 110 = z(13,17)   EXACTLY extremal
+  134 - floor(134/16) = 126 = z(15,17)   EXACTLY extremal
+  ```
+- **Theorem shape this gives:** at each tight step the parent is forced to
+  be exactly extremal AND the deleted row has degree exactly 8 (parent
+  `>= e-8` by the density lemma, `<= z(k-1,17)` by definition; when those
+  coincide, both facts follow). Hence
+  `Ext(k, e) subset of { G + one degree-8 row : G in Ext(k-1, e-8) }`.
+- **Consequence: a narrow ladder, not a general search.** Each rung needs
+  only degree-8 extension rows, `C(17,8) = 24310` candidates per parent,
+  cheaply filtered by the triple-multiplicity counters.
+- Tightness *starts* at k=13: below it there is slack
+  (`110 - 8 = 102` vs `z(12,17) = 103`), so k=13 is the natural base.
+- The e=133 case is one wider: parent has 125 or 126 edges (slack 1).
+- Note the +8 pattern predicts 134, but the published bound says <=133 —
+  so the pattern must break exactly at our target, consistent with the
+  2016 authors having refuted 134 by exhaustive computation. That
+  refutation is the rung we would be reproducing *with a certificate*, for
+  the first time.
+- Named risk, now more acute than before: because the ladder is tight,
+  dropping a single parent from `Ext(k,e)` could remove the very graph
+  that extends, yielding a false "no". Sound over-approximation
+  (retain possible duplicates) is mandatory over any clever canonical form.
