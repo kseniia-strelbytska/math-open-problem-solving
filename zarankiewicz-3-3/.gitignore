@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+search/results/*.cnf
+# Proof certificates are generated artifacts and can reach many GB.
+# (kissat writes a gzipped proof when the path ends in .gz, so cover that too.)
+search/results/**/*.drat
+search/results/**/*.drat.gz
+search/results/**/*.lrat
+search/results/**/*.lrat.gz
+search/results/**/*.cnf
+# Built third-party checker binaries + their source checkouts (drat-trim,
+# cake_lpr). Rebuild instructions and exact commit hashes are recorded in
+# search/CERTIFICATE_LOG.md.
+tools/
