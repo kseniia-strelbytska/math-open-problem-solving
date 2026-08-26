@@ -29,17 +29,67 @@ import checker  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
-# A fourth, fully independent ground-truth implementation used ONLY in
-# tests -- pure Python, no numpy, no networkx, operating on plain lists of
-# lists. Its only job is to give us something to compare checker.py
-# against that shares zero code with checker.py's three internal methods.
+# Two additional detectors, used ONLY in tests -- pure Python, no numpy, no
+# networkx, on plain lists of lists. They are deliberately NOT equivalent in
+# strength, and the difference is the whole point:
+#
+#   _brute_force_definition_literal   -- written from the DEFINITION of a
+#       complete bipartite subgraph. Independent of the characterisation that
+#       checker.py relies on, so it can catch that characterisation being
+#       wrong. This is the lemma guard, and it is what every cross-check in
+#       this file now routes through.
+#
+#   _brute_force_via_characterisation -- uses the same characterisation as
+#       checker.py, differing only in implementation. Catches indexing/axis
+#       bugs; does NOT guard the characterisation. Retained so the two can be
+#       compared against each other, which is what the lemma test does.
 # ---------------------------------------------------------------------------
 
-def _brute_force_ground_truth(rows: list[list[int]]) -> bool:
+def _brute_force_definition_literal(rows: list[list[int]]) -> bool:
     """
-    Pure-Python (no numpy, no networkx) brute-force K_{3,3} detector.
-    Iterates over row-triples and, for each, does a plain Python set
-    intersection over column indices. Independent of checker.py entirely.
+    THE LEMMA GUARD. A literally definition-based K_{3,3} detector, written
+    from the definition of a complete bipartite subgraph and nothing else.
+
+    Definition: a K_{3,3} is a *simultaneous* choice of 3 rows and 3 columns
+    such that all 9 of the corresponding cells are 1. This function
+    enumerates exactly that -- row-triples crossed with column-triples,
+    checking all 9 cells -- with no intersection/common-neighbourhood
+    reformulation anywhere in it.
+
+    This matters because every method in checker.py, and
+    `_brute_force_via_characterisation` below, instead tests the derived
+    characterisation "some 3 rows share >= 3 columns". Those agree with each
+    other by construction, so their agreement cannot detect the
+    characterisation itself being misapplied. This function can, because it
+    never uses it.
+
+    (The equivalence is in fact a two-line argument: if 3 rows share >= 3
+    columns, those rows with any 3 of those columns give all-9-ones; and
+    conversely a K_{3,3}'s 3 columns are by definition common to its 3 rows.
+    The risk of it being wrong is low -- but "low risk" is not the same as
+    "checked", and this file is the project's trust anchor.)
+    """
+    m = len(rows)
+    n = len(rows[0]) if m else 0
+    for row_triple in itertools.combinations(range(m), 3):
+        for col_triple in itertools.combinations(range(n), 3):
+            if all(rows[r][c] for r in row_triple for c in col_triple):
+                return True
+    return False
+
+
+def _brute_force_via_characterisation(rows: list[list[int]]) -> bool:
+    """
+    A second pure-Python detector (no numpy, no networkx) using the derived
+    characterisation: for each row-triple, intersect the three rows'
+    1-columns and test whether >= 3 survive.
+
+    Honest scope: this shares its *mathematics* with checker.py's three
+    methods and differs only in implementation (Python sets vs numpy arrays
+    vs networkx adjacency). It is therefore an implementation cross-check
+    -- useful against indexing/axis/off-by-one bugs -- and NOT a guard on
+    the characterisation itself. For that, see
+    `_brute_force_definition_literal` above.
     """
     m = len(rows)
     n = len(rows[0]) if m else 0
@@ -53,8 +103,70 @@ def _brute_force_ground_truth(rows: list[list[int]]) -> bool:
     return False
 
 
+# Kept under the old name so every existing call site now routes through the
+# definition-literal implementation -- i.e. the strongest available check is
+# the default, not an opt-in extra.
+_brute_force_ground_truth = _brute_force_definition_literal
+
+
 def _brute_force_edge_count(rows: list[list[int]]) -> int:
     return sum(sum(row) for row in rows)
+
+
+# ---------------------------------------------------------------------------
+# THE LEMMA TEST. Everything in checker.py rests on the equivalence
+#
+#     (exists 3 rows and 3 cols with all 9 cells = 1)
+#         <=>  (exists 3 rows sharing >= 3 common columns)
+#
+# This is the one claim that, if false, would make all three of checker.py's
+# methods wrong simultaneously. It is checked here directly, by running the
+# definition-literal detector against the characterisation-based one:
+#   - EXHAUSTIVELY over every 3x3 and every 3x4 0/1 matrix (2^9 and 2^12),
+#     which covers the smallest shapes where a K_{3,3} can exist at all;
+#   - over randomised larger shapes where exhaustion is impossible.
+# ---------------------------------------------------------------------------
+
+def test_definition_matches_characterisation_exhaustively_small():
+    for n in (3, 4):
+        cells = 3 * n
+        for bits in range(1 << cells):
+            rows = [
+                [(bits >> (i * n + j)) & 1 for j in range(n)]
+                for i in range(3)
+            ]
+            lit = _brute_force_definition_literal(rows)
+            car = _brute_force_via_characterisation(rows)
+            assert lit == car, (
+                f"LEMMA FAILURE on 3x{n} matrix {rows}: "
+                f"definition={lit} characterisation={car}"
+            )
+
+
+def test_definition_matches_characterisation_random_larger():
+    rng = random.Random(987654321)
+    for m, n in ((5, 5), (6, 7), (8, 9), (16, 17)):
+        for _ in range(40):
+            p = rng.choice([0.2, 0.35, 0.5, 0.65])
+            rows = [[1 if rng.random() < p else 0 for _ in range(n)] for _ in range(m)]
+            lit = _brute_force_definition_literal(rows)
+            car = _brute_force_via_characterisation(rows)
+            assert lit == car, (
+                f"LEMMA FAILURE on {m}x{n}: definition={lit} characterisation={car}"
+            )
+
+
+def test_checker_agrees_with_definition_literal_detector():
+    """checker.py's public verify() vs the definition-literal detector."""
+    rng = random.Random(24680)
+    for m, n in ((6, 7), (8, 9), (16, 17)):
+        for _ in range(40):
+            p = rng.choice([0.2, 0.35, 0.5, 0.65])
+            rows = [[1 if rng.random() < p else 0 for _ in range(n)] for _ in range(m)]
+            result = checker.verify(np.array(rows, dtype=np.uint8))
+            assert result["has_k33"] == _brute_force_definition_literal(rows), (
+                f"checker.verify disagrees with the definition on a {m}x{n} matrix"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -157,7 +269,7 @@ def test_planted_k33_inside_larger_matrix_is_detected():
 
 
 # ---------------------------------------------------------------------------
-# Test 4: edge count sanity check against a matrix with a known number of
+# Test 5: edge count sanity check against a matrix with a known number of
 # ones, built by an explicit, easy-to-hand-verify pattern.
 # ---------------------------------------------------------------------------
 
@@ -188,7 +300,7 @@ def test_edge_count_mismatch_raises():
 
 
 # ---------------------------------------------------------------------------
-# Test 5: random 16x17 matrices, many trials, all three internal methods
+# Test 6: random 16x17 matrices, many trials, all three internal methods
 # cross-checked for agreement (verify() raises CheckerDisagreement if they
 # don't), PLUS agreement against the independent pure-Python ground truth.
 # This is a smoke test, not a proof -- it's here to catch a method
@@ -232,7 +344,7 @@ def test_random_16x17_many_trials_agree():
 
 
 # ---------------------------------------------------------------------------
-# Test 6: smaller random matrices (8x9) checked against the independent
+# Test 7: smaller random matrices (8x9) checked against the independent
 # brute-force ground truth too, as a second density/shape regime.
 # ---------------------------------------------------------------------------
 

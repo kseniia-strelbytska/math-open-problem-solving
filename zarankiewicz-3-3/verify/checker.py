@@ -57,13 +57,29 @@ itself wrong, all three would be wrong together and their agreement would
 prove nothing. Their agreement is therefore evidence about the code, not
 about the lemma.
 
-What actually guards the lemma is external to this file: the test suite
-carries a fourth, deliberately code-independent brute-force ground truth
-(plain Python, no numpy, no networkx, written from the definition of a
-complete bipartite subgraph rather than from the characterisation above)
-and cross-checks it against this module over hundreds of random matrices.
-A reviewer wanting to attack this module's correctness should attack that
-lemma and that fourth implementation, not the three-way agreement.
+What actually guards the lemma is external to this file, in
+`test_checker.py`, and it is worth being precise about *how*, because an
+earlier revision of this docstring overstated it:
+
+  - `_brute_force_definition_literal` is written from the definition of a
+    complete bipartite subgraph and nothing else -- it enumerates
+    row-triples crossed with column-triples and tests whether all 9 cells
+    are 1. It never uses the characterisation above, so it genuinely can
+    detect that characterisation being wrong. This is the lemma guard.
+  - `_brute_force_via_characterisation` uses the same characterisation as
+    this module, in plain Python. It is an *implementation* cross-check
+    only, and does not guard the lemma. It is retained precisely so the
+    two can be run against each other.
+
+The equivalence is checked directly: exhaustively over every 3x3 and 3x4
+0/1 matrix (all 2^9 and 2^12 of them -- the smallest shapes in which a
+K_{3,3} can occur), and over randomised larger shapes up to 16x17 where
+exhaustion is impossible. This module's public `verify()` is additionally
+cross-checked against the definition-literal detector directly.
+
+A reviewer wanting to attack this module should attack that equivalence,
+or the definition-literal implementation -- not the three-way agreement,
+which by construction cannot fail on a mathematical error.
 """
 
 from __future__ import annotations
