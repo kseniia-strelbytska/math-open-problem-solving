@@ -58,7 +58,7 @@ jobs:
             described in `.github/reviewer.md`.
           claude_args: |
             --allowedTools "Read,Write,Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(gh pr comment:*)"
-            --max-turns 30
+            --max-turns 80
 
       - name: Enforce verdict
         run: |
