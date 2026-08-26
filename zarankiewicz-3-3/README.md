@@ -100,6 +100,30 @@ who trusts nothing except the checker script and its test suite.
    resolved within budget, deliver one of the substantial-progress
    criteria (C)-(E) rather than leaving an inconclusive PR.
 
+## Pull-request discipline
+
+One PR per discrete, closed piece of work. This is not a style preference —
+it is a hard constraint discovered the expensive way: the first attempt at
+this project accumulated a single 107-file, 21,000-line, 14-commit PR, which
+the reviewer agent **could not process at all** (it exhausted its turn budget
+without emitting a verdict, so CI failed closed and nothing could merge). An
+unreviewable PR is an unmergeable one.
+
+Rules:
+
+- **One task, one branch, one PR.** A specific case being checked (e.g. "is
+  there a 134-edge graph?") is its own PR, not a commit inside a mega-branch.
+- **Only open a PR on work that is closed.** Finished, verified, and with its
+  result written down. Exploratory or still-running work stays on a working
+  branch until it settles.
+- **Merge in dependency order.** `verify/` is the trust anchor and lands
+  first; everything that imports it follows.
+- **A PR must be small enough for the reviewer to actually read** — roughly
+  one component plus its tests and its log, not a whole workstream.
+- **Never self-certify.** Merge only on a reviewer `ACCEPTED` verdict. If a
+  line of work is being abandoned, abandon the PR too rather than pushing
+  for an acceptance nobody needs.
+
 ## Working discipline
 
 This applies to every step of the work, not just the final write-up. It
