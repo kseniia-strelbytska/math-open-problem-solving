@@ -1,0 +1,5 @@
+    level nodes: 0:1 1:1 2:4 3:129 4:6284 5:258772 6:3920669 7:3284402 8:41199 9:1 10:1
+ASSUMED f(9) <= 81   [DECLARED ASSUMPTION, not proved here]
+PARAMS n=17 m=10 triple_cap=1360
+RESULT mode=decide m=10 n=17 target=89 dcap=17 dfloor=0 emax=-1 forced0=-1 split=0:0:1 status=FOUND nodes=7511463 solutions=1 ext_success=0 secs=300.721 rss_mib=3.6
+WITNESS_ROWS 10 130816 123128 104647 83638 71021 54062 42355 36509 31946 11035

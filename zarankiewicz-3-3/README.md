@@ -1,5 +1,9 @@
 # The Zarankiewicz z(m,n;3,3) frontier
 
+> **Start with [`WRITEUP.md`](WRITEUP.md)** — the master index: current
+> status, every document, every program with what it does and what it
+> produced, and the consolidated run log.
+
 ## Problem
 
 `Z(m,n,3,3)` is the maximum number of edges a bipartite graph with parts of

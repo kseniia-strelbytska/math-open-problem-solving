@@ -76,6 +76,11 @@ static double htime[MAXM + 2][MAXN + 2];
 static int verbose = 0;
 static int use_density = 1;   /* rule R6 */
 static int hcap_level = MAXM; /* use exact h(j,.) only for j <= hcap_level */
+static int nocanon = 0;       /* 1 = disable R2 entirely (cells become singletons,
+                                 so the prefix-in-cell condition is vacuous and
+                                 every subset is enumerated). Leaves only R1,
+                                 which is trivially sound. Used to verify that R2
+                                 is not discarding graphs, at full n=17 scale. */
 static int countlevel = -1;   /* if >=0: count surviving configs at this level
                                  and cut the search there (exact tree width) */
 static int h_exact = 1;       /* 0 = use only the cheap closed-form upper bound */
@@ -303,6 +308,11 @@ static int try_extend(int deg, unsigned int *out) {
 static int place_level(int k);
 
 static void build_cells(int k) {
+    if (nocanon) {                      /* every column its own cell */
+        for (int c = 0; c <= N; c++) X->cstart[k][c] = c;
+        X->ncells[k] = N;
+        return;
+    }
     if (k == 0) {
         X->cstart[0][0] = 0;
         X->cstart[0][1] = N;
@@ -606,6 +616,7 @@ static void usage(void) {
         "    --assume k:v        DECLARE the assumption f(k) <= v (logged loudly)\n"
         "    --countlevel L      cut the search at level L; level_nodes[L] is then the\n"
         "                        EXACT number of surviving L-row configurations\n"
+        "    --nocanon           disable column canonicity (R2) -- slow, for validation\n"
         "    -v / -vv            verbosity\n");
     exit(2);
 }
@@ -643,6 +654,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[i], "--nodensity")) use_density = 0;
         else if (!strcmp(argv[i], "--hmode")) h_exact = strcmp(argv[++i], "ub") != 0;
         else if (!strcmp(argv[i], "--countlevel")) countlevel = atoi(argv[++i]);
+        else if (!strcmp(argv[i], "--nocanon")) nocanon = 1;
         else if (!strcmp(argv[i], "--assume")) {
             int aj, av;
             if (sscanf(argv[++i], "%d:%d", &aj, &av) != 2) usage();

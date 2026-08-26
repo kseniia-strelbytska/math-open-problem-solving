@@ -4,6 +4,43 @@ This is the mathematical core of the intended proof. Everything here is
 elementary and hand-checkable; the only computational obligations are the
 two enumerations named at the end.
 
+> ## Status corrections (added after measurement)
+>
+> Two claims made when this document was first written have since been
+> tested and must be qualified. Both are recorded here rather than edited
+> away, because the reduction is still correct — what changed is what it
+> costs and what it rests on.
+>
+> **(1) The reduction is conditional, and we cannot discharge the
+> condition.** Everything below takes `z(15,17) = 126` as an input. The
+> intent was to re-derive that ourselves via the bottom-up ladder. That has
+> now been *measured infeasible*: the density-lemma chain needs
+> `z(9,17) <= 78` to reach `126`, and the true value — which this project
+> **proved** from scratch — is `z(9,17) = 81`. Our own self-contained chain
+> therefore yields only `z(15,17) <= 135`. The whole remaining obstruction
+> localises to levels `k = 11, 12, 13`, each needing a genuine exhaustive
+> refutation costing an estimated `1e9`, `2e10`, `4e11` nodes respectively.
+> So the reduction below stands as mathematics, but its input is a
+> **citation we cannot currently replace**. See
+> `search/orderly/ORDERLY_LOG.md` §5.
+>
+> **(2) The "narrow ladder" framing does not reduce the work.** The claim
+> that climbing `Ext(13,110) -> Ext(14,118) -> Ext(15,126)` is cheaper
+> because each rung needs only degree-8 extension rows was **wrong**. It is
+> the *same search tree*: a generator that orders rows by descending degree
+> has its last row equal to the very row the density lemma deletes, so the
+> tight-prefix constraints arise with no ladder framing at all. The ladder
+> looks narrow because `|Ext(k,e)|` — the size of the *answer* at each rung
+> — is small, but the cost is passing through the intermediate levels, which
+> were measured still branching ~40x per row (`8.1e7` surviving
+> configurations at level 6 alone). Confusing the size of an answer with the
+> cost of computing it was the error. See `ORDERLY_LOG.md` §6.3.
+>
+> **Consequence for §"computational obligations" below:** those obligations
+> are correct but are cluster-scale, not laptop-scale — optimistically ~40
+> core-hours if the width peaks at level 8, realistically `1e12`-`1e14`
+> nodes.
+
 All arithmetic below was verified by direct computation, and the
 degree-sequence counts come out as partition numbers, which serves as an
 independent check on the enumeration (see the last section).
