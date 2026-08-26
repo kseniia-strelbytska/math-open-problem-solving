@@ -3,7 +3,18 @@ name: Claude reviewer gate
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [main]
+    # `main` is the branch that actually needs protecting. `pr/**` is here
+    # because this project reviews work as a stack of small PRs, each based
+    # on the one before it rather than on `main` directly. Without this
+    # pattern a stacked PR gets no run at all, and `gh pr checks` reports
+    # "no checks reported" -- which is not a blocked merge, it is an
+    # unreviewed one. The gate below still fails closed on a missing
+    # verdict, so widening the trigger cannot weaken it; the only way to
+    # weaken it would be to *narrow* the trigger, which is the bug this
+    # fixes.
+    branches:
+      - main
+      - 'pr/**'
 
 concurrency:
   group: claude-review-${{ github.event.pull_request.number }}
