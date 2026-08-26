@@ -277,6 +277,48 @@ def test_published_16_16_is_not_used_to_support_a_truth_claim():
         cc.PUBLISHED_16_16 = saved
 
 
+def test_entry_level_map_matches_the_committed_log():
+    """The 'how deep must you go' table in CHAIN_CEILING.md.
+
+    Strengthens Theorem A: not only can the final step not deliver 133, no
+    entry point into the chain can. Asserted because it drives which level
+    the expensive enumeration must target.
+    """
+    rows = {r["k"]: r for r in cc.entry_level_map(133)}
+    for k in range(9, 16):
+        assert rows[k]["reachable"] is False, (
+            f"133 appears reachable from k={k} -- contradicts Theorem A"
+        )
+    # The shallowest level from which each weaker target is reachable.
+    shallowest = {}
+    for target in (136, 135, 134):
+        ks = [r["k"] for r in cc.entry_level_map(target) if r["reachable"]]
+        shallowest[target] = min(ks)
+    assert shallowest == {136: 11, 135: 12, 134: 13}
+
+
+def test_chain_from_each_true_value_matches_the_log():
+    """The 'start at k, get what at 16' column."""
+    expected = {9: 144, 10: 144, 11: 136, 12: 135, 13: 134, 14: 134, 15: 134}
+    got = {r["k"]: r["chain_from_true_value"] for r in cc.entry_level_map(133)}
+    assert got == expected
+
+
+def test_133_is_blocked_at_every_level_by_a_strict_shortfall():
+    """Each level's required input is STRICTLY below its true value.
+
+    Not merely 'not reachable' -- the required input is false with room to
+    spare at every level, which is what makes the strengthened claim robust
+    rather than resting on a boundary case.
+    """
+    for r in cc.entry_level_map(133):
+        assert r["required_input"] is not None
+        assert r["required_input"] < r["true_value"], (
+            f"k={r['k']}: required {r['required_input']} vs true "
+            f"{r['true_value']} -- not a strict shortfall"
+        )
+
+
 def test_gap_table_matches_the_committed_log():
     """The tight/loose pattern quoted in CHAIN_CEILING.md."""
     gaps = {row["m"]: row["gap"] for row in cc.tight_gaps()}

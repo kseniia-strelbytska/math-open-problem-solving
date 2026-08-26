@@ -253,6 +253,50 @@ def theorem_133_column_route() -> dict:
     }
 
 
+# True values for the n=17 column. 81 and 90 were proved from scratch in this
+# project; 96, 103, 110, 118, 126 are published (Collins et al. 2016 Table 4,
+# boldface = exact; 96 independently bold in Tan arXiv:2203.02283 Table 3).
+# Used ONLY for the entry-level map, which is explicitly labelled as leaning
+# on published values except at k=15.
+TRUE_VALUES_17: dict[int, int] = {
+    9: 81, 10: 90, 11: 96, 12: 103, 13: 110, 14: 118, 15: 126,
+}
+
+
+def entry_level_map(target: int = 133, top: int = 16) -> list[dict]:
+    """For each level k: what the chain needs there, and whether that is true.
+
+    Theorem A rules out `target` by inspecting the chain's last step. This
+    asks the stronger question -- can ANY entry point into the chain reach
+    it? -- by comparing, at each level, the input the chain would require
+    against that level's true value.
+    """
+    rows = []
+    for k in sorted(TRUE_VALUES_17):
+        if k >= top:
+            continue
+        needed = None
+        for B in range(1, 4 * target + 8):
+            v = B
+            for m in range(k + 1, top + 1):
+                v = density_ceiling(v, m)
+            if v <= target:
+                needed = B
+        true_value = TRUE_VALUES_17[k]
+        rows.append(
+            {
+                "k": k,
+                "required_input": needed,
+                "true_value": true_value,
+                # Reachable iff the required input is not already falsified
+                # by the true value at that level.
+                "reachable": needed is not None and needed >= true_value,
+                "chain_from_true_value": chain(true_value, k, top)[-1],
+            }
+        )
+    return rows
+
+
 def tight_gaps() -> list[dict]:
     """For each m where both z(m-1,17) and z(m,17) are known: the chain's gap."""
     known = {**PROVED_HERE, **PUBLISHED}

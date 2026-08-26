@@ -236,9 +236,70 @@ false), the picture for the density-chain route is now closed:
 - Reaching it needs `z(11,17;3) = 94` exactly, the bottom of the proved
   bracket `[94, 97]` — and the evidence at `k = 9, 10`, where the same
   construction undershoots the truth by 3 and 4 edges, argues against it.
+  **A literature check has since settled this: `z(11,17;3) = 96`**, bold
+  (= "exact value" per the legend) in Collins et al. 2016 Table 4 row
+  `m=11`, and independently bold in Tan arXiv:2203.02283 Table 3. So `134`
+  is **not reachable via `k = 11` at all**. See the entry-level map below,
+  which replaces this bullet's guesswork with the complete answer.
 - `z(16,17;3) <= 133` is **unreachable** by the chain, twice over: by this
   theorem at the top of the chain, and by the `f(11) >= 94` floor at the
   bottom.
+
+### The entry-level map: how deep you must go for each target
+
+Theorem A rules out `133` by examining the chain's *last* step. A stronger
+and more useful question is: for each level `k`, if we exhaustively
+determined `z(k,17;3)` ourselves and then chained upward, what would we get?
+The answer is fully determined by arithmetic plus the known values, and it
+is worth tabulating because it says exactly how deep the expensive
+computation has to go.
+
+Starting the chain at level `k` from that level's true value:
+
+| start at `k` | true `z(k,17;3)` | chain yields `z(16,17;3) <=` |
+|---|---|---|
+| 9  | 81  | 144 |
+| 10 | 90  | 144 |
+| 11 | 96  | **136** |
+| 12 | 103 | **135** |
+| 13 | 110 | **134** |
+| 14 | 118 | 134 |
+| 15 | 126 | 134 |
+
+Equivalently, the shallowest level from which each target is reachable at
+all:
+
+| target | reachable from | blocked at |
+|---|---|---|
+| `<= 136` | `k >= 11` | `k <= 10` |
+| `<= 135` | `k >= 12` | `k <= 11` |
+| `<= 134` | `k >= 13` | `k <= 12` |
+| **`<= 133`** | **nowhere** | **every level `k = 9 .. 15`** |
+
+**This strengthens Theorem A.** Theorem A shows the final step cannot
+deliver `133`. The last row here shows more: *no entry point* into the chain
+delivers `133`. At every level from 9 to 15, the input the chain would need
+is strictly below that level's true value — `<= 109` at `k = 13` against a
+true `110`, `<= 117` at `k = 14` against `118`, `<= 125` at `k = 15` against
+`126`, and so on down. Each of those inputs is false, so each such chain is
+unsound.
+
+The row-based part of that strengthening carries the same caveat as
+Theorem A about the transposed step, and the entries for `k <= 12` lean on
+published values (`96`, `103`) rather than on values proved here. The
+`k = 15` entry — the one that matters, and the only one Theorem A itself
+needs — rests on our own verified 126-edge witness.
+
+**What this changes operationally.** It converts a vague "go deeper" into a
+priced menu:
+
+- `z(16,17;3) <= 136` needs `z(11,17;3) <= 96`. This is the live target;
+  `--decide 97` at `k = 11` is running and would deliver it.
+- `<= 135` needs `z(12,17;3) <= 103`.
+- `<= 134` needs `z(13,17;3) <= 110` — **`k = 13` is the shallowest level
+  that reaches the hand-derivable bound.** Everything below it is
+  arithmetically incapable of it, no matter how much compute is spent.
+- `<= 133` needs enumeration, full stop.
 
 So certifying `<= 133` requires genuine enumeration — the extremal-parent
 route of `REDUCTION.md` — and no amount of further chain computation
