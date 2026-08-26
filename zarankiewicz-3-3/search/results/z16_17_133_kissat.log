@@ -1,0 +1,3 @@
+[external_sat_runner] built instance: m=16 n=17 K=133 sym=False solver=kissat nvars=37246 nclauses=454748 build_time=1.43s
+[external_sat_runner] wrote CNF to search/results/z16_17_133_kissat.cnf in 1.66s
+[external_sat_runner] running: kissat -q search/results/z16_17_133_kissat.cnf

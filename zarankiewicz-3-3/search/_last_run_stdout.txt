@@ -1,0 +1,49 @@
+=== Phase 3: structural (quadratic-residue / circulant over GF(17)) ===
+  QR_mod17_16rows                |D|= 8  edges= 128  energy=     0
+  QR_plus_zero_mod17_16rows      |D|= 9  edges= 144  energy=   168
+  non_QR_mod17_16rows            |D|= 8  edges= 128  energy=     0
+  QR_mod17_17rows_truncated16    |D|= 8  edges= 128  energy=     0
+  QR_mod17_plus_3                |D|= 9  edges= 144  energy=   224
+  QR_mod17_plus_5                |D|= 9  edges= 144  energy=   224
+  QR_mod17_plus_6                |D|= 9  edges= 144  energy=   224
+  QR_mod17_plus_7                |D|= 9  edges= 144  energy=   224
+  QR_mod17_plus_10               |D|= 9  edges= 144  energy=   224
+  QR_mod17_plus_11               |D|= 9  edges= 144  energy=   224
+  QR_mod17_plus_12               |D|= 9  edges= 144  energy=   224
+  QR_mod17_plus_14               |D|= 9  edges= 144  energy=   224
+
+=== Phase 1: SA seeded from known 132-edge witness (150 restarts x 20000 iters) ===
+  done in 186.3s
+  hits at 133/energy0: 0 / 150
+  best run: edges_at_zero_energy=132 best_energy_at_133=2 params={'mode': 'target', 't0': 1.0, 'edge_weight': 3.0, 'big_penalty': 1000.0, 'first_added_cell': [7, 2]}
+
+=== Phase 2: SA from scratch (40 random + 40 greedy starts x 30000 iters) ===
+  done in 143.4s
+  hits at 133/energy0: 0 / 80
+  best run: edges_at_zero_energy=122 best_energy_at_133=-1 params={'mode': 'reward', 't0': 2.0, 'greedy_start_edges': 114}
+
+=== Certification pass ===
+{
+  "hits_at_133_zero_energy": [],
+  "best_overall": null,
+  "best_overall_run": {
+    "label": "phase1_seeded",
+    "seed": 100132,
+    "params": {
+      "mode": "target",
+      "t0": 1.0,
+      "edge_weight": 3.0,
+      "big_penalty": 1000.0,
+      "first_added_cell": [
+        7,
+        2
+      ]
+    },
+    "best_edges_at_zero_energy": 132,
+    "best_energy_at_target": 2
+  }
+}
+best_overall_certified: {'shape': (16, 17), 'edges': 132, 'has_k33': False, 'is_k33_free': True, 'methods': {'row_triples': False, 'col_triples': False, 'networkx': False}}
+
+Wrote summary to /Users/kseniia/Desktop/programming/Projects/math-open-problem-solving/zarankiewicz-3-3/search/local_search_results.json
+Total wall time: 329.8s

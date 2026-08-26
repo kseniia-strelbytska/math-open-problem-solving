@@ -1,0 +1,78 @@
+{
+  "m": 4,
+  "n": 4,
+  "K": 8,
+  "solver": "kissat",
+  "backend": "external-dimacs-subprocess",
+  "symmetry_breaking": false,
+  "card_encoding": "seqcounter",
+  "card_mode": "atleast",
+  "time_limit_s": null,
+  "memory_limit_mb": null,
+  "proof_path": "search/results/smoke/al_z4_4_8_atleast.drat",
+  "status": "done",
+  "build_time_s": 0.0,
+  "num_vars": 80,
+  "num_clauses": 144,
+  "cnf_path": "search/results/smoke/al_z4_4_8_atleast.cnf",
+  "cnf_write_time_s": 0.0,
+  "cmd": [
+    "kissat",
+    "-q",
+    "--force",
+    "search/results/smoke/al_z4_4_8_atleast.cnf",
+    "search/results/smoke/al_z4_4_8_atleast.drat"
+  ],
+  "solve_time_s": 0.0,
+  "total_time_s": 0.0,
+  "exit_code": 10,
+  "subprocess_timed_out": false,
+  "stderr_tail": "",
+  "solver_status": "sat",
+  "sat": true,
+  "matrix": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      1,
+      1
+    ]
+  ],
+  "checker": {
+    "shape": [
+      4,
+      4
+    ],
+    "edges": 8,
+    "is_k33_free": true,
+    "methods": {
+      "row_triples": false,
+      "col_triples": false,
+      "networkx": false
+    }
+  },
+  "checker_edge_test": "edges >= 8",
+  "checker_verified": true,
+  "proof_written": true,
+  "proof_bytes": 0,
+  "proof_verified": false,
+  "proof_note": "Instance is SATISFIABLE -- there is no refutation to certify. This file is a partial DRAT derivation log with no certificate value. The trust anchor for a SAT result is verify/checker.py on the decoded witness (checker_verified)."
+}

@@ -1,0 +1,299 @@
+      h(3,17) probe T=44 -> UNSAT  nodes=15 0.00s
+      h(3,17) probe T=43 -> UNSAT  nodes=20 0.00s
+      h(3,17) probe T=42 -> UNSAT  nodes=27 0.00s
+      h(3,17) probe T=41 -> UNSAT  nodes=31 0.00s
+      h(3,17) probe T=40 -> UNSAT  nodes=37 0.00s
+      h(3,17) probe T=39 -> UNSAT  nodes=47 0.00s
+      h(3,17) probe T=38 -> UNSAT  nodes=53 0.00s
+      h(3,17) probe T=37 -> UNSAT  nodes=62 0.00s
+      h(3,17) probe T=36 -> SAT  nodes=4 0.00s
+  h(3,17) = 36   [nodes=296  0.000s]
+      h(3,3) probe T=9 -> SAT  nodes=4 0.00s
+  h(3,3) = 9   [nodes=4  0.000s]
+      h(3,4) probe T=12 -> SAT  nodes=4 0.00s
+  h(3,4) = 12   [nodes=4  0.000s]
+      h(3,5) probe T=15 -> SAT  nodes=4 0.00s
+  h(3,5) = 15   [nodes=4  0.000s]
+      h(3,6) probe T=18 -> SAT  nodes=4 0.00s
+  h(3,6) = 18   [nodes=4  0.000s]
+      h(3,7) probe T=21 -> SAT  nodes=4 0.00s
+  h(3,7) = 21   [nodes=4  0.000s]
+      h(3,8) probe T=24 -> SAT  nodes=4 0.00s
+  h(3,8) = 24   [nodes=4  0.000s]
+      h(3,9) probe T=27 -> SAT  nodes=4 0.00s
+  h(3,9) = 27   [nodes=4  0.000s]
+      h(3,10) probe T=30 -> SAT  nodes=4 0.00s
+  h(3,10) = 30   [nodes=4  0.000s]
+      h(3,11) probe T=33 -> SAT  nodes=4 0.00s
+  h(3,11) = 33   [nodes=4  0.000s]
+      h(3,12) probe T=36 -> SAT  nodes=4 0.00s
+  h(3,12) = 36   [nodes=4  0.000s]
+      h(3,13) probe T=39 -> UNSAT  nodes=7 0.00s
+      h(3,13) probe T=38 -> UNSAT  nodes=7 0.00s
+      h(3,13) probe T=37 -> UNSAT  nodes=12 0.00s
+      h(3,13) probe T=36 -> SAT  nodes=4 0.00s
+  h(3,13) = 36   [nodes=30  0.000s]
+      h(3,14) probe T=42 -> UNSAT  nodes=6 0.00s
+      h(3,14) probe T=41 -> UNSAT  nodes=6 0.00s
+      h(3,14) probe T=40 -> UNSAT  nodes=10 0.00s
+      h(3,14) probe T=39 -> UNSAT  nodes=16 0.00s
+      h(3,14) probe T=38 -> UNSAT  nodes=20 0.00s
+      h(3,14) probe T=37 -> UNSAT  nodes=25 0.00s
+      h(3,14) probe T=36 -> SAT  nodes=4 0.00s
+  h(3,14) = 36   [nodes=87  0.000s]
+      h(3,15) probe T=44 -> UNSAT  nodes=5 0.00s
+      h(3,15) probe T=43 -> UNSAT  nodes=8 0.00s
+      h(3,15) probe T=42 -> UNSAT  nodes=13 0.00s
+      h(3,15) probe T=41 -> UNSAT  nodes=16 0.00s
+      h(3,15) probe T=40 -> UNSAT  nodes=20 0.00s
+      h(3,15) probe T=39 -> UNSAT  nodes=29 0.00s
+      h(3,15) probe T=38 -> UNSAT  nodes=33 0.00s
+      h(3,15) probe T=37 -> UNSAT  nodes=41 0.00s
+      h(3,15) probe T=36 -> SAT  nodes=4 0.00s
+  h(3,15) = 36   [nodes=169  0.000s]
+      h(3,16) probe T=44 -> UNSAT  nodes=12 0.00s
+      h(3,16) probe T=43 -> UNSAT  nodes=15 0.00s
+      h(3,16) probe T=42 -> UNSAT  nodes=22 0.00s
+      h(3,16) probe T=41 -> UNSAT  nodes=25 0.00s
+      h(3,16) probe T=40 -> UNSAT  nodes=31 0.00s
+      h(3,16) probe T=39 -> UNSAT  nodes=40 0.00s
+      h(3,16) probe T=38 -> UNSAT  nodes=46 0.00s
+      h(3,16) probe T=37 -> UNSAT  nodes=54 0.00s
+      h(3,16) probe T=36 -> SAT  nodes=4 0.00s
+  h(3,16) = 36   [nodes=249  0.000s]
+      h(4,17) probe T=48 -> UNSAT  nodes=69 0.00s
+      h(4,17) probe T=47 -> UNSAT  nodes=76 0.00s
+      h(4,17) probe T=46 -> UNSAT  nodes=95 0.00s
+      h(4,17) probe T=45 -> UNSAT  nodes=131 0.00s
+      h(4,17) probe T=44 -> UNSAT  nodes=222 0.00s
+      h(4,17) probe T=43 -> UNSAT  nodes=333 0.00s
+      h(4,17) probe T=42 -> SAT  nodes=17 0.00s
+  h(4,17) = 42   [nodes=943  0.001s]
+      h(4,3) probe T=12 -> SAT  nodes=5 0.00s
+  h(4,3) = 12   [nodes=5  0.000s]
+      h(4,4) probe T=16 -> SAT  nodes=5 0.00s
+  h(4,4) = 16   [nodes=5  0.000s]
+      h(4,5) probe T=20 -> SAT  nodes=5 0.00s
+  h(4,5) = 20   [nodes=5  0.000s]
+      h(4,6) probe T=24 -> SAT  nodes=5 0.00s
+  h(4,6) = 24   [nodes=5  0.000s]
+      h(4,7) probe T=28 -> SAT  nodes=5 0.00s
+  h(4,7) = 28   [nodes=5  0.000s]
+      h(4,8) probe T=32 -> SAT  nodes=10 0.00s
+  h(4,8) = 32   [nodes=10  0.000s]
+      h(4,9) probe T=36 -> SAT  nodes=5 0.00s
+  h(4,9) = 36   [nodes=5  0.000s]
+      h(4,10) probe T=40 -> SAT  nodes=10 0.00s
+  h(4,10) = 40   [nodes=10  0.000s]
+      h(4,11) probe T=44 -> UNSAT  nodes=32 0.00s
+      h(4,11) probe T=43 -> UNSAT  nodes=32 0.00s
+      h(4,11) probe T=42 -> SAT  nodes=17 0.00s
+  h(4,11) = 42   [nodes=81  0.000s]
+      h(4,12) probe T=48 -> UNSAT  nodes=9 0.00s
+      h(4,12) probe T=47 -> UNSAT  nodes=9 0.00s
+      h(4,12) probe T=46 -> UNSAT  nodes=13 0.00s
+      h(4,12) probe T=45 -> UNSAT  nodes=30 0.00s
+      h(4,12) probe T=44 -> UNSAT  nodes=72 0.00s
+      h(4,12) probe T=43 -> UNSAT  nodes=95 0.00s
+      h(4,12) probe T=42 -> SAT  nodes=17 0.00s
+  h(4,12) = 42   [nodes=245  0.000s]
+      h(4,13) probe T=48 -> UNSAT  nodes=20 0.00s
+      h(4,13) probe T=47 -> UNSAT  nodes=21 0.00s
+      h(4,13) probe T=46 -> UNSAT  nodes=35 0.00s
+      h(4,13) probe T=45 -> UNSAT  nodes=56 0.00s
+      h(4,13) probe T=44 -> UNSAT  nodes=113 0.00s
+      h(4,13) probe T=43 -> UNSAT  nodes=175 0.00s
+      h(4,13) probe T=42 -> SAT  nodes=17 0.00s
+  h(4,13) = 42   [nodes=437  0.000s]
+      h(4,14) probe T=48 -> UNSAT  nodes=33 0.00s
+      h(4,14) probe T=47 -> UNSAT  nodes=39 0.00s
+      h(4,14) probe T=46 -> UNSAT  nodes=54 0.00s
+      h(4,14) probe T=45 -> UNSAT  nodes=80 0.00s
+      h(4,14) probe T=44 -> UNSAT  nodes=157 0.00s
+      h(4,14) probe T=43 -> UNSAT  nodes=234 0.00s
+      h(4,14) probe T=42 -> SAT  nodes=17 0.00s
+  h(4,14) = 42   [nodes=614  0.000s]
+      h(4,15) probe T=48 -> UNSAT  nodes=49 0.00s
+      h(4,15) probe T=47 -> UNSAT  nodes=55 0.00s
+      h(4,15) probe T=46 -> UNSAT  nodes=71 0.00s
+      h(4,15) probe T=45 -> UNSAT  nodes=105 0.00s
+      h(4,15) probe T=44 -> UNSAT  nodes=187 0.00s
+      h(4,15) probe T=43 -> UNSAT  nodes=280 0.00s
+      h(4,15) probe T=42 -> SAT  nodes=17 0.00s
+  h(4,15) = 42   [nodes=764  0.001s]
+      h(4,16) probe T=48 -> UNSAT  nodes=62 0.00s
+      h(4,16) probe T=47 -> UNSAT  nodes=68 0.00s
+      h(4,16) probe T=46 -> UNSAT  nodes=87 0.00s
+      h(4,16) probe T=45 -> UNSAT  nodes=122 0.00s
+      h(4,16) probe T=44 -> UNSAT  nodes=209 0.00s
+      h(4,16) probe T=43 -> UNSAT  nodes=317 0.00s
+      h(4,16) probe T=42 -> SAT  nodes=17 0.00s
+  h(4,16) = 42   [nodes=882  0.001s]
+      h(5,17) probe T=52 -> SAT  nodes=121 0.00s
+  h(5,17) = 52   [nodes=121  0.003s]
+      h(5,3) probe T=15 -> SAT  nodes=6 0.00s
+  h(5,3) = 15   [nodes=6  0.000s]
+      h(5,4) probe T=20 -> SAT  nodes=6 0.00s
+  h(5,4) = 20   [nodes=6  0.000s]
+      h(5,5) probe T=25 -> SAT  nodes=6 0.00s
+  h(5,5) = 25   [nodes=6  0.000s]
+      h(5,6) probe T=30 -> SAT  nodes=6 0.00s
+  h(5,6) = 30   [nodes=6  0.000s]
+      h(5,7) probe T=35 -> SAT  nodes=7 0.00s
+  h(5,7) = 35   [nodes=7  0.000s]
+      h(5,8) probe T=40 -> SAT  nodes=11 0.00s
+  h(5,8) = 40   [nodes=11  0.000s]
+      h(5,9) probe T=45 -> SAT  nodes=14 0.00s
+  h(5,9) = 45   [nodes=14  0.000s]
+      h(5,10) probe T=50 -> SAT  nodes=109 0.00s
+  h(5,10) = 50   [nodes=109  0.000s]
+      h(5,11) probe T=52 -> UNSAT  nodes=89 0.00s
+      h(5,11) probe T=51 -> SAT  nodes=59 0.00s
+  h(5,11) = 51   [nodes=148  0.000s]
+      h(5,12) probe T=52 -> SAT  nodes=121 0.00s
+  h(5,12) = 52   [nodes=121  0.000s]
+      h(5,13) probe T=52 -> SAT  nodes=121 0.00s
+  h(5,13) = 52   [nodes=121  0.000s]
+      h(5,14) probe T=52 -> SAT  nodes=121 0.00s
+  h(5,14) = 52   [nodes=121  0.000s]
+      h(5,15) probe T=52 -> SAT  nodes=121 0.00s
+  h(5,15) = 52   [nodes=121  0.000s]
+      h(5,16) probe T=52 -> SAT  nodes=121 0.00s
+  h(5,16) = 52   [nodes=121  0.000s]
+      h(6,17) probe T=62 -> UNSAT  nodes=384 0.00s
+      h(6,17) probe T=61 -> UNSAT  nodes=626 0.00s
+      h(6,17) probe T=60 -> UNSAT  nodes=1628 0.01s
+      h(6,17) probe T=59 -> UNSAT  nodes=2565 0.01s
+      h(6,17) probe T=58 -> SAT  nodes=443 0.01s
+  h(6,17) = 58   [nodes=5646  0.026s]
+      h(6,3) probe T=18 -> SAT  nodes=7 0.00s
+  h(6,3) = 18   [nodes=7  0.000s]
+      h(6,4) probe T=24 -> SAT  nodes=7 0.00s
+  h(6,4) = 24   [nodes=7  0.000s]
+      h(6,5) probe T=30 -> SAT  nodes=7 0.00s
+  h(6,5) = 30   [nodes=7  0.000s]
+      h(6,6) probe T=36 -> SAT  nodes=10 0.00s
+  h(6,6) = 36   [nodes=10  0.000s]
+      h(6,7) probe T=42 -> SAT  nodes=65 0.00s
+  h(6,7) = 42   [nodes=65  0.002s]
+      h(6,8) probe T=48 -> SAT  nodes=14 0.00s
+  h(6,8) = 48   [nodes=14  0.000s]
+      h(6,9) probe T=54 -> SAT  nodes=40 0.00s
+  h(6,9) = 54   [nodes=40  0.000s]
+      h(6,10) probe T=60 -> UNSAT  nodes=838 0.00s
+      h(6,10) probe T=59 -> UNSAT  nodes=838 0.01s
+      h(6,10) probe T=58 -> SAT  nodes=443 0.01s
+  h(6,10) = 58   [nodes=2119  0.015s]
+      h(6,11) probe T=61 -> UNSAT  nodes=288 0.00s
+      h(6,11) probe T=60 -> UNSAT  nodes=1146 0.01s
+      h(6,11) probe T=59 -> UNSAT  nodes=1530 0.01s
+      h(6,11) probe T=58 -> SAT  nodes=443 0.00s
+  h(6,11) = 58   [nodes=3407  0.019s]
+      h(6,12) probe T=62 -> UNSAT  nodes=211 0.00s
+      h(6,12) probe T=61 -> UNSAT  nodes=410 0.00s
+      h(6,12) probe T=60 -> UNSAT  nodes=1321 0.01s
+      h(6,12) probe T=59 -> UNSAT  nodes=2045 0.01s
+      h(6,12) probe T=58 -> SAT  nodes=443 0.01s
+  h(6,12) = 58   [nodes=4430  0.024s]
+      h(6,13) probe T=62 -> UNSAT  nodes=280 0.00s
+      h(6,13) probe T=61 -> UNSAT  nodes=490 0.00s
+      h(6,13) probe T=60 -> UNSAT  nodes=1439 0.01s
+      h(6,13) probe T=59 -> UNSAT  nodes=2287 0.01s
+      h(6,13) probe T=58 -> SAT  nodes=443 0.01s
+  h(6,13) = 58   [nodes=4939  0.028s]
+      h(6,14) probe T=62 -> UNSAT  nodes=323 0.00s
+      h(6,14) probe T=61 -> UNSAT  nodes=544 0.00s
+      h(6,14) probe T=60 -> UNSAT  nodes=1520 0.01s
+      h(6,14) probe T=59 -> UNSAT  nodes=2446 0.01s
+      h(6,14) probe T=58 -> SAT  nodes=443 0.00s
+  h(6,14) = 58   [nodes=5276  0.024s]
+      h(6,15) probe T=62 -> UNSAT  nodes=352 0.00s
+      h(6,15) probe T=61 -> UNSAT  nodes=584 0.00s
+      h(6,15) probe T=60 -> UNSAT  nodes=1584 0.01s
+      h(6,15) probe T=59 -> UNSAT  nodes=2514 0.01s
+      h(6,15) probe T=58 -> SAT  nodes=443 0.00s
+  h(6,15) = 58   [nodes=5477  0.026s]
+      h(6,16) probe T=62 -> UNSAT  nodes=373 0.00s
+      h(6,16) probe T=61 -> UNSAT  nodes=615 0.00s
+      h(6,16) probe T=60 -> UNSAT  nodes=1616 0.01s
+      h(6,16) probe T=59 -> UNSAT  nodes=2550 0.01s
+      h(6,16) probe T=58 -> SAT  nodes=443 0.01s
+  h(6,16) = 58   [nodes=5597  0.028s]
+      h(7,17) probe T=67 -> UNSAT  nodes=10419 0.27s
+      h(7,17) probe T=66 -> SAT  nodes=11018 0.23s
+  h(7,17) = 66   [nodes=21437  0.494s]
+      h(7,3) probe T=21 -> SAT  nodes=8 0.00s
+  h(7,3) = 21   [nodes=8  0.000s]
+      h(7,4) probe T=28 -> SAT  nodes=8 0.00s
+  h(7,4) = 28   [nodes=8  0.000s]
+      h(7,5) probe T=35 -> SAT  nodes=41 0.00s
+  h(7,5) = 35   [nodes=41  0.001s]
+      h(7,6) probe T=42 -> SAT  nodes=13 0.00s
+  h(7,6) = 42   [nodes=13  0.000s]
+      h(7,7) probe T=49 -> SAT  nodes=66 0.00s
+  h(7,7) = 49   [nodes=66  0.003s]
+      h(7,8) probe T=56 -> SAT  nodes=94 0.02s
+  h(7,8) = 56   [nodes=94  0.019s]
+      h(7,9) probe T=63 -> SAT  nodes=2921 0.10s
+  h(7,9) = 63   [nodes=2921  0.100s]
+      h(7,10) probe T=67 -> UNSAT  nodes=3107 0.04s
+      h(7,10) probe T=66 -> SAT  nodes=11018 0.21s
+  h(7,10) = 66   [nodes=14125  0.254s]
+      h(7,11) probe T=67 -> UNSAT  nodes=7407 0.10s
+      h(7,11) probe T=66 -> SAT  nodes=11018 0.23s
+  h(7,11) = 66   [nodes=18425  0.321s]
+      h(7,12) probe T=67 -> UNSAT  nodes=9221 0.11s
+      h(7,12) probe T=66 -> SAT  nodes=11018 0.21s
+  h(7,12) = 66   [nodes=20239  0.317s]
+      h(7,13) probe T=67 -> UNSAT  nodes=10142 0.10s
+      h(7,13) probe T=66 -> SAT  nodes=11018 0.23s
+  h(7,13) = 66   [nodes=21160  0.331s]
+      h(7,14) probe T=67 -> UNSAT  nodes=10301 0.10s
+      h(7,14) probe T=66 -> SAT  nodes=11018 0.21s
+  h(7,14) = 66   [nodes=21319  0.310s]
+      h(7,15) probe T=67 -> UNSAT  nodes=10369 0.10s
+      h(7,15) probe T=66 -> SAT  nodes=11018 0.32s
+  h(7,15) = 66   [nodes=21387  0.422s]
+      h(7,16) probe T=67 -> UNSAT  nodes=10405 0.10s
+      h(7,16) probe T=66 -> SAT  nodes=11018 0.19s
+  h(7,16) = 66   [nodes=21423  0.285s]
+      h(8,17) probe T=75 -> UNSAT  nodes=50175 3.09s
+      h(8,17) probe T=74 -> SAT  nodes=22832 0.61s
+  h(8,17) = 74   [nodes=73007  3.697s]
+      h(8,3) probe T=24 -> SAT  nodes=9 0.00s
+  h(8,3) = 24   [nodes=9  0.000s]
+      h(8,4) probe T=32 -> SAT  nodes=9 0.00s
+  h(8,4) = 32   [nodes=9  0.000s]
+      h(8,5) probe T=40 -> SAT  nodes=96 0.00s
+  h(8,5) = 40   [nodes=96  0.003s]
+      h(8,6) probe T=48 -> SAT  nodes=15 0.00s
+  h(8,6) = 48   [nodes=15  0.000s]
+      h(8,7) probe T=56 -> SAT  nodes=67 0.00s
+  h(8,7) = 56   [nodes=67  0.004s]
+      h(8,8) probe T=64 -> SAT  nodes=271 0.08s
+  h(8,8) = 64   [nodes=271  0.080s]
+      h(8,9) probe T=72 -> SAT  nodes=18380 0.93s
+  h(8,9) = 72   [nodes=18380  0.926s]
+      h(8,10) probe T=75 -> UNSAT  nodes=21477 0.42s
+      h(8,10) probe T=74 -> SAT  nodes=22832 0.67s
+  h(8,10) = 74   [nodes=44309  1.096s]
+      h(8,11) probe T=75 -> UNSAT  nodes=39427 0.72s
+      h(8,11) probe T=74 -> SAT  nodes=22832 0.76s
+  h(8,11) = 74   [nodes=62259  1.476s]
+      h(8,12) probe T=75 -> UNSAT  nodes=48978 0.87s
+      h(8,12) probe T=74 -> SAT  nodes=22832 0.72s
+  h(8,12) = 74   [nodes=71810  1.591s]
+      h(8,13) probe T=75 -> UNSAT  nodes=49899 0.96s
+      h(8,13) probe T=74 -> SAT  nodes=22832 0.70s
+  h(8,13) = 74   [nodes=72731  1.662s]
+      h(8,14) probe T=75 -> UNSAT  nodes=50058 0.88s
+      h(8,14) probe T=74 -> SAT  nodes=22832 0.67s
+  h(8,14) = 74   [nodes=72890  1.549s]
+      h(8,15) probe T=75 -> UNSAT  nodes=50126 0.75s
+      h(8,15) probe T=74 -> SAT  nodes=22832 0.61s
+  h(8,15) = 74   [nodes=72958  1.362s]
+      h(8,16) probe T=75 -> UNSAT  nodes=50162 0.74s
+      h(8,16) probe T=74 -> SAT  nodes=22832 0.66s
+  h(8,16) = 74   [nodes=72994  1.400s]
+      h(9,17) probe T=83 -> UNSAT  nodes=347899 19.28s
+      h(9,17) probe T=82 -> UNSAT  nodes=2412355 87.07s

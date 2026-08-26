@@ -1,0 +1,25 @@
+{
+  "m": 7,
+  "n": 7,
+  "K": 34,
+  "solver": "kissat",
+  "backend": "external-dimacs-subprocess",
+  "symmetry_breaking": false,
+  "card_encoding": "seqcounter",
+  "time_limit_s": null,
+  "memory_limit_mb": null,
+  "proof_path": "search/results/smoke/z7_7_34.drat",
+  "status": "solving",
+  "build_time_s": 0.0,
+  "num_vars": 1069,
+  "num_clauses": 3265,
+  "cnf_path": "search/results/smoke/z7_7_34.cnf",
+  "cnf_write_time_s": 0.0,
+  "cmd": [
+    "kissat",
+    "-q",
+    "--force",
+    "search/results/smoke/z7_7_34.cnf",
+    "search/results/smoke/z7_7_34.drat"
+  ]
+}

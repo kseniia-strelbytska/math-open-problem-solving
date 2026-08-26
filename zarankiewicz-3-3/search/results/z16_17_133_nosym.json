@@ -1,0 +1,12 @@
+{
+  "m": 16,
+  "n": 17,
+  "K": 133,
+  "solver": "cadical153",
+  "symmetry_breaking": false,
+  "card_encoding": "seqcounter",
+  "status": "solving",
+  "build_time_s": 0.91,
+  "num_vars": 37246,
+  "num_clauses": 454748
+}

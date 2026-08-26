@@ -1,0 +1,21 @@
+{
+  "m": 16,
+  "n": 17,
+  "K": 133,
+  "solver": "kissat",
+  "backend": "external-dimacs-subprocess",
+  "symmetry_breaking": false,
+  "card_encoding": "seqcounter",
+  "time_limit_s": null,
+  "status": "solving",
+  "build_time_s": 1.43,
+  "num_vars": 37246,
+  "num_clauses": 454748,
+  "cnf_path": "search/results/z16_17_133_kissat.cnf",
+  "cnf_write_time_s": 1.66,
+  "cmd": [
+    "kissat",
+    "-q",
+    "search/results/z16_17_133_kissat.cnf"
+  ]
+}

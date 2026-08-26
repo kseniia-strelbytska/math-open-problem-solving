@@ -1,0 +1,50 @@
+=== Conflict-biased / tabu / compound-move search (150 restarts x 20000 iters) ===
+done in 359.3s
+hits at 133/energy0: 0 / 150
+best_energy_at_target histogram (sorted): [2, 2, 2, 2, 2, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6]...
+min energy at 133 edges across all restarts: 2
+
+=== Certification pass ===
+{
+  "hits_at_133_zero_energy": [],
+  "best_overall_run": {
+    "label": "tabu_conflict_biased",
+    "seed": 400099,
+    "params": {
+      "t0": 4.0,
+      "edge_weight": 3.0,
+      "big_penalty": 5000.0,
+      "tabu_tenure": 20,
+      "bias_prob": 0.9,
+      "compound_every": 250,
+      "patience": 500,
+      "first_added_cell": [
+        7,
+        2
+      ]
+    },
+    "best_edges_at_zero_energy": 132,
+    "best_energy_at_target": 2
+  },
+  "best_near_miss_at_133": {
+    "seed": 400027,
+    "params": {
+      "t0": 1.0,
+      "edge_weight": 1.0,
+      "big_penalty": 5000.0,
+      "tabu_tenure": 20,
+      "bias_prob": 0.8,
+      "compound_every": 400,
+      "patience": 300,
+      "first_added_cell": [
+        7,
+        2
+      ]
+    },
+    "energy": 2
+  }
+}
+best_overall_certified: {'shape': (16, 17), 'edges': 132, 'has_k33': False, 'is_k33_free': True, 'methods': {'row_triples': False, 'col_triples': False, 'networkx': False}}
+
+Wrote summary to /Users/kseniia/Desktop/programming/Projects/math-open-problem-solving/zarankiewicz-3-3/search/tabu_search_results.json
+Total wall time: 359.4s

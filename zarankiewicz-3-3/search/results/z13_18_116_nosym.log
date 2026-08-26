@@ -1,0 +1,3 @@
+[sat_attack] built instance: m=13 n=18 K=116 sym=False solver=cadical153 nvars=27610 nclauses=288128 build_time=0.41s
+[sat_attack] solve finished: sat=True solve_time=213.43s
+[sat_attack] checker_verified=True (edges=116, is_k33_free=True)

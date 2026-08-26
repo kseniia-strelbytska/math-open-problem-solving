@@ -1,0 +1,5 @@
+[external_sat_runner] built instance: m=7 n=7 K=34 sym=False solver=kissat nvars=559 nclauses=2264 build_time=0.00s
+[external_sat_runner] wrote CNF to search/results/smoke/scale_z7_7_34.cnf in 0.00s
+[external_sat_runner] running: kissat -q --time=1200 --force search/results/smoke/scale_z7_7_34.cnf search/results/smoke/scale_z7_7_34.drat
+[external_sat_runner] solve finished: solver_status=unsat exit_code=20 solve_time=179.97s
+[external_sat_runner] UNSAT; candidate DRAT proof at search/results/smoke/scale_z7_7_34.drat (133702540 bytes). NOT yet verified -- run drat-trim/cake_lpr on it.
