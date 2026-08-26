@@ -204,3 +204,61 @@ logged `PROMISING-UNEXPLORED` should be revived instead of starting fresh.
   This is a literature/technique gap, not a computational one, and is a
   candidate for a genuinely different (human-mathematics-style, not
   brute-force) angle on the upper-bound side.
+
+### [L12] DRAT/LRAT proof certificate generation + independent verification
+- Status: ACTIVE, URGENT
+- First appeared: iteration ~8 (raised by the prover-reviewer's first call,
+  2026-08-26 — was NOT previously logged despite being the single highest-
+  value gap in the project)
+- The problem: none of the solver processes running as of that review had
+  proof logging enabled. So if any of them had resolved UNSAT, the result
+  would have been worthless as a *certificate* — only informal internal
+  evidence — and the 100+ combined CPU-hours would have to be re-spent.
+  This directly blocks acceptance criterion (B) and the explicitly-raised
+  "conference-admittable proof" bar.
+- Independently verified (not taken on the reviewer's word): `kissat --help`
+  confirms proof output is a plain positional argument
+  (`kissat [options] <dimacs> [<proof>]`, binary DRAT for real files) —
+  an unused CLI flag, not a research problem. Also confirmed `drat-trim`,
+  `cake_lpr`, `lrat-check` are all absent from this machine.
+- What it needs: (a) relaunch a no-symmetry-breaking 16x17/K=133 kissat run
+  WITH a proof file; (b) install `drat-trim`, and `cake_lpr` if buildable
+  (preferred — it is itself formally verified in HOL4, which closes the
+  "who checks the checker" loop far more tightly); (c) smoke-test both
+  checkers on a tiny hand-constructed UNSAT case (e.g. m=3,n=3,K=9) before
+  trusting either on the real proof.
+- Note: the certifying run should NOT use symmetry breaking — it hurts
+  performance here anyway, and dropping it removes the (only empirically
+  validated, never formally proven) double-lex soundness argument from the
+  proof's dependency chain entirely. Two birds.
+
+### [L13] Bottom-up isomorph-free exhaustive generation (orderly generation)
+- Status: ACTIVE — now the primary computational strategy
+- First appeared: iteration ~8 (strategy re-evaluation, see
+  `zarankiewicz-3-3/STRATEGY_V2.md` for the full argument)
+- Why: the monolithic SAT approach fights ~`16!*17! = 1.2e26` row/column
+  permutation symmetry with clauses, which CDCL cannot exploit and which
+  was measured to make the solver *slower*. Orderly generation instead
+  eliminates that symmetry *by construction* via canonical forms.
+- Method: build row-by-row over 17-bit row masks, rows kept lex
+  non-increasing (sound: sorting rows preserves both edge count and
+  K_{3,3}-freeness), first row fixed as `1^d 0^(17-d)` WLOG by column
+  permutation, incremental 680-counter triple-multiplicity state each
+  capped at 2, and pruning by prefix bound (`E_k <= f(k)`), suffix bound
+  (`E_k + (16-k)*d_k >= target`), and remaining triple budget.
+- Key structural advantage: compute `f(k) := z(k,17;3)` bottom-up for
+  k=1..16 ourselves, so the final result cites NO external upper bound —
+  it re-derives the sub-cell values (z(13,17)=110, z(14,17)=118,
+  z(15,17)=126) that the case-reduction argument would otherwise have to
+  assume on the 2016 paper's uncertified authority.
+- Validation before trust: must reproduce known published exact values
+  (small cells z(6,6)=26, z(7,7)=33, z(8,8)=42, z(9,9)=49, then the
+  directly relevant 13/14/15 x 17 cells). Reproducing those is much
+  stronger evidence than anything the SAT pipeline has produced.
+- Supporting result already verified this session: the counting bounds
+  (`sum_r C(d_r,3) <= 2*C(17,3) = 1360`, `sum_c C(e_c,3) <= 2*C(16,3) =
+  1120`) plus deletion-derived degree floors cut the hypothetical 133-edge
+  graph's possible row degree sequences to just **438** (and column
+  sequences to 3167) — an explicit, human-checkable, parallelisable case
+  reduction. Counting alone does NOT rule out 133 (balanced sequences give
+  1036 and 889, both within budget), so search is genuinely required.

@@ -296,11 +296,22 @@ A long session pause happened mid-run; picking up the thread here.
   newly wired in via a DIMACS-subprocess runner,
   `search/external_sat_runner.py`, smoke-tested on hand-checkable tiny
   cases before being trusted on the real target). As of this entry: none
-  have resolved; several have accumulated 75-100+ minutes of real CPU
-  time. This is itself informative — four different solver algorithms
-  (Cadical, Glucose, Kissat, an SMT-based engine via Z3) all struggling
-  on the identical instance is at minimum consistent with (not proof of)
-  genuine hardness, not just under-resourcing.
+  have resolved.
+
+  **Correction (flagged by the prover-reviewer, 2026-08-26)**: an earlier
+  version of this entry claimed all six configurations had accumulated
+  "75-100+ minutes of CPU time each" and leaned on that for a
+  "four different solver algorithms all struggling" hardness argument.
+  That was an overclaim on my part. Verified breakdown: Cadical153 (both
+  configs) ~105 CPU-min and Glucose3 ~78 CPU-min — but Kissat and Z3 had
+  only ~11-13 CPU-min, having been launched much later. Eleven CPU-minutes
+  is not informative either way for a modern CDCL solver on an instance
+  this size, so the hardness argument rests only on the Cadical/Glucose
+  figures, and is correspondingly weaker than stated. Additionally, all
+  seven solver processes were then sharing 8 logical cores at ~55-70% of
+  a core each, so wall-clock was not a clean proxy for solver effort.
+  Future log entries should record each solver's *launch time* alongside
+  its CPU time so staleness is visible at a glance.
 - Confidence: SAT encoding correctness itself remains ~90% (unchanged
   from step 1 — nothing here contradicts it; step 2a's real, checker-
   verified witness is further positive evidence the K_{3,3} clauses are
