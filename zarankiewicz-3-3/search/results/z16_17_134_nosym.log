@@ -1,0 +1,1 @@
+[sat_attack] built instance: m=16 n=17 K=134 sym=False solver=cadical153 nvars=37256 nclauses=454768 build_time=1.89s

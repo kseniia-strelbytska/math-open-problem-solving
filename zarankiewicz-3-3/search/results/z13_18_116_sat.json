@@ -1,0 +1,11 @@
+{
+  "m": 13,
+  "n": 18,
+  "K": 116,
+  "solver": "cadical153",
+  "symmetry_breaking": true,
+  "status": "solving",
+  "build_time_s": 0.86,
+  "num_vars": 28018,
+  "num_clauses": 290576
+}

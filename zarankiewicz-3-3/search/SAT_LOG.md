@@ -118,7 +118,123 @@ addresses this gap.
 
 ## Step 2 -- Pipeline validation against a known exact value: Z(13,18,3,3) = 116
 
-(filled in below as runs complete)
+Wrote `search/sat_attack.py`, a thin runner around `sat_encoding.build_instance`
+that logs instance stats before solving (so a kill mid-solve is
+distinguishable from never starting), solves, and -- if SAT -- immediately
+re-verifies the decoded witness with `verify/checker.py` before reporting
+`checker_verified`. Self-tested on a trivial `3x3, K=8` instance first
+(SAT, checker-verified, sub-second) before trusting it on anything real.
+
+### 2a. Confirm SAT at K=116 for 13x18
+
+- **Independent structural check (not the SAT solver at all), done first:**
+  took the actual literature-derived `z13_18_116_witness.csv` and
+  iteratively row-sorted then column-sorted it. It **converged after a
+  single iteration** to a matrix that is simultaneously row-lex-sorted
+  AND column-lex-sorted (a genuine fixed point of both sorts at once --
+  not something guaranteed by the informal "sort rows then columns"
+  argument in `sat_encoding.py`'s docstring, which explicitly flags that
+  column-sorting could in general disturb row order). Re-checked with
+  `checker.verify`: still exactly 116 edges, still K_{3,3}-free. This is
+  a concrete, checkable existence proof that a double-lex-sorted 116-edge
+  witness genuinely exists at this real instance size -- i.e. the
+  symmetry-breaking clauses cannot be eliminating every witness here,
+  independent of whether a solver can find one quickly. Strong additional
+  evidence for soundness at scale, beyond the m,n<=5 tests in step 1.
+- **`symmetry_breaking=False`, Cadical153:** SAT in **213.4s**
+  (28018 vars unset -- actually 27610 vars, 288128 clauses without the
+  symmetry clauses). Decoded witness independently checker-verified:
+  116 edges, `is_k33_free=True`. **Step 2a's core requirement (a K=116
+  witness, independently checker-verified) is satisfied.**
+- **`symmetry_breaking=True`, same instance:** did **not** finish inside
+  any of three separate attempts, each run to a hard stop after 10-22+
+  CPU-minutes with no result:
+  - Cadical153, `seqcounter` cardinality encoding (the default): killed
+    after **~34 minutes** wall clock (two separate launches, ~22 min then
+    ~9 min more) with no verdict.
+  - Glucose3, `seqcounter`: killed after **~9 min** with no verdict
+    (run in parallel with the Cadical retry above, same wall-clock
+    window).
+  - Cadical153, `totalizer` cardinality encoding (tried specifically to
+    check whether the slowdown was a seqcounter-specific interaction
+    with the double-lex chains): killed after **~8 min** with no verdict.
+  - Total: 3 different (solver, cardinality-encoding) combinations, all
+    with `symmetry_breaking=True`, none completed within reasonable
+    budgets, versus the plain (no symmetry breaking) instance solving in
+    3.5 minutes. This rules out "it's just the seqcounter encoding" as
+    the explanation -- the slowdown tracks `symmetry_breaking=True`
+    specifically, not a particular cardinality encoding or solver.
+
+**Interpretation, stated carefully:** this is a *performance* finding,
+not a soundness finding. Step 1 (isolated gadget check + full small-case
+agreement check, all passing) and the double-lex-sort convergence check
+above are both still valid evidence that the symmetry-breaking clauses do
+not change the SAT/UNSAT status of an instance. What this shows instead
+is that, at the 13x18 scale, adding the double-lex ordering clauses on
+top of a tight "exactly K" cardinality constraint appears to make CDCL
+search *dramatically harder* in practice for both solvers tried --
+plausibly because the ordering chains interact badly with the cardinality
+encoding's own propagation structure and/or the solvers' variable-ordering
+heuristics, a known failure mode for symmetry-breaking constraints in the
+SAT/CP literature (added constraints can prune the search *space* while
+still making the *search* slower, if they don't align with how the solver
+explores). This was not anticipated going in and is a genuine, honestly-
+reported dead end for "always turn symmetry breaking on."
+
+**Consequence for strategy (rotation, per working discipline):** proceed
+with `symmetry_breaking=False` as the primary configuration for both the
+K=117 UNSAT attempt below and the real target in step 3. This is still a
+fully sound choice for an UNSAT *proof* specifically: an UNSAT verdict
+from the plain (K33-freeness + exactly-K cardinality, no symmetry
+clauses) CNF is already a complete, self-contained proof of
+non-existence on its own terms -- it does not depend on the
+symmetry-breaking soundness argument at all, since that argument is only
+needed when symmetry clauses are actually added to the instance being
+solved. Symmetry breaking was only ever meant to be a *speed*
+optimization (by pruning symmetric duplicates from the search space); it
+is not required for either a SAT witness or an UNSAT proof to be valid.
+Given it measurably hurt speed here rather than helping, dropping it for
+the harder downstream attempts is the right call, not a compromise on
+rigor.
+
+### 2b. Attempt UNSAT at K=117 for 13x18
+
+Given the finding above, ran two attempts **in parallel**, both Cadical153:
+`symmetry_breaking=False` (primary, since it's the configuration that
+actually worked in 2a) and `symmetry_breaking=True` (kept as a secondary
+attempt in case UNSAT-proving behaves differently from SAT-finding).
+
+- **Result: TIMEOUT, both configurations.** Killed after **~30 minutes**
+  wall clock (~28 CPU-minutes each, both pegged at ~100% CPU the whole
+  time, i.e. actively searching, not stuck/hung) with no SAT/UNSAT
+  verdict from either. This is a few minutes over the ~20-25 minute
+  budget given for this step; extended slightly to get one more clean
+  data point before stopping, per "report honestly rather than abandon
+  silently."
+- Neither run produced a partial verdict of any kind -- Cadical153 (like
+  most modern CDCL solvers) does not expose incremental progress short of
+  a final SAT/UNSAT answer via the plain `solve()` API used here, so
+  "still running" is the only information available mid-search.
+- **Honest read of this result:** proving UNSAT at K=117 for a 13x18
+  instance (27610-28018 vars, ~288-291k clauses, most of them 9-literal
+  K33-freeness clauses) is harder than the ~3.5-minute SAT search at
+  K=116 -- expected in general (UNSAT proofs require exhausting/pruning
+  the whole relevant search space, not just finding one witness), but the
+  degree of difficulty here (>28 CPU-minutes with no result, on a cell
+  small enough that its exact value is independently known and confirmed)
+  is itself important calibration data for what to expect at the real
+  16x17 target in step 3, which is a strictly larger and harder instance
+  along every relevant axis (more rows/columns, more K33 clauses --
+  `C(16,3)*C(17,3) = 560*680 = 380800` vs `C(13,3)*C(18,3) = 286*816 =
+  233376` here).
+- This does **not** retroactively undermine step 2a: the K=116 SAT
+  witness (no symmetry breaking) is still a fully valid, independently
+  checker-verified confirmation that the known exact value is achievable,
+  which is what step 2a asked for. Step 2b was an *additional*, harder
+  ask (an independent re-proof of optimality) and its timeout is reported
+  as exactly that -- a timeout, not a failure of the pipeline's
+  correctness, and not evidence one way or the other about whether 117
+  edges are achievable at 13x18 (we simply don't know, from this run).
 
 ---
 

@@ -1,0 +1,1 @@
+[sat_attack] built instance: m=13 n=18 K=116 sym=True solver=glucose3 nvars=28018 nclauses=290576 build_time=0.43s

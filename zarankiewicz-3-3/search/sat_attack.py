@@ -39,6 +39,11 @@ for p in (_HERE, _REPO_ROOT):
 
 import sat_encoding as se  # noqa: E402
 from verify import checker  # noqa: E402
+from pysat.card import EncType  # noqa: E402
+
+
+def _card_enc(name: str):
+    return getattr(EncType, name)
 
 
 def _solver_cls(name: str):
@@ -62,6 +67,7 @@ def main() -> int:
     ap.add_argument("--solver", default="cadical153",
                      choices=["cadical153", "glucose3", "minisat22"])
     ap.add_argument("--no-symmetry-breaking", action="store_true")
+    ap.add_argument("--card-encoding", default="seqcounter")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
@@ -75,12 +81,16 @@ def main() -> int:
         "K": args.K,
         "solver": args.solver,
         "symmetry_breaking": sym,
+        "card_encoding": args.card_encoding,
         "status": "building",
     }
     _write(out_path, result)
 
     t0 = time.time()
-    cnf, x, vpool = se.build_instance(args.m, args.n, args.K, symmetry_breaking=sym)
+    cnf, x, vpool = se.build_instance(
+        args.m, args.n, args.K, symmetry_breaking=sym,
+        card_encoding=_card_enc(args.card_encoding),
+    )
     build_time = time.time() - t0
 
     result.update({

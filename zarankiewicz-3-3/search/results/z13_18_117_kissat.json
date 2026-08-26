@@ -1,0 +1,21 @@
+{
+  "m": 13,
+  "n": 18,
+  "K": 117,
+  "solver": "kissat",
+  "backend": "external-dimacs-subprocess",
+  "symmetry_breaking": false,
+  "card_encoding": "seqcounter",
+  "time_limit_s": null,
+  "status": "solving",
+  "build_time_s": 0.87,
+  "num_vars": 27612,
+  "num_clauses": 288132,
+  "cnf_path": "search/results/z13_18_117_kissat.cnf",
+  "cnf_write_time_s": 1.18,
+  "cmd": [
+    "kissat",
+    "-q",
+    "search/results/z13_18_117_kissat.cnf"
+  ]
+}

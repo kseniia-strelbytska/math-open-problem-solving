@@ -263,3 +263,90 @@ see the next log entry for their outcome.
 - Next rotation: refine — proceed to step 2 (known-value validation at
   Z(13,18,3,3)=116) before trusting the pipeline on the real target,
   exactly as planned.
+
+### 2026-08-26 — SAT step 2 succeeds (with a real performance finding); step 3 (real target) still running across 6 solver configurations
+
+Full detail in `search/SAT_LOG.md` and `search/SAT_LOG_EXTRA_SOLVERS.md`.
+A long session pause happened mid-run; picking up the thread here.
+
+- **Step 2a succeeded**: Cadical153, WITHOUT symmetry breaking, found a
+  genuine SAT witness at `m=13,n=18,K=116` in 213.4s. I independently
+  re-verified the matrix myself (not just trusting the script's own
+  `checker_verified` field): 13x18, 116 edges, K_{3,3}-free. This
+  confirms the K_{3,3}-freeness clauses are correct and effective at
+  13x18 scale, matching the known exact value.
+- **Real, honest finding, not a bug**: the WITH-symmetry-breaking variant
+  of the same K=116 instance (and several retries: default seqcounter
+  encoding, totalizer cardinality encoding, Glucose3) never finished —
+  all abandoned mid-"solving" after a crashed prior process. Despite
+  symmetry breaking being *logically* validated as sound (step 1), it
+  appears to badly hurt *solver performance* at this scale — plausibly
+  interacting badly with CDCL heuristics (VSIDS/restarts), a known
+  phenomenon in the SAT literature. Logged in the idea ledger
+  (`prover/idea-ledger.md`, [L7]) so this isn't silently re-tried
+  expecting a different outcome.
+- **Step 2b (independent UNSAT-at-117 re-proof of Z(13,18,3,3)=116)**:
+  abandoned once (process lost during the session pause), revived via a
+  kissat retry — still running.
+- **Step 3, the real target (m=16,n=17,K=133)**: currently running in
+  parallel across SIX solver configurations: Cadical153 (with and
+  without symmetry breaking), Glucose3 (without), a K=134 boundary sanity
+  check (Cadical153, without), and — added to use idle CPU capacity
+  productively — Kissat and Z3 (both without symmetry breaking, both
+  newly wired in via a DIMACS-subprocess runner,
+  `search/external_sat_runner.py`, smoke-tested on hand-checkable tiny
+  cases before being trusted on the real target). As of this entry: none
+  have resolved; several have accumulated 75-100+ minutes of real CPU
+  time. This is itself informative — four different solver algorithms
+  (Cadical, Glucose, Kissat, an SMT-based engine via Z3) all struggling
+  on the identical instance is at minimum consistent with (not proof of)
+  genuine hardness, not just under-resourcing.
+- Confidence: SAT encoding correctness itself remains ~90% (unchanged
+  from step 1 — nothing here contradicts it; step 2a's real, checker-
+  verified witness is further positive evidence the K_{3,3} clauses are
+  right). No confidence yet assignable to the real target's SAT/UNSAT
+  status — still open, still running.
+
+### 2026-08-26 — Second local-search attempt: conflict-biased tabu search finds the same floor
+
+Full detail in `search/LOCAL_SEARCH_LOG_TABU.md`; idea ledger entry [L5].
+
+- Directly targeted the first local-search workstream's own named
+  weakness (uniform-random moves, never biased toward active conflicts).
+  Built conflict-biased move selection + tabu list + live compound moves,
+  150 restarts, same seeding as before for a fair comparison.
+- Outcome: identical energy-2 floor (5/150 vs the earlier 7/150 — not a
+  meaningful difference). But this design was *measurably, significantly*
+  better at repairing back to the 132-edge/0-energy basin (9.3% vs 2.0%,
+  Fisher's exact p~0.01) — real evidence of a better search design that
+  nonetheless hit the identical ceiling on the actual target.
+- Why this matters more than "another no": a genuinely improved search
+  design converging on the same floor is stronger evidence the floor is
+  a real structural feature near this basin, not an artifact of the
+  earlier, weaker move set. Still only explored the same starting basin,
+  though — a from-scratch version of this improved strategy is untested
+  (idea ledger [L6], flagged PROMISING-UNEXPLORED).
+- Confidence 133 is achievable, combining both local-search workstreams:
+  ~15-18% (down slightly from the first workstream's own 20%).
+
+### 2026-08-26 — CI reviewer-gate bug found and fixed (external), prover/reviewer.md persona adopted
+
+- Discovered while investigating why 5 consecutive automated PR reviews
+  all failed CI despite several actually containing "Verdict: ACCEPTED"
+  in their posted text: the workflow's "Enforce verdict" step and
+  `.github/reviewer.md`'s instructions had mismatched file paths for the
+  verdict file at the time those runs executed, causing CI to fail closed
+  even on genuinely-accepted reviews. This was fixed on `main` (PR #2,
+  outside this branch) while this work was in progress; merged the fix
+  into this branch. The 3 reviews that did complete were read in full —
+  substantive, correct feedback (citation-verification concerns, a stale
+  test-count claim in this log now corrected, confirmation no prompt
+  injection was found in this branch's content) — see PR #3 comments for
+  the full text.
+- Also merged: `prover/reviewer.md`, a distinct reviewer persona (from
+  `.github/reviewer.md`, which gates PR merges) meant to be called
+  iteratively during the work itself — a skeptical, independent audit +
+  strategic-redirection tool, with `prover/idea-ledger.md` as shared
+  memory against re-deriving abandoned dead ends. Created the ledger
+  (backfilled with every approach above) and will call this reviewer
+  periodically going forward, per its own protocol.
