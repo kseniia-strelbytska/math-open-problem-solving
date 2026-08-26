@@ -340,6 +340,55 @@ Full detail in `search/LOCAL_SEARCH_LOG_TABU.md`; idea ledger entry [L5].
 - Confidence 133 is achievable, combining both local-search workstreams:
   ~15-18% (down slightly from the first workstream's own 20%).
 
+### 2026-08-26 — SAT step 3 closed out: no verdict, ~5 CPU-hours, and one sharp epistemic finding
+
+Full detail in `search/SAT_LOG.md`. Summary and the parts worth carrying
+forward:
+
+- **No K=133 verdict was ever obtained**, from any of the six solver
+  configurations. The longest-surviving run (Cadical153, no symmetry
+  breaking) was killed on budget after **116 CPU-minutes** / 8h01m wall,
+  pegged at 98-100% CPU throughout — i.e. genuinely searching, not hung.
+  Total step-3 spend: **~5 CPU-hours for zero verdicts.** A timeout is not
+  evidence, so this shifts the 132-vs-133 question by nothing.
+- **The single most valuable thing to come out of this workstream is an
+  epistemic asymmetry, not a number.** Every scale validation the SAT
+  pipeline has is of the form "the solver finds a witness that we already
+  know should exist" (e.g. the genuine 116-edge witness at 13x18). But a
+  subtly **over-constrained** encoding would pass every one of those tests
+  and then silently produce a **bogus UNSAT** — which is precisely the
+  verdict this project wants from SAT. So the validations we have do not
+  test the failure mode we actually care about. Confidence in the weakest
+  step was therefore revised *down* to 75% (from 80%), even though nothing
+  contradicted the encoding: step 1 named "only validated at m,n <= 5" and
+  expected step 2 to close it; step 2a closed only the SAT half, and step
+  2b (the UNSAT half) never returned. The gap that matters most is still
+  open and is now known to be hard to close. Practical consequence: **no
+  UNSAT claim from this project will be believed without an independently
+  checked DRAT/LRAT certificate.** This is now [L12] and is being acted on.
+- Step 2a re-verified once more, independently: the 13x18 K=116 witness is
+  genuinely 116 edges and `K_{3,3}`-free, all three checker methods
+  agreeing.
+- **Provenance correction made to `search/SAT_LOG.md`.** That log initially
+  recorded three of the four K=133/134 processes as having been SIGKILLed
+  by a macOS memory-pressure (jetsam) event. That was wrong — *I* killed
+  those three deliberately during the strategy pivot, and the subagent
+  writing the log had no way to know that. Corrected in place rather than
+  left standing, because "the kernel killed our runs" and "we killed our
+  runs on purpose" are very different facts for a later reader. What *is*
+  independently confirmed is that the memory pressure itself is real and
+  severe: measured `~72 MB` free RAM and `12.87 GB of 14.34 GB` swap in
+  use. Both active workstreams have been warned and asked to design around
+  it (stream to disk, cap concurrency, report peak RSS, fail loudly rather
+  than dying silently).
+- Also noted for future runs: `sat_attack.py` still has no
+  `--time-limit`/`--memory-limit` option and should get one before any
+  further long run; and by the monotonicity lemma [L15], an
+  **"at least K"** cardinality encoding is both smaller and a more direct
+  statement of the upper-bound claim than the current two-sided
+  "exactly K" sequential counter (~37k auxiliary variables). Suggested to
+  the certificate workstream for the K=134 run.
+
 ### 2026-08-26 — CI reviewer-gate bug found and fixed (external), prover/reviewer.md persona adopted
 
 - Discovered while investigating why 5 consecutive automated PR reviews

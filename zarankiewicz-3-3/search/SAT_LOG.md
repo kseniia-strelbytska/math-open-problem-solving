@@ -235,15 +235,292 @@ attempt in case UNSAT-proving behaves differently from SAT-finding).
   as exactly that -- a timeout, not a failure of the pipeline's
   correctness, and not evidence one way or the other about whether 117
   edges are achievable at 13x18 (we simply don't know, from this run).
+- **Provenance note (added when finalizing this log):** the CPU-time and
+  100%-CPU figures in this sub-section are as observed and recorded by the
+  session that ran them; those processes were already gone by the time
+  this log was finalized, so they could not be re-measured independently.
+  What *is* directly verifiable after the fact is the end state:
+  `z13_18_117_sym.json` and `z13_18_117_nosym.json` both still read
+  `"status": "solving"` with no verdict and no result line in their
+  `.log` files -- consistent with being killed mid-solve, and confirming
+  that **no K=117 verdict was ever produced**, however long they ran.
+- **Being re-attempted:** the parallel extra-solvers workstream has
+  launched kissat on this exact instance
+  (`search/results/z13_18_117_kissat.*`); if it returns, step 2b's
+  question gets answered there rather than here. See
+  `search/SAT_LOG_EXTRA_SOLVERS.md`.
 
 ---
 
 ## Step 3 -- The real target: Z(16,17,3,3), K=133
 
-(filled in below as runs complete)
+### What was launched
+
+Four `sat_attack.py` processes against the real target, all with the
+already-validated `sat_encoding.build_instance` and the `seqcounter`
+cardinality encoding:
+
+| Output JSON | m,n,K | Solver | Sym. breaking | Launched | Instance size |
+|---|---|---|---|---|---|
+| `z16_17_133_sym.json` | 16,17,133 | Cadical153 | **on** | 10:12 | 37726 vars / 457628 cl |
+| `z16_17_133_nosym.json` | 16,17,133 | Cadical153 | off | 10:12 | 37246 vars / 454748 cl |
+| `z16_17_133_glucose_nosym.json` | 16,17,133 | Glucose3 | off | 10:53 | 37246 vars / 454748 cl |
+| `z16_17_134_nosym.json` | 16,17,**134** | Cadical153 | off | 10:53 | 37256 vars / 454768 cl |
+
+The K=134 run was a deliberate boundary/sanity check, not a serious
+attempt at a result: 134 > 133 >= the published upper bound, so a SAT
+verdict there would have meant something was *wrong* -- either with the
+literature's 133 upper bound or (far more likely) with our encoding. It
+was included precisely so that outcome could not slip past unnoticed.
+
+### Outcome: NO VERDICT from any of the four. This is a timeout, not a result.
+
+**None of the four runs ever returned SAT or UNSAT.** All four
+`.json` files are still at `"status": "solving"` and all four `.log` files
+contain only their `built instance:` line. Concretely:
+
+- **Three of the four were killed deliberately by the orchestrating
+  session** — `z16_17_133_sym`, `z16_17_133_glucose_nosym`, and
+  `z16_17_134_nosym` — as part of the strategy pivot documented in
+  `../STRATEGY_V2.md`, with explicit `kill` calls and confirmations.
+  Rationale at the time: the symmetry-breaking variant was known to be
+  pathologically slow here, Glucose3 was the weakest solver in the set,
+  and K=134 was (mistakenly — see below) judged a low-value sanity check.
+
+  **PROVENANCE CORRECTION (orchestrating session).** This section
+  originally attributed those three deaths to a system-wide macOS
+  memory-pressure (jetsam) SIGKILL event at ~18:05 BST, inferred from a
+  parallel workstream's observation of severe memory pressure. That
+  attribution is **wrong**, and is corrected here rather than left to
+  stand: the subagent writing this log had no way to know the
+  orchestrating session had killed those exact three processes itself.
+  What *is* independently confirmed is that memory pressure was — and at
+  the time of writing still is — genuinely severe: `vm_stat` shows ~72 MB
+  free RAM and `sysctl vm.swapusage` shows 12.87 GB of 14.34 GB swap in
+  use. So the *observation* was real and remains an important operational
+  constraint (the pysat wrapper processes were indeed the fattest targets
+  at ~500-570 MB RSS each); only the *causal attribution* for these three
+  specific deaths was mistaken. Recording both halves, because "the
+  kernel killed our runs" and "we killed our runs on purpose" are very
+  different facts for anyone reading this log later.
+
+  **Consequence of that mistaken kill, now acted on:** K=134 was not a
+  low-value sanity check. Per `../LITERATURE.md`, the 2016 density lemma
+  gives `z(16,17;3) <= 134` by hand, so refuting K=134 would
+  independently re-certify the published `<= 133` bound — acceptance
+  criterion (C). K=134 is also strictly more constrained than K=133 and
+  so should be easier. It has been relaunched with DRAT proof logging as
+  the primary certified target.
+- **The fourth (`z16_17_133_nosym`, Cadical153, no symmetry breaking)
+  survived and was killed deliberately by this session** at 18:14 BST on
+  hitting its allotted compute budget (a 45-minute bounded poll, checking
+  every 3 minutes, started 17:27 BST; it produced 15 consecutive
+  `"status": "solving"` observations and no verdict). Final accounting for
+  that process: 8h01m wall clock, **116 CPU-minutes**, 536 MB RSS,
+  pegged at ~98-100% CPU throughout, i.e. genuinely searching rather than
+  hung or deadlocked. Confirmed dead afterwards (`ps` shows no
+  `sat_attack` processes remaining).
+
+**Approximate total compute spent on step 3: ~5 CPU-hours** (116 + >=80 +
+>=53 + >=53 CPU-minutes across the four runs; the three lower bounds are
+last-observed values at 17:26 BST, shortly before the kill event, so the
+true total is somewhat higher). Wall-clock elapsed was ~8 hours per
+process, far exceeding CPU time, because a long session pause / machine
+sleep intervened.
+
+### What this does and does not tell us
+
+**Does not tell us:** anything whatsoever about whether a 133-edge
+`K_{3,3}`-free 16x17 graph exists. `Z(16,17,3,3)` is **not resolved by
+this workstream**. A solver that was killed -- by the OS or by us --
+returned no verdict, and a non-verdict is not weak evidence in either
+direction. It is not a "leaning UNSAT," it is not a hardness result about
+the instance, and it must never be written up as one. This is exactly the
+class of unverified-numeric-claim error the acceptance criteria in
+`README.md` forbid.
+
+**In particular, there is no K=134 result to report.** The boundary check
+was killed mid-solve like the others, so it produced neither the mildly
+reassuring UNSAT nor the alarming SAT. The encoding-sanity question it was
+meant to answer remains unanswered by this run. (It is not unanswered in
+general: step 1's tiny-shape tests were checked against full brute-force
+enumeration, and step 2a's K=116 witness at 13x18 matches a known exact
+value -- so the encoding does have real validation behind it, just not
+from this particular boundary probe.)
+
+**Does tell us,** as calibration rather than as a result: a 16x17 K=133
+instance at ~37k variables / ~455k clauses did not yield to Cadical153 in
+~116 CPU-minutes, with or without symmetry breaking, nor to Glucose3.
+Read together with step 2b (>=28 CPU-minutes with no verdict at the
+strictly *easier* 13x18 K=117 instance, 27612 vars / 288132 clauses), the
+consistent picture is that **plain CNF + a tight "exactly K" cardinality
+constraint is not, on its own, a strong enough formulation to settle
+either of these cells on this hardware in the time available.** The
+bottleneck looks formulational, not merely a matter of waiting longer:
+nothing in these runs suggests they were close to finishing.
+
+### What a next attempt should do differently
+
+1. **kissat** (SAT-competition-grade CDCL, considerably stronger than
+   Cadical153/Glucose3 in practice) was *not installed* when step 3 was
+   launched -- this was correctly identified as the most obvious untried
+   lever. It has since been installed and wired up (`brew install kissat`,
+   4.0.4) by the parallel extra-solvers workstream, which is running it on
+   both this target and the 13x18 K=117 cell as of this writing; see
+   `search/SAT_LOG_EXTRA_SOLVERS.md` for those results. That workstream
+   also found kissat's memory footprint (~165 MB) to be roughly a third of
+   the pysat wrapper's, which is a practical advantage when several
+   instances share a machine -- and was why its runs survived the kill
+   event that took out three of ours.
+2. **Run fewer instances at once.** Four ~500 MB pysat processes plus the
+   extra-solvers workstream's runs is what produced the memory pressure
+   that destroyed three runs' worth of compute. Serial or two-at-a-time
+   runs of a leaner backend would have preserved more information per
+   CPU-hour than four parallel fat ones did.
+3. **Set explicit, self-reported resource limits** so a run terminates
+   with an honest recorded non-verdict rather than vanishing silently. The
+   extra-solvers workstream added `--time-limit` / `--memory-limit-mb` for
+   exactly this reason after being bitten by it; `sat_attack.py` still has
+   no such option and should get one before being used for long runs again.
+4. **Reformulate rather than out-wait.** Options, roughly in order of
+   expected value: encode the *upper-bound* direction as a smaller
+   sub-problem (e.g. fix a row-degree profile and refute each case
+   separately, turning one intractable instance into many small ones);
+   use the row-triple structure to add implied/blocking clauses beyond
+   plain `K_{3,3}`-freeness; or drop the "exactly K" cardinality
+   constraint in favour of "at least K" (weaker constraint, same question,
+   often much better propagation).
+5. **If an UNSAT verdict is ever obtained, it must come with a DRAT/LRAT
+   proof certificate and independent proof checking** to satisfy
+   acceptance criterion (B)/(C) -- an unchecked solver "UNSATISFIABLE"
+   line is not an independently verified certificate, which is the whole
+   point of the exercise given that the literature's 133 bound is itself
+   uncertified. (The extra-solvers workstream has begun exercising
+   kissat's DRAT output path; see `search/results/smoke/`.)
+
+---
+
+## Result-file inventory: what is real, what is a corpse
+
+`search/results/*.json` files are kept as a historical record of what was
+attempted -- **none are deleted** -- but a file's mere existence proves
+nothing, and several will never update. Read them by this table, not by
+assuming a `.json` in the directory means a finished run.
+
+**The rule: `"status": "solving"` means the process died mid-solve and the
+file is a corpse. It is not "still running" and carries no verdict.**
+`sat_attack.py` writes its stats file *before* solving precisely so that a
+mid-solve kill is distinguishable from a run that never started; that
+design worked as intended here.
+
+| File | Real result? | What it actually is |
+|---|---|---|
+| `selftest_3x3_8.json` | **YES** | Trivial 3x3 K=8 self-test of the runner. SAT, checker-verified, sub-second. |
+| `z13_18_116_nosym.json` | **YES -- the one substantive success** | 13x18 K=116, no sym. breaking, Cadical153. SAT in 213.4s, witness independently `checker.verify`-ed: 116 edges, `is_k33_free: true`. Contains the actual matrix. |
+| `z13_18_116_sat.json` | no | Corpse (`solving`). Cadical153 + sym. breaking, abandoned. |
+| `z13_18_116_sym_retry.json` | no | Corpse (`solving`). Second Cadical153 + sym. attempt, abandoned. |
+| `z13_18_116_glucose_sym.json` | no | Corpse (`solving`). Glucose3 + sym., abandoned. |
+| `z13_18_116_totalizer_sym.json` | no | Corpse (`solving`). Cadical153 + sym. + `totalizer`, abandoned. |
+| `z13_18_117_sym.json` | no | Corpse (`solving`). Step 2b stretch goal, no verdict. |
+| `z13_18_117_nosym.json` | no | Corpse (`solving`). Step 2b stretch goal, no verdict. |
+| `z16_17_133_sym.json` | no | Corpse (`solving`). Killed deliberately by the orchestrating session during the strategy pivot (symmetry breaking known pathological here). Earlier attributed to an OS memory kill — see the provenance correction above. |
+| `z16_17_133_nosym.json` | no | Corpse (`solving`). Killed on budget at 18:14 after 116 CPU-min. |
+| `z16_17_133_glucose_nosym.json` | no | Corpse (`solving`). Killed deliberately by the orchestrating session (weakest solver in the set). Not an OS kill. |
+| `z16_17_134_nosym.json` | no | Corpse (`solving`). Killed deliberately by the orchestrating session, **which was a mistake** — K=134 is the load-bearing case, not a sanity check (see the provenance correction above). **No 134 verdict exists yet;** relaunched with DRAT proof logging. |
+
+The four `z13_18_116*` sym-breaking corpses and the two `z13_18_117*`
+corpses are, taken together, still *informative* -- they are the evidence
+behind step 2a's symmetry-breaking performance finding and step 2b's
+timeout respectively. But each individual file is a non-result.
+
+Files named `*_kissat.*`, `*_z3.*`, `smoke/`, and `proofs/` belong to the
+separate extra-solvers workstream and are documented in
+`search/SAT_LOG_EXTRA_SOLVERS.md`, not here. (Note that `z13_18_117_kissat.*`
+is a fresh attempt at exactly the step 2b question that timed out here.)
 
 ---
 
 ## Bottom line
 
-(filled in at the end)
+**This workstream did not resolve `Z(16,17,3,3)`.** No SAT witness at
+K=133 and no UNSAT proof at K=133 was obtained; the gap `132 <=
+Z(16,17,3,3) <= 133` stands exactly where it did before, with the upper
+bound still resting on the literature's own explicitly-uncertified claim.
+Acceptance criteria (A), (B), and (C) are all **unmet** by the SAT
+workstream as it stands.
+
+What was genuinely established:
+
+1. **The encoding works and is validated at real scale (the solid
+   result).** `Z(13,18,3,3) = 116` -- a cell whose exact value is
+   independently known -- was reproduced from scratch: SAT in 213s, and
+   the decoded witness independently confirmed by `verify/checker.py`
+   (13x18, 116 edges, `is_k33_free: true`, all three checker methods
+   agreeing). I re-ran `checker.verify()` on that matrix myself, freshly,
+   rather than trusting the `checker_verified` field the search script
+   wrote. The `K_{3,3}`-freeness clauses plus the cardinality constraint
+   genuinely find real witnesses at a scale close to the target.
+2. **Symmetry breaking is sound but counterproductive here (a real,
+   reportable finding).** Validated as *logically* sound in step 1 (336
+   exhaustive gadget checks, plus small-case SAT/UNSAT agreement against
+   brute-force ground truth) and further supported at 13x18 by the
+   double-lex sort of the known 116-witness converging in one iteration --
+   proving a double-lex-sorted witness exists there, so the clauses cannot
+   be eliminating every witness. But at 13x18 it made search
+   *dramatically slower*: 3 different (solver, cardinality-encoding)
+   combinations all failed to finish where the plain instance solved in
+   3.5 minutes. This is a performance finding, not a soundness one, and it
+   matches a known phenomenon in the SAT/CP literature. Practical upshot:
+   turn it off, which costs no rigor, since an UNSAT verdict on the plain
+   CNF is a complete proof that does not invoke the symmetry argument at all.
+3. **Honest limitations.** Step 2b (independently re-proving 116 is
+   *optimal* at 13x18, i.e. UNSAT at K=117) **was not completed** -- it
+   timed out with no verdict. Step 3 likewise timed out on all four runs,
+   three of them destroyed by an OS memory-pressure kill rather than
+   running to any conclusion. Roughly 5 CPU-hours went into step 3 for
+   zero verdicts.
+
+**Combined picture with the local-search workstream:** that workstream
+reports **~20%** confidence that 133 is achievable, on the strength of
+0/230 SA restarts reaching it and 7 near-misses each proven to be strict
+local optima under exhaustive single-swap search -- real evidence, though
+it self-identifies its uniform-random move set as its weakest point. The
+SAT workstream adds **nothing that shifts that number**, because a
+timeout is not evidence. So the honest combined position is unchanged
+from the search side alone: **132 is most likely the true value (~80%),
+but we have not proved it, and we specifically do not have the
+independently verified upper-bound certificate that acceptance criterion
+(C) asks for.** The most promising route to actually closing this remains
+the untried-here levers listed in step 3 -- kissat (now installed and
+running in the parallel workstream), a decomposed/case-split upper-bound
+encoding, and DRAT proof-certificate checking -- not more wall-clock on
+the formulation used here.
+
+**Calibrated confidence:**
+
+- **SAT encoding correctness overall: 90%.** Unchanged from step 1, and
+  that stability is itself meaningful -- step 2a's successful reproduction
+  of a known exact value at near-target scale (with independent checker
+  confirmation) is real corroborating evidence, and step 3 produced no
+  evidence either way, since no run returned a verdict that could have
+  been wrong. Not raised above 90% because the encoding has still never
+  been confirmed against a *known UNSAT* instance at realistic scale: every
+  scale-validation we have is of the "finds a witness that should exist"
+  kind, and a subtly *over*-constrained encoding would pass all of those
+  while silently producing a bogus UNSAT. That asymmetry matters a lot
+  here, because the result this project actually wants from SAT is an
+  UNSAT.
+- **Weakest step: 75%** -- that no-known-UNSAT-validation-at-scale gap
+  just described. It is *down* from step 1's 80% weakest-step score, and
+  deliberately so: step 1 named "validation only at m,n <= 5" as the weak
+  point and expected step 2 to close it. Step 2a partially closed it on
+  the SAT side, but step 2b -- the half that would have exercised the
+  UNSAT path at scale -- never returned, so the gap that matters most for
+  this project's goal is *still open and now known to be hard to close*.
+  Any future UNSAT claim from this pipeline must therefore carry an
+  independently checked DRAT/LRAT certificate before it is believed; that
+  requirement is not optional bookkeeping, it is the mitigation for this
+  specific 75%.
+- **Confidence that `Z(16,17,3,3) = 132`: ~80%** (i.e. ~20% that 133 is
+  achievable), inherited entirely from the local-search workstream. This
+  workstream contributes no independent movement to that estimate.
