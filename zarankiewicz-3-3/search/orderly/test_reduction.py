@@ -77,7 +77,10 @@ def chain_up(k0: int, v0: int, kmax: int = 16) -> dict[int, int]:
 CHAIN_CASES = [
     (9, 81, 144, "ORDERLY_LOG section 5, chain from the proved f(9)=81"),
     (11, 98, 138, "ORDERLY_LOG section 11.4, chain from the proved f(11)<=98"),
-    (11, 97, 137, "one further edge at k=11"),
+    (11, 97, 137, "ORDERLY_LOG section 13.0, chain from the proved f(11)<=97"),
+    (11, 96, 136, "one further edge at k=11"),
+    (11, 94, 134, "section 11.5: reaches the hand-derived f(16)<=134 from k=11"),
+    (11, 93, 133, "section 11.5: reaches the published f(16)<=133 from k=11"),
     (12, 105, 137, "one refutation at k=12 (target 106)"),
     (12, 102, 134, "section 11.5: equivalent to the hand-derived f(16)<=134"),
     (12, 101, 133, "section 11.5: equivalent to the published f(16)<=133"),
@@ -89,6 +92,9 @@ SENSITIVITY = {
     (9, 81): 8,
     (11, 98): 1,
     (11, 97): 1,
+    (11, 96): 1,
+    (11, 94): 1,
+    (11, 93): 1,
     (12, 105): 1,
     (12, 102): 1,
     (12, 101): 1,
@@ -97,6 +103,7 @@ SENSITIVITY = {
 # f(16) goal -> the largest bound at k=11/12/13 that still reaches it
 CHAIN_INVERSE = [
     (138, 98, 106, 114),
+    (136, 96, 104, 112),
     (137, 97, 105, 113),
     (134, 94, 102, 110),
     (133, 93, 101, 109),

@@ -25,8 +25,9 @@ uncertified 2016 exhaustive computation. The open question is whether a
 |---|---|
 | `z(7,7) <= 33`, machine-verified end to end (HOL4-verified checker) | **PROVED, certified** |
 | `z(9,17) = 81` and `z(10,17) = 90`, computed from scratch | **PROVED**, witnesses independently certified |
-| `z(11,17) <= 98`, by exhaustive refutation of `11x17 @ 99` | **PROVED**, and by **two independent routes** (a direct 32.0M-node refutation, and a separate reduction route via 10x17 extensions: 24 parents, 0 extensions) |
-| **`z(16,17) <= 138`, entirely self-contained** — no published value anywhere in the derivation | **PROVED** (density chain from our own `z(11,17) <= 98`) |
+| `z(11,17) <= 98` (refutation of `11x17 @ 99`) | **PROVED, verified four ways** — see below |
+| `z(11,17) <= 97` (refutation of `11x17 @ 98`) | **PROVED**, EXHAUSTED at 32,035,246 nodes |
+| **`z(16,17) <= 137`, entirely self-contained** — no published value anywhere in the derivation | **PROVED** (density chain from our own `z(11,17) <= 97`; arithmetic machine-asserted in `test_reduction.py`) |
 | `z(k,k)` for `k = 3..9` reproduced from scratch | **PROVED**, agrees with published values |
 | 32 small cells agree with a deliberately independent second searcher | **verified, both directions** |
 | A complete elementary reduction of `z(16,17)` to two finite enumerations | **derived** (§ `REDUCTION.md`), but *conditional* — see below |
@@ -281,8 +282,10 @@ M-series unless noted.
 | R27 | `orderly2` | 11x17, `--decide 99`, re-run of R25 | reproduced exactly -- 32,034,663 nodes |
 | R28 | `orderly2` | 9x17, `--decide 83` / `--decide 82` | regression vs log: 347,899 / 2,412,355 nodes, both exact matches |
 | R29 | `orderly3` | 9x17 (R9 optimisation) | identical node counts to R28 -- optimisation verified non-semantic |
-| R30 | `orderly2` | 11x17, `--decide 98` | decides `f(11)=98` vs `<=97` -- running |
-| R31 | `orderly3 --countlevel` | 12x17, `--decide 106`, L=6..9 | exact `k=12` tree widths, to replace projection with measurement -- running |
+| R30 | `orderly2` | 11x17, `--decide 98` | **EXHAUSTED, 32,035,246 nodes -> `f(11) <= 97`, hence `z(16,17) <= 137`** |
+| R31 | `orderly3 --countlevel` | 12x17, `--decide 106` | **abandoned deliberately**: 64 CPU-min without completing; levels 0-6 alone exceeded the *entire* k=11 tree. Redirected to the cheaper k=11 route (R33). No result claimed. |
+| R32 | `orderly3` | 10x17, `--extend 8` cross-check | running -- must return `ext_success=0` or it is a blocking bug |
+| R33 | `orderly2` | 11x17, **`--decide 95`** | **running -- the shot at `z(16,17) <= 134`, self-contained** |
 | R23 | kissat + DRAT | 16x17 **K=134**, at-least-K, no sym-break | **running** (primary certified target) |
 | R24 | kissat + DRAT | 13x18 **K=117**, no sym-break | **running** (would give us `z(13,18)=116` as our own certified result) |
 
@@ -332,6 +335,35 @@ being attempted (width measurement in progress). `k = 13` moves from
 impossible to plausible-with-patience but outside a session. `k >= 14`
 stays out of reach.
 
+### How `f(11) <= 98` was verified (four independent ways)
+
+Because this result arrived in a crashing agent's final message, it was
+treated as unverified until re-established:
+
+1. **Archived run re-read**: no degree floor, no edge cap, no sharding, no
+   node limit. `--decide` accepts `E >= target`, so one EXHAUSTED run
+   refutes the whole half-line.
+2. **No published number smuggled in**: the only `--assume` was `9:81`, our
+   own proved value, and it is read in exactly one place where it can only
+   *lower* an upper bound. `f(10) <= 90` was not even supplied — it is
+   re-derived.
+3. **Binary provenance**: the on-disk binary was rebuilt after the run
+   began, which was the real worry. Its Mach-O UUID matches a fresh build
+   of the committed source, and it reproduces the archived `k=9` counts
+   exactly (347,899 and 2,412,355).
+4. **Bit-identical re-run**: EXHAUSTED, 32,034,663 nodes, all eleven
+   per-level widths identical.
+
+Plus a fifth, structural check: the independent reduction route reached
+**the same 24 objects** (level widths 142/142 and 24/24 agreeing between
+two differently-constrained searches).
+
+**Methodological note worth carrying forward: CPU seconds are not
+comparable across sessions.** The bit-identical re-run took 7,760 s versus
+3,255 s for the same 32,034,663 nodes, because seven heavy processes were
+competing and swap was near-full. **Node counts are the invariant**; timings
+in this document are indicative only.
+
 ### What each further edge would buy
 
 Because the chain step is `+8` throughout this range, the requirement
@@ -340,9 +372,23 @@ inverts exactly:
 | goal | needs | status |
 |---|---|---|
 | `z(16,17) <= 138` | `f(11) <= 98` | **done** |
-| `z(16,17) <= 137` | `f(11) <= 97` or `f(12) <= 105` | one more refutation |
-| `z(16,17) <= 134` | `f(11) <= 94` or `f(12) <= 102` or `f(13) <= 110` | `k=12` route is ~6-16 h |
-| `z(16,17) <= 133` | `f(11) <= 93` or `f(12) <= 101` | see below |
+| `z(16,17) <= 137` | `f(11) <= 97` | **done** |
+| `z(16,17) <= 136` | `f(11) <= 96` | one refutation |
+| `z(16,17) <= 135` | `f(11) <= 95` | one refutation |
+| `z(16,17) <= 134` | `f(11) <= 94` | **in progress** (`--decide 95`, R33) |
+| `z(16,17) <= 133` | `f(11) <= 93` | very likely **impossible** by this route — see below |
+
+**The key realisation, and it changed the plan.** `z(16,17) <= 134` is
+equivalent to `f(11) <= 94`, and because `--decide` refutes an entire
+half-line, that is **one command** — one level shallower than the `k=12`
+route, on a tree already measured at ~3.2e7 nodes for its neighbouring
+rungs. So the `k=12` attempt was deliberately abandoned mid-run in favour
+of it. If it returns EXHAUSTED, `z(16,17) <= 134` follows **self-contained,
+needing nothing at all at `k = 12..15`.**
+
+The published `8k+6` progression (`f(13)=110`, `f(14)=118`, `f(15)=126`)
+gives exactly `94` at `k=11`, so if that progression holds down to 11, this
+run is UNSAT and 134 is reachable.
 
 And the hard limit no compute fixes: **you cannot refute a value that is
 actually achievable.** If the published `8k+6` progression

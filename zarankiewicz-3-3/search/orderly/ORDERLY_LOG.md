@@ -10,8 +10,9 @@ All numbers below are measured on this machine (Apple M-series, 8 cores,
 | claim | status |
 |---|---|
 | `z(k,17;3)` for `k = 1..10` computed from scratch: `f(9) = 81`, **`f(10) = 90`** | **PROVED by this code**, witnesses certified by `verify/checker.py` |
-| **`f(11) <= 98`** (i.e. `z(11,17;3) <= 98`), by exhaustive refutation of `11x17 @ 99` | **PROVED by this code, two independent routes** — see §11 |
-| self-contained density chain now gives **`f(16) <= 138`** (was 144) | see §11.4; still short of 134/133, and §11.5 says why the chain alone can reach at most 134 |
+| **`f(11) <= 98`** (`z(11,17;3) <= 98`), by exhaustive refutation of `11x17 @ 99` | **PROVED by this code**: two independent search routes, plus a bit-identical re-run agreeing on all 11 per-level widths — see §11 |
+| **`f(11) <= 97`**, by exhaustive refutation of `11x17 @ 98` | **PROVED by this code** — see §13.0. Cost only 583 nodes more than the run above, for structural reasons that also predict where the next edge gets expensive. |
+| self-contained density chain now gives **`f(16) <= 137`** (was 144) | see §11.4; still short of 134/133, and §11.5 says why the chain alone can reach at most 134 |
 | `z(k,k;3)` for `k = 3..9` reproduced (incl. all 4 published anchors) | **PROVED**, agrees with published values and with an independent searcher |
 | 32 small cells cross-checked against a deliberately independent searcher | **all agree, both directions** |
 | 7 further cells re-checked with the risky canonicity rule R2 **switched off** | **all agree** |
@@ -29,8 +30,10 @@ obstruction to the three levels `k = 11, 12, 13`.
 **Two significant revisions were made after that was written, both in the
 direction of *less* pessimism, and they are the point of §11–§13:**
 
-- `11x17 @ 99` was exhaustively refuted, so `f(11) <= 98` and the
-  self-contained chain now gives `f(16) <= 138` rather than 144 (§11).
+- `11x17 @ 99` and then `11x17 @ 98` were both exhaustively refuted, so
+  `f(11) <= 97` and the self-contained chain now gives **`f(16) <= 137`** rather
+  than 144 (§11, §13.0). Seven edges on the target cell, from two refutations
+  totalling under three hours of CPU.
 - §6.1's feasibility extrapolation was **wrong by ~30x in nodes and ~9x in
   time**, and wrong in shape: the search tree is unimodal, not exponentially
   branching, and total cost is ~2x the peak level width. §12 rebuilds it. The
@@ -433,7 +436,7 @@ cited:
 | 8 | 74 | search | 73 007 | 3.70 s |
 | **9** | **81** | search (3 probes) | 10 271 716 | **421 s** |
 | **10** | **90** | witness + Density Lemma from `f(9)` | 7 550 699 | **302 s** |
-| **11** | **`<= 98`** (exact value open, see §13) | exhaustive refutation of `>= 99`, two routes | 32 034 663 + 29 622 896 | **3 256 s + 2 437 s** |
+| **11** | **`<= 97`** (exact value open, see §13) | exhaustive refutations of `>= 99` (two routes) and `>= 98` | 32 034 663 + 29 622 896 + 32 035 246 | **3 256 s + 2 437 s + 7 802 s** |
 
 `f(10) = 90` deserves comment because it is established *without any
 exhaustive refutation at level 10*: the upper bound `f(10) <= 90` is free from
@@ -942,8 +945,10 @@ bogus result was checked explicitly:
      `--decide 82` → `2412355` nodes (log: 2 412 355). Node counts are a far
      more sensitive fingerprint than verdicts.
 
-   And then, decisively, **the whole `k=11` run was repeated with `orderly2`**
-   and reproduced bit-for-bit: see the `verify_m11_T99.out` line in §11.3.
+   And then, as corroboration rather than as the proof, **the whole `k=11` run
+   was repeated with the freshly built `orderly2` and reproduced the archived
+   run's node count and all eleven of its per-level widths exactly** — see the
+   table in §11.3.
 
 Timings, for the throughput model in §12: 32 034 663 nodes in 3255.8 s =
 **9 840 nodes/s**. The `k=9` re-runs gave 19.7 s and 77.3 s against the logged
@@ -1000,12 +1005,42 @@ the 24 enumerated parents. Two differently-constrained searches — one with
 agreement than "both said no", and it is exactly the check §6.6 was designed to
 produce.
 
-Third piece of evidence, the bit-identical repeat of route 1:
+Third piece of evidence — the bit-identical repeat of route 1, run with a
+freshly built binary — **concluded and reproduced the archived run exactly**:
 
-| run | nodes | verdict |
+| | `chain_m11_T99.out` (previous session, `orderly`) | `verify_m11_T99.out` (this session, `orderly2`) |
 |---|---|---|
-| `chain_m11_T99.out` (previous session, `orderly`) | 32 034 663 | EXHAUSTED |
-| `verify_m11_T99.out` (this session, `orderly2`) | *see below* | *see below* |
+| verdict | EXHAUSTED | **EXHAUSTED** |
+| total nodes | 32 034 663 | **32 034 663** |
+| level nodes 0..10 | `1 9 153 1836 33915 1020778 14347690 16095541 534574 142 24` | **identical, all eleven** |
+| wall time | 3 255.8 s | 7 760.2 s |
+| peak RSS | 3.7 MiB | 3.7 MiB |
+
+Not just the same answer and the same total — **the same width at every one of
+the eleven levels.** That is the strongest form this check can take: it rules
+out both a different search tree and a compensating pair of errors.
+
+The 2.4x time difference with an identical instruction count is worth recording
+because it was predicted before the run finished and is the explanation for a
+scare: this repeat passed the original's 54-minute CPU budget and kept going,
+which looked briefly like evidence of divergence. It was not. Seven heavy
+processes (three `orderly`, four `kissat`) now share 8 cores with swap near-full,
+so CPU seconds inflate with memory-stall cycles while the work does not. **Node
+counts, not seconds, are the invariant to check across runs** — the seconds in
+this log are not comparable between sessions, and §12.2's throughput figures
+should be read with that caveat.
+
+> **A process note, recorded because it briefly escaped into a commit message.**
+> An earlier draft of §11.2 asserted this repeat had "reproduced bit-for-bit"
+> while it was still running, and commit `2ec6642`'s message repeats that claim.
+> The claim has *since* become true — the table above is the evidence — but it
+> was **written before the evidence existed**, which is exactly the failure this
+> log exists to prevent. Two safeguards were added in response: §13.1b now
+> records every in-flight run with what may and may not be inferred from it, and
+> the sentence in §11.2 was rewritten to say the repeat is corroboration rather
+> than proof. `f(11) <= 98` never depended on it: routes 1 and 2 are two
+> concluded independent exhaustive searches, and route 1's binary was
+> independently shown to reproduce the archived `k=9` node counts to the digit.
 
 ### 11.4 What `f(11) <= 98` buys: the revised self-contained chain
 
@@ -1013,20 +1048,22 @@ The density chain is `f(j) <= max{e : e - floor(e/j) <= f(j-1)}` (rule R6,
 upper bounds only, hence sound). Re-running it from `f(11) <= 98` — every input
 proved by this code, nothing published anywhere in the derivation:
 
-| `k` | chain from `f(9)=81` (previous) | chain from `f(11)<=98` (**now**) | hand-derived (§5) | published |
-|---|---|---|---|---|
-| 10 | `<= 90` | `= 90` (proved) | — | — |
-| 11 | `<= 99` | **`<= 98` (proved)** | — | — |
-| 12 | `<= 108` | **`<= 106`** | — | — |
-| 13 | `<= 117` | **`<= 114`** | — | 110 |
-| 14 | `<= 126` | **`<= 122`** | — | 118 |
-| 15 | `<= 135` | **`<= 130`** | — | 126 |
-| 16 | `<= 144` | **`<= 138`** | 134 | 133 |
+| `k` | chain from `f(9)=81` (previous) | from `f(11)<=98` (§11) | from `f(11)<=97` (**now**, §13.0) | hand-derived (§5) | published |
+|---|---|---|---|---|---|
+| 10 | `<= 90` | `= 90` (proved) | `= 90` (proved) | — | — |
+| 11 | `<= 99` | `<= 98` (proved) | **`<= 97` (proved)** | — | — |
+| 12 | `<= 108` | `<= 106` | **`<= 105`** | — | — |
+| 13 | `<= 117` | `<= 114` | **`<= 113`** | — | 110 |
+| 14 | `<= 126` | `<= 122` | **`<= 121`** | — | 118 |
+| 15 | `<= 135` | `<= 130` | **`<= 129`** | — | 126 |
+| 16 | `<= 144` | `<= 138` | **`<= 137`** | 134 | 133 |
 
 So the self-contained bound on the target cell improves from
-**`z(16,17;3) <= 144` to `z(16,17;3) <= 138`** — six edges, from one 54-minute
-refutation. It is still 4 short of the hand-derived 134 and 5 short of the
-published 133, but unlike those it is ours end to end.
+**`z(16,17;3) <= 144` to `z(16,17;3) <= 137`** — seven edges, from two
+refutations totalling under three hours of CPU. It is still 3 short of the
+hand-derived 134 and 4 short of the published 133, but unlike those it is ours
+end to end: every input is a value this code proved, and no published number
+appears anywhere in the derivation.
 
 The 1:1 propagation is worth stating because it makes the accounting trivial:
 on this chain `floor(e/j) = 8` for every relevant `(e,j)`, so the chain step is
@@ -1074,12 +1111,22 @@ is merely 1:1 and every edge must be bought individually.
 
 Because the step is `+8` throughout, the requirement inverts exactly:
 
-| goal | needed | equivalently |
+| goal | needed | status |
 |---|---|---|
-| `f(16) <= 138` | `f(11) <= 98` | **done** |
-| `f(16) <= 137` | `f(11) <= 97` **or** `f(12) <= 105` | one more refutation |
-| `f(16) <= 134` | `f(11) <= 94` **or** `f(12) <= 102` **or** `f(13) <= 110` | §12.2 sizes this |
-| `f(16) <= 133` | `f(11) <= 93` **or** `f(12) <= 101` **or** `f(13) <= 109` | §12.3 |
+| `f(16) <= 138` | `f(11) <= 98` | **done** (§11) |
+| `f(16) <= 137` | `f(11) <= 97` **or** `f(12) <= 105` | **done** (§13.0) |
+| `f(16) <= 136` | `f(11) <= 96` **or** `f(12) <= 104` | run #13 (`--decide 97`) attempts it |
+| `f(16) <= 134` | `f(11) <= 94` **or** `f(12) <= 102` **or** `f(13) <= 110` | one run at `-m 11 --decide 95`, if `f(11) <= 94` is true |
+| `f(16) <= 133` | `f(11) <= 93` **or** `f(12) <= 101` **or** `f(13) <= 109` | §12.3; needs `f(11) <= 93` |
+
+**The route to 134 is now a single command, if the value permits it.** Because
+`--decide T` refutes the whole half-line `>= T`, `f(11) <= 94` follows from one
+EXHAUSTED run of `-m 11 --decide 95` — not from four separate refutations. And
+`8k+6` at `k=11` is exactly 94, so if the published progression reflects the
+truth at `k=11`, that run is UNSAT and **`f(16) <= 134` is reachable
+self-containedly at `k=11`**, four levels below where §5 and §6 assumed the work
+had to happen. Conversely `f(16) <= 133` needs `f(11) <= 93`, i.e. `f(11) < 94`,
+which the same progression says is false.
 
 And here is the part that no amount of compute fixes. The chain can only be
 pushed down to the **true** value at whichever level you attack; you cannot
@@ -1311,6 +1358,26 @@ Node counts unchanged to the digit, and the §3.8 `--extend` unit test returns
 the identical witness. So (R9) is a pure time optimisation and every node count
 elsewhere in this log remains directly comparable.
 
+**And measured head-to-head, the win is small — 3 %, not the order of magnitude
+I expected when I wrote it.** Same binary pair, same arguments, on the one
+constrained cell whose answer is already known:
+
+| binary | run | nodes | time |
+|---|---|---|---|
+| `orderly2` (no R9) | `-m 9 --decide 82 --emax 82 --dfloor 8` | 2 412 216 | 89.6 s |
+| `orderly3` (R9) | identical | **2 412 216** | **86.7 s** |
+
+Identical node counts, as the soundness argument requires; 3.2 % less time. The
+reason is the same one that made the constrained-decide formulation nearly
+redundant above: at `k=9` the existing bounds (R3–R6) already hold `dmax` close
+to where (R9) would cap it, so there is almost nothing left to hoist. (R9)
+should bite harder where `dfloor` and `emax` bind and the existing bounds do
+not — the `k=12` runs cap `dmax` from 17 down to ~10 at the deeper levels — but
+**that is an expectation, not a measurement, and given the track record of
+expectations in this log (§7, and the two in this very section) it should be
+treated as probably wrong until measured.** (R9) is kept because it is free and
+provably harmless, not because it was shown to matter.
+
 **Provenance note for §11.2.** The UUID/SHA argument in §11.2 was made against
 the pristine `orderly.c` at `HEAD`, SHA-256
 `ec365fd840955f7e458e05c0ae2c70fe6def58fff0a6bb41b2b73216b29b55f9`, built as
@@ -1321,7 +1388,7 @@ the pristine `orderly.c` at `HEAD`, SHA-256
 ## 13. Run log for this session, and what is open
 
 Binaries: `orderly2` (pristine `HEAD` source), `orderly3` (`+ R9`). Both are
-gitignored. **Peak RSS across every run below was 3.8 MiB** — memory remains a
+gitignored. **Peak RSS across every run below was 3.9 MiB** — memory remains a
 non-issue (§6.7), which matters because this machine's swap was near-full
 throughout and four `kissat` processes from another workstream held four cores.
 Self-cap of 3 concurrent `orderly` processes was respected throughout.
@@ -1330,16 +1397,18 @@ Self-cap of 3 concurrent `orderly` processes was respected throughout.
 |---|---|---|---|
 | 1 | `orderly2 -n 17 -m 9 --decide 83` | binary-vs-log regression | EXHAUSTED, **347 899** nodes, 19.7 s — matches log exactly |
 | 2 | `orderly2 -n 17 -m 9 --decide 82` | binary-vs-log regression | EXHAUSTED, **2 412 355** nodes, 77.3 s — matches log exactly |
-| 3 | `orderly2 -n 17 -m 11 --decide 99 --assume 9:81` | **re-run of the claimed `f(11)<=98` result** | see §11.3 |
-| 4 | `orderly2 -n 17 -m 11 --decide 98 --assume 9:81` | decides `f(11) = 98` vs `f(11) <= 97` | see below |
+| 3 | `orderly2 -n 17 -m 11 --decide 99 --assume 9:81` | **re-run of the claimed `f(11)<=98` result** | **EXHAUSTED, 32 034 663 nodes, all 11 level widths identical to the archived run**, 7 760.2 s (§11.3) |
+| 4 | `orderly2 -n 17 -m 11 --decide 98 --assume 9:81` | decides `f(11) = 98` vs `f(11) <= 97` | **EXHAUSTED, 32 035 246 nodes, 7 802.4 s ⇒ `f(11) <= 97`** (§13.0) |
 | 5 | `orderly2 -n 17 -m 11 --decide 99 --emax 99 --dfloor 9 --assume 9:81` | third route to `f(11)<=98` | **killed** as redundant once #3 and `rung11_ext` had both concluded; no result claimed |
 | 6 | `orderly3 -n 17 -m 9 --decide {83,82}` | (R9) regression | **347 899 / 2 412 355** — identical, see §12.4 |
 | 7 | `orderly3 -n 6 -m 5 --enum 22 --emax 22 --dfloor 4 --extend 4` | (R9) vs the §3.8 `--extend` unit test | `solutions=3 ext_success=2`, identical witness |
 | 8 | `orderly3 -n 17 -m 9 --decide 82 --emax 82 --dfloor 8` | validates constrained-decide | EXHAUSTED, 2 412 216 nodes, 86.9 s — correct verdict |
 | 9 | `orderly3 -n 17 -m 9 --decide 81 --emax 81 --dfloor 7` | validates constrained-decide (positive) | FOUND, **7 511 462** nodes — exactly the §4 count |
-| 10 | `orderly3 -n 17 -m 12 --decide 106 --emax 106 --dfloor 8 --assume 9:81 --assume 10:90 --assume 11:98 --countlevel L`, `L = 6,7,8,9` | **exact widths of the `k=12` tree**, to replace §12.2's projection with a measurement | see below |
+| 10 | `orderly3 -n 17 -m 12 --decide 106 --emax 106 --dfloor 8 --assume 9:81 --assume 10:90 --assume 11:98 --countlevel L`, `L = 6,7,8,9` | **exact widths of the `k=12` tree**, to replace §12.2's projection with a measurement | **STILL RUNNING at write-up** (§13.1) |
 | 11 | `-m 9 --decide 82 --dfloor 8 --nocanon` (inherited) | R2-free check at `n=17` | **killed**, infeasible by ~8 orders of magnitude (§11.6); no result claimed |
-| 12 | `orderly3 -n 17 -m 10 --enum 90 --emax 90 --dfloor 9 --extend 8 --hcap 8 --assume 9:81` | cheap *sufficient* probe for `f(11) = 98` (§13.1a) | see below |
+| 12 | `orderly3 -n 17 -m 10 --enum 90 --emax 90 --dfloor 9 --extend 8 --hcap 8 --assume 9:81` | was a probe for `f(11) = 98`; now a consistency check on §13.0 (§13.1a) | **STILL RUNNING at write-up**; must report `ext_success = 0`, anything else is a bug |
+| 13 | `orderly2 -n 17 -m 11 --decide 97 --assume 9:81` | `f(11) <= 96`? and measures the predicted cost jump (§13.0) | **STILL RUNNING at write-up** |
+| 14 | `orderly2 -n 17 -m 11 --decide 95 --assume 9:81` | **the shot at `f(11) <= 94`, i.e. at `f(16) <= 134`** (§13.1c) | **queued behind run #10's `--countlevel 6`; STILL RUNNING or not yet started at write-up** |
 
 Every `--assume` used anywhere above is one of **this workstream's own proved
 values** (`f(9) <= 81`, `f(10) <= 90`, `f(11) <= 98`). No published number
@@ -1370,7 +1439,99 @@ sequence, which is exactly why it cost only 3.2e7 nodes. At `k=12` there are 41,
 so the naive expectation is tens of times more work on top of the extra level.
 Run #10 measures this rather than guessing it.
 
-### 13.1a A cheap sufficient probe for `f(11) = 98`
+**Partial result, and it is only a lower bound.** Run #10's `--countlevel 6`
+had consumed **64 CPU minutes without completing** when this was written, so no
+exact width is available. What that does license is a bound, by comparison with
+a run of known size at the same contention on the same machine: the `k=11`
+re-run did 32.0e6 nodes in 129 CPU minutes (§11.3), i.e. ~4.1e3 nodes/s, so run
+#10 has traversed **at least ~1.6e7 nodes** in levels 0–6 alone. The *entire*
+levels 0–6 of the `k=11` tree is 1.54e7 nodes. So:
+
+> levels 0–6 of the `k=12 @ 106` tree already exceed the whole of levels 0–6 of
+> the `k=11 @ 99` tree, and were still growing.
+
+That is consistent with the 41-vs-1 degree-sequence expansion and with §12.2's
+projected 1.2e8–3.1e8 total, but it does **not** confirm it — a lower bound of
+1.6e7 on one level is compatible with a wide range of totals. §12.2's `k=12` row
+therefore remains a projection, and the honest statement is that the measurement
+was attempted, produced a bound rather than a value, and was then cancelled in
+favour of the cheaper `k=11` route (§13.1c). Anyone resuming it should note that
+`--countlevel` prints nothing until it finishes, which makes it a poor choice for
+a run of uncertain length; `--split` shards or a node limit would give partial
+visibility.
+
+### 13.0 `f(11) <= 97`: a second refutation at `k=11`, and it was almost free
+
+Run #4 concluded, and the answer is the better of the two possibilities:
+
+```
+./orderly2 -n 17 -m 11 --decide 98 --assume 9:81
+  level nodes: 0:1 1:9 2:156 3:1880 4:33956 5:1021053 6:14347875 7:16095576
+               8:534574 9:142 10:24
+  RESULT ... target=98 dfloor=0 emax=-1 status=EXHAUSTED nodes=32035246
+         solutions=0 ext_success=0 secs=7802.354 rss_mib=3.7
+```
+
+> **`z(11,17;3) <= 97`.** No `11 x 17` `K_{3,3}`-free graph has 98 or more edges.
+
+Same soundness conditions as §11.1: `--decide` accepts `E >= target`, so one
+EXHAUSTED run at 98 refutes the whole half-line; `dfloor=0`, `emax=-1`,
+no sharding, no node limit; the sole assumption is our own `f(9) <= 81`.
+So `f(11)` is now pinned into `[90, 97]`, and **`f(11) = 98` is refuted, not
+merely unproven** — §13.1a's probe is thereby answered before it finishes.
+
+**The striking part is the cost: it was free.** 32 035 246 nodes against
+32 034 663 for the target-99 run — **583 more nodes, 0.0018 %.** That badly
+breaks the model in §12.2, which had the per-unit-of-target factor at 3x–7x
+(measured at `k=9`, where `83 -> 82` cost 6.9x). Understanding why matters more
+than the datum, because it says where the next edge gets expensive.
+
+Compare the two level profiles:
+
+| level | target 99 | target 98 | difference |
+|---|---|---|---|
+| 2 | 153 | 156 | +3 |
+| 3 | 1 836 | 1 880 | +44 |
+| 4 | 33 915 | 33 956 | +41 |
+| 5 | 1 020 778 | 1 021 053 | +275 |
+| 6 | 14 347 690 | 14 347 875 | +185 |
+| 7 | 16 095 541 | 16 095 576 | +35 |
+| 8 | 534 574 | **534 574** | **0** |
+| 9 | 142 | **142** | **0** |
+| 10 | 24 | **24** | **0** |
+
+The tail is *identical*, and there is an exact reason. Rows are ordered by
+non-increasing degree (R1), so the last row's degree is at most the previous
+one's. A 10-row prefix can only reach 98 if `E_10 + d_10 >= 98` with
+`d_10 <= d_9`:
+
+- `E_10 = 90`: **every** 90-edge `10x17` `K_{3,3}`-free graph is 9-regular —
+  delete its minimum-degree row, `90 - d <= f(9) = 81` forces `d >= 9`, and ten
+  degrees `>= 9` summing to 90 are all exactly 9. So these are precisely the 24
+  graphs of §11.3, and `d_10 <= 9` gives at most 99.
+- `E_10 = 89`: such a prefix has minimum degree `<= 8` (it is below the maximum
+  90), and by R1 that minimum *is* `d_9`, so `d_10 <= 8` and the total is at
+  most 97 — **below 98.** Pruned at level 9, exactly as before.
+
+So dropping the target from 99 to 98 opens *nothing* at the bottom of the tree;
+it only relaxes a few suffix bounds higher up, which is the +583. **The next
+step down is where this stops being free:** at target 97 the `E_10 = 89`
+prefixes become viable (`89 + 8 = 97`), so the level-10 population jumps from 24
+to the whole of `Ext(10,17,89)`, which is not a single degree sequence. Run #13
+(`--decide 97`, launched) measures that jump. This is the first genuinely
+predictive statement this log has been able to make about its own cost, and it
+is falsifiable: if `--decide 97` also comes back at ~3.2e7 nodes, the reasoning
+above is wrong and should be re-examined.
+
+### 13.1a A cheap sufficient probe for `f(11) = 98` — answered, and now a cross-check
+
+**Superseded by §13.0 before it finished.** `--decide 98` EXHAUSTED means no
+98-edge `11x17` graph exists at all, so this probe *must* report
+`ext_success = 0`. It is therefore no longer a probe but a **consistency check
+on a brand-new refutation**, and a useful one: `ext_success >= 1` would directly
+contradict §13.0 and expose a bug in either the `--extend` path or the main
+search. It was left running for exactly that reason. The original framing
+follows.
 
 Run #4 (`-m 11 --decide 98`, unconstrained) settles `f(11)` either way but is
 projected at 1.6e8–3.2e8 nodes (§12.2), i.e. 5–10 h. A much cheaper *sufficient*
@@ -1395,6 +1556,69 @@ summing to 90 with each `>= 8` leaves 10 units of slack, hence **41** degree
 sequences rather than one. So `--dfloor 9` covers only the 9-regular slice.
 Therefore: `ext_success >= 1` **proves** `f(11) = 98`; `ext_success = 0` proves
 **nothing** and run #4 (or a `--dfloor 8` rerun) is still needed.
+
+### 13.1b Runs still in flight at write-up, and exactly what to do with each
+
+Recorded in this form deliberately: a previous session died mid-run and its
+result survived only as an unrecorded remark in a final message. Everything
+below is the instruction for whoever finds these files.
+
+Progress at write-up (22:34), for whoever needs to judge how far each got — all
+three were still advancing, all three niced (`RN`) by the OS under load, and
+none had written a byte:
+
+| run | CPU consumed at write-up |
+|---|---|
+| #3 `verify_m11_T99.out` | 73 min 42 s |
+| #4 `sat_m11_T98.out` | 72 min 48 s |
+| #10 `width_m12_T106.out` (at `--countlevel 6`) | 64 min 24 s, no output — see the partial bound in §13.1 |
+
+| file | command | what to do when it lands |
+|---|---|---|
+| ~~`verify_m11_T99.out`~~ **CONCLUDED** | run #3 | **Done: EXHAUSTED, 32 034 663 nodes, every level width identical. Recorded in §11.3.** Retained for the record: expect `status=EXHAUSTED nodes=32034663`. Put its `RESULT` line into §11.3's third table, replacing the IN PROGRESS row. **If `nodes != 32034663`, stop and treat it as a blocking bug** — the two routes would still stand but the binary/source provenance argument in §11.2 would not. Note it has already consumed **74 min of CPU against the original run's 54 min 16 s for identical work.** That is expected to be per-node slowdown, not extra work — seven heavy processes now share the 8 cores with swap near-full, and CPU seconds inflate with memory-stall cycles while the instruction count does not. But it is an *assumption* until the node count lands, and if the node count differs it is the first thing to abandon. |
+| ~~`sat_m11_T98.out`~~ **CONCLUDED** | run #4 | **Done: EXHAUSTED ⇒ `f(11) <= 97`, `f(16) <= 137`. Recorded in §13.0**, and §4/§11.4/§11.5/the headline table are updated. |
+| `width_m12_T106.out` | run #10 | **Cancelled** once its slot was wanted for §13.1c's `k=11` route; only the lower bound in §13.1 came out of it. If resumed: read off `level nodes:` for each `L`; total cost ≈ 2x the peak width (§12.1), which would replace the projected `k=12` row of §12.2 with a measurement. Use `--split` or a node limit rather than `--countlevel`, so a long run yields partial visibility. |
+| `ext8_from_9reg.out` | run #12 | Now a cross-check, not a probe (§13.1a). It **must** report `ext_success = 0`, because §13.0 already refuted every 98-edge `11x17` graph. `ext_success >= 1` would contradict §13.0 and is a **blocking bug** in either `--extend` or the main search — investigate before trusting anything at `k=11`. |
+| `sat_m11_T95.out` | run #14 | **The important one.** `EXHAUSTED` ⇒ `f(11) <= 94` ⇒ **`f(16) <= 134` self-contained** — update §11.4/§11.5, `test_reduction.py` and the headline table, and note that nothing at `k = 12..15` is then needed. `FOUND` ⇒ certify the 11-row 95-edge witness through `verify/checker.py`; `f(11) >= 95`, and 134 goes back to `k >= 12`. `ABORTED`/empty ⇒ **no verdict**; report the level profile as a partial. |
+| `sat_m11_T97.out` | run #13 | `EXHAUSTED` ⇒ `f(11) <= 96` and `f(16) <= 136`; propagate through §11.4/§11.5 and `test_reduction.py`. `FOUND` ⇒ **`f(11) = 97` exactly** — certify the 11-row 97-edge `WITNESS_ROWS` through `verify/checker.py`, and note that `k=11` is then closed at `f(16) <= 137`, so 134 must come from `k >= 12`. Either way, compare its node count against §13.0's prediction that this is the step where cost jumps. |
+
+An empty or truncated file means the run did not finish. A missing result is
+never evidence of a refutation.
+
+### 13.1c Priority change: `k=11`, not `k=12`, is now the route to 134
+
+§13.0 changes the plan, and the reasoning should be explicit because §5, §6 and
+§12 all assumed the opposite.
+
+Everything above assumed the remaining edges had to be bought at `k = 11, 12, 13`
+with the expensive ones at 12 and 13. But the inverse table in §11.5 says
+`f(16) <= 134` follows from **`f(11) <= 94`** alone, and `--decide` refutes a
+half-line, so that is **one command**: `-m 11 --decide 95`. Compare the two
+routes to the same goal:
+
+| route | requirement | levels | slack in the forced degree sequence |
+|---|---|---|---|
+| via `k=12` | `f(12) <= 102`, i.e. `-m 12 --decide 103` | 12 | 10 (41 degree sequences, §13.1) |
+| via `k=11` | `f(11) <= 94`, i.e. `-m 11 --decide 95` | 11 | fewer rows, one level shallower |
+
+The `k=11` route is one level shallower and was measured at 3.2e7 nodes for its
+first two rungs. So the `k=12` width measurement (run #10) was cancelled after
+its `--countlevel 6` datum — enough to correct §12.2's projection, which is what
+it was for — and the freed core went to `-m 11 --decide 95` (run #14).
+
+**What each outcome means.** `EXHAUSTED` ⇒ `f(11) <= 94` ⇒ **`f(16) <= 134`,
+fully self-contained, matching the hand-derived bound of §5 and needing nothing
+at `k = 12..15`.** `FOUND` ⇒ a 95-edge `11x17` witness, so `f(11) >= 95`, the
+`k=11` route is capped at `f(16) <= 136`, and 134 must return to `k >= 12`.
+Either outcome is worth having; the second is the cheaper one to obtain, since
+the search stops at the first witness.
+
+**The honest risk.** Cost per unit of target decrease is unmeasured below 98,
+and §13.0 predicts the *next* step is where it jumps (the `Ext(10,17,89)`
+prefixes become viable at target 97). Three units below 98 could be anywhere
+from ~1e8 to ~1e10 nodes. Run #13 (`--decide 97`) is running alongside precisely
+to calibrate that, and if run #14 has not converged it should be reported as a
+partial with its level profile, never as a refutation.
 
 ### 13.2 Open
 
