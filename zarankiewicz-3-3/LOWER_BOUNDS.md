@@ -9,17 +9,21 @@ this repo yields, with no search at all:
 |---|---|---|---|---|
 | 9  | 78  | `<= 81` (exhaustive) | **81** | **3** |
 | 10 | 86  | `<= 90` (exhaustive) | **90** | **4** |
-| 11 | **94**  | `<= 97` (exhaustive) | unknown, in `[94, 97]` | unknown |
-| 12 | 102 | `<= 105` (density chain) | unknown | unknown |
-| 13 | 110 | `<= 113` (density chain) | unknown | unknown |
-| 14 | 118 | `<= 121` (density chain) | unknown | unknown |
-| 15 | 126 | `<= 129` (density chain) | unknown | unknown |
+| 11 | **94**  | `<= 97` (exhaustive) | **96** (published, twice) | **2** |
+| 12 | 102 | `<= 105` (density chain) | **103** (published once, never re-proved) | **1** |
+| 13 | 110 | `<= 113` (density chain) | 110 (published) | 0 |
+| 14 | 118 | `<= 121` (density chain) | 118 (published) | 0 |
+| 15 | 126 | `<= 129` (density chain) | 126 (published) | 0 |
 
 The last column is the point of the table, and it is bad news, not good:
-**wherever the true value is known, this method undershoots it by 3 or 4
-edges.** The apparent agreement of the lower bounds with `8k+6` for
-`k >= 11` is therefore weak evidence at best — the same formula undershoots
-by 3 at `k = 9` and by 4 at `k = 10`, where we can actually check.
+**wherever the true value is known, this method undershoots it** — by 3 and
+4 at `k = 9, 10` (values proved here), and by 2 and 1 at `k = 11, 12`
+(values published; see the section below). It happens to be tight at
+`k = 13, 14, 15`, which is exactly where the witnesses were optimised.
+
+The apparent agreement of the lower bounds with `8k+6` at `k = 11, 12` is
+therefore **not evidence that the true values are `94` and `102`** — and
+indeed they are not; they are `96` and `103`.
 
 ### The `8k+6` reading is worse than weak — it is the wrong model
 
@@ -49,6 +53,58 @@ formula fitted to the far end of the range lands and the near end (`k = 9`,
 because, as the last section shows, `z(16,17;3) <= 134` through `k = 11`
 needs precisely `z(11,17;3) = 94` — the one value in the bracket the
 evidence points away from.
+
+### Settled by the literature while this was being written: it is 96
+
+A literature check completed after the analysis above was written, and it
+resolves the bracket from outside:
+
+> **`z(11,17;3) = 96` is a published exact value.** Collins–Riasanovsky–
+> Wallace–Radziszowski, *Zarankiewicz Numbers and Bipartite Ramsey Numbers*,
+> arXiv:1604.01257 (J. Algorithms and Computation 47(1) (2016) 63–78),
+> **Table 4**, row `m=11`, column `n=17`, set in **boldface**, which their
+> legend defines as "a boldfaced entry is an exact value". Independently,
+> Jeremy Tan, *An attack on Zarankiewicz's problem through SAT solving*,
+> arXiv:2203.02283, **Table 3**, row 11 column 17, also **bold**, which his
+> legend defines as "a bold value is exact, proven by the methods in this
+> paper".
+
+Two independent computational proofs, in two papers, six years apart. Both
+markings were read at the glyph level from the embedded PDF fonts, not from
+a rendering — the same method that earlier established the `133` cell of the
+same table is italic (`PJYSJE+CMTI10`), and reproducing that known result
+was used to confirm the column alignment.
+
+**This is recorded rather than used to edit the reasoning above.** The
+bracket `[94, 97]` and the argument about the `8k+6` regime change were
+derived from this project's own computations and remain exactly as valid as
+they were; the published value simply lands inside the bracket, at `96`.
+Keeping both is the point — the prediction was that `94` is the least likely
+value in the bracket, and that prediction was right.
+
+**Consequences, all bad for the shortcut and good for the honesty of the
+record:**
+
+1. **`z(16,17;3) <= 134` via `k = 11` is dead.** It required
+   `z(11,17;3) = 94`. If `96` is correct, a 96-edge graph exists, so
+   `--decide 95` and `--decide 96` can only return SAT. The `--decide 95`
+   run was killed for this reason, with the reasoning written into its
+   output file rather than left as a silent corpse.
+2. **Our own bounds are weaker than the literature at this cell**, in both
+   directions: our `>= 94` against a published `96`, and our `<= 97` against
+   a published `96`. Stating that plainly matters more than the bounds
+   themselves.
+3. **The self-contained target becomes `z(11,17;3) = 96` exactly**, which is
+   now reachable: `--decide 97` returning EXHAUSTED gives `<= 96`, and
+   `--decide 96` returning SAT hands us our own 96-edge matrix, giving
+   `>= 96` from a witness we checked rather than from a citation. That is a
+   re-derivation of a twice-published value, not a new result — and it is
+   labelled as such.
+
+**A caveat on the caveat.** If `--decide 96` returns EXHAUSTED, that would
+*contradict* the published value, and the correct response is to suspect our
+generator before suspecting two independent papers. That check is worth
+having precisely because it is a check.
 
 Every bound in the second column is backed by an explicit matrix that
 `verify/checker.py` re-checked with all three of its independent `K_{3,3}`
@@ -141,20 +197,32 @@ new mathematics. Two concrete uses:
      `k = 11` route reaches `134` **if and only if** the lower bound is
      tight — and the `k = 9, 10` shortfalls are direct evidence that
      tightness is not to be assumed.
-   - The three currently running jobs (`--decide 95/96/97`) therefore
-     resolve `z(11,17;3)` exactly, since the bracket has only four values
-     in it.
+   - The three jobs launched on this basis (`--decide 95/96/97`) would
+     therefore resolve `z(11,17;3)` exactly, since the bracket has only four
+     values in it.
+
+   **Update after the literature check (see the section above).**
+   `z(11,17;3) = 96` is published, twice. So `--decide 95` can only return
+   SAT and was killed as subsumed; the surviving pair `--decide 96` (expect
+   SAT, handing us our own 96-edge witness) and `--decide 97` (expect
+   EXHAUSTED, giving `<= 96`) still pin the value exactly, now as a
+   **self-contained re-derivation of a published result** rather than a new
+   one. The `134` row of the table below is unreachable.
 
    Chain values for each outcome, computed from
    `f(j) <= max{e : e - floor(e/j) <= f(j-1)}` (divisor 8 throughout this
    range, so the propagation is 1:1 from `k = 11` to `k = 16`):
 
-   | if `z(11,17;3) =` | then chain gives `z(16,17;3) <=` |
-   |---|---|
-   | 97 | 137 *(already proved)* |
-   | 96 | 136 |
-   | 95 | 135 |
-   | 94 | **134** — matches the hand bound, with nothing cited |
+   | if `z(11,17;3) =` | then chain gives `z(16,17;3) <=` | status |
+   |---|---|---|
+   | 97 | 137 | already proved self-contained |
+   | **96** | **136** | **the real value** — the best this route can give |
+   | 95 | 135 | unreachable (a 96-edge graph exists) |
+   | 94 | 134 | unreachable |
+
+   So the `k = 11` route's true ceiling is `z(16,17;3) <= 136`, one better
+   than we have, and it cannot do better no matter how much compute is
+   spent at that level. Improving past `136` requires going to `k = 12`.
 
 ## Reproducing
 
