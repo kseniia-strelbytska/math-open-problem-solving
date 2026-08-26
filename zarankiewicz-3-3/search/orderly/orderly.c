@@ -460,6 +460,24 @@ static int place_level(int k) {
     int R = TRIPLE_CAP - X->usedcap;
     while (dmax > 0 && C3[dmax] > R) dmax--;
 
+    /* (R9) The (R7) degree-floor/emax complement, HOISTED from a post-row
+     * rejection into a cap on the row degree. It is the *same predicate*
+     * gen() already applies once the row is complete --
+     *     E_before + d + (m-k-1)*dfloor <= emax
+     * -- and it depends only on d, never on which columns the row uses. So
+     * testing it here cannot change which rows survive; it only stops `gen`
+     * from enumerating rows that would be rejected anyway. That matters
+     * because the measured bottleneck is the *number of candidate rows
+     * enumerated* (§7), not the cost of testing one: without this hoist,
+     * `--emax E --dfloor D` prunes the tree but still walks every row of
+     * degree up to 17 at every level. Inactive unless --emax is given, so
+     * every unconstrained run reproduces its old node count bit-for-bit. */
+    if (X->emax >= 0) {
+        int cap = X->emax - X->E;
+        if (X->dfloor > 0) cap -= (X->m - k - 1) * X->dfloor;
+        if (cap < dmax) dmax = cap;
+    }
+
     int j = X->m - k - 1;                  /* rows placed after this one */
     unsigned char allowed[MAXN + 2];
     memset(allowed, 0, sizeof(allowed));

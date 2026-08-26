@@ -54,6 +54,138 @@ def degree_sequences(m: int, e: int, dmin: int, dmax: int):
     return out
 
 
+def chain_step(j: int, prev: int) -> int:
+    """The Density Lemma (R6) upper-bound step: the largest e such that
+    e - floor(e/j) <= prev.  Deleting a minimum-degree row of an e-edge
+    j x n graph leaves at least e - floor(e/j) edges on j-1 rows."""
+    e = prev
+    while (e + 1) - ((e + 1) // j) <= prev:
+        e += 1
+    return e
+
+
+def chain_up(k0: int, v0: int, kmax: int = 16) -> dict[int, int]:
+    """Propagate f(k0) <= v0 upward with chain_step, returning {k: bound}."""
+    out, v = {k0: v0}, v0
+    for j in range(k0 + 1, kmax + 1):
+        v = chain_step(j, v)
+        out[j] = v
+    return out
+
+
+# (start level, start bound, expected f(16) bound, label)
+CHAIN_CASES = [
+    (9, 81, 144, "ORDERLY_LOG section 5, chain from the proved f(9)=81"),
+    (11, 98, 138, "ORDERLY_LOG section 11.4, chain from the proved f(11)<=98"),
+    (11, 97, 137, "one further edge at k=11"),
+    (12, 105, 137, "one refutation at k=12 (target 106)"),
+    (12, 102, 134, "section 11.5: equivalent to the hand-derived f(16)<=134"),
+    (12, 101, 133, "section 11.5: equivalent to the published f(16)<=133"),
+]
+
+# (start level, start bound) -> how much f(16) improves per further edge saved
+# there.  1 everywhere on the live chain; 8 at k=9 because of a divisor cliff.
+SENSITIVITY = {
+    (9, 81): 8,
+    (11, 98): 1,
+    (11, 97): 1,
+    (12, 105): 1,
+    (12, 102): 1,
+    (12, 101): 1,
+}
+
+# f(16) goal -> the largest bound at k=11/12/13 that still reaches it
+CHAIN_INVERSE = [
+    (138, 98, 106, 114),
+    (137, 97, 105, 113),
+    (134, 94, 102, 110),
+    (133, 93, 101, 109),
+]
+
+
+def check_chain() -> list[str]:
+    """The density chain arithmetic behind ORDERLY_LOG sections 11.4/11.5.
+
+    Worth asserting because every headline upper bound this workstream claims
+    above k=11 is one of these numbers, and they were originally computed by
+    hand.  A single off-by-one here would misstate the project's headline
+    result for z(16,17;3)."""
+    failures = []
+    print("\n--- density chain (R6) arithmetic ---")
+    for k0, v0, want16, label in CHAIN_CASES:
+        got = chain_up(k0, v0)[16]
+        ok = got == want16
+        print(f"f({k0}) <= {v0:3d}  =>  f(16) <= {got:3d}  (expect {want16:3d})  "
+              f"{'OK' if ok else 'MISMATCH'}   {label}")
+        if not ok:
+            failures.append(f"chain from f({k0})<={v0}: got f(16)<={got}, expected {want16}")
+
+    print("\n--- inverse: what each f(16) goal requires ---")
+    for goal, n11, n12, n13 in CHAIN_INVERSE:
+        for k0, need in ((11, n11), (12, n12), (13, n13)):
+            best = max(v for v in range(60, 145) if chain_up(k0, v)[16] <= goal)
+            ok = best == need
+            if not ok:
+                failures.append(
+                    f"f(16)<={goal} via k={k0}: largest sufficient bound is {best}, "
+                    f"log says {need}")
+            print(f"f(16) <= {goal}  needs f({k0}) <= {best:3d}  (log says {need:3d})  "
+                  f"{'OK' if ok else 'MISMATCH'}")
+
+    # The 1:1 propagation claim of section 11.4, asserted the way the log uses
+    # it: one edge saved at k0 is exactly one edge saved at k=16.  (Asserting
+    # the *reason* -- floor(e/j) == 8 -- would be wrong to state globally: on
+    # the older, weaker chain from f(9)=81 the divisor is 9, not 8.  The
+    # sensitivity is what the log actually relies on, so that is what is
+    # checked.)
+    #
+    # The sensitivity is NOT uniform, and the exception is worth asserting
+    # rather than glossing: at k=9 one further edge would have been worth
+    # EIGHT at k=16, because f(9)=81 sits just above a divisor cliff
+    # (floor(90/10)=9, but from f(9)=80 the chain runs 88,96,... with
+    # floor=8 throughout).  See ORDERLY_LOG section 11.4a.  That door is shut --
+    # f(9)=81 is proved exactly, with a certified 81-edge witness -- but it
+    # explains why the chain from k=9 was so much worse than it looked.
+    print()
+    for k0, v0, _, _ in CHAIN_CASES:
+        got = chain_up(k0, v0)[16] - chain_up(k0, v0 - 1)[16]
+        want = SENSITIVITY[(k0, v0)]
+        ok = got == want
+        print(f"one edge saved at k={k0} (from {v0}) moves f(16) by {got} "
+              f"(expect {want})  {'OK' if ok else 'MISMATCH'}")
+        if not ok:
+            failures.append(
+                f"chain sensitivity at k={k0}, v={v0}: f(16) moves by {got}, "
+                f"expected {want}")
+
+    # And the stated *reason*, checked only where the log states it: on the
+    # live chain (k0 >= 11) every step has floor(e/j) == 8, i.e. f(j) <= f(j-1)+8.
+    for k0, v0, _, _ in CHAIN_CASES:
+        if k0 < 11:
+            continue
+        bounds = chain_up(k0, v0)
+        for j in range(k0 + 1, 17):
+            if bounds[j] // j != 8:
+                failures.append(
+                    f"step-size claim broken on the live chain: "
+                    f"floor({bounds[j]}/{j}) = {bounds[j] // j}, not 8")
+    live_ok = not any("step-size" in f for f in failures)
+    print(f"live chain (k0 >= 11) has floor(e/j) == 8 at every step: "
+          f"{'OK' if live_ok else 'MISMATCH'}")
+    print()
+
+    # Why k=12 @ 106 is structurally wider than k=11 @ 99 (section 13.1):
+    # the tightness argument leaves 0 slack at k=11 and 10 at k=12.
+    for m, e, dfloor, want in ((11, 99, 9, 1), (12, 106, 8, 41)):
+        seqs = degree_sequences(m, e, dfloor, min(17, e - (m - 1) * dfloor))
+        ok = len(seqs) == want
+        print(f"k={m}, e={e}, dfloor={dfloor}: {len(seqs):3d} admissible degree "
+              f"sequences (expect {want})  {'OK' if ok else 'MISMATCH'}")
+        if not ok:
+            failures.append(f"k={m} e={e}: {len(seqs)} degree sequences, expected {want}")
+    return failures
+
+
 CASES = [
     # label,                              m,   e, dmin, dmax, excess
     ("e=134 on 16x17, d_min=8",           16, 134,   8,   14,  6),
@@ -104,6 +236,8 @@ def main() -> int:
             print("could not parse orderly level-1 width (skipped)")
     else:
         print("orderly binary not built; skipped the generator cross-check")
+
+    failures.extend(check_chain())
 
     if failures:
         print("\nFAILURES:")

@@ -25,19 +25,30 @@ uncertified 2016 exhaustive computation. The open question is whether a
 |---|---|
 | `z(7,7) <= 33`, machine-verified end to end (HOL4-verified checker) | **PROVED, certified** |
 | `z(9,17) = 81` and `z(10,17) = 90`, computed from scratch | **PROVED**, witnesses independently certified |
+| `z(11,17) <= 98`, by exhaustive refutation of `11x17 @ 99` | **PROVED**, and by **two independent routes** (a direct 32.0M-node refutation, and a separate reduction route via 10x17 extensions: 24 parents, 0 extensions) |
+| **`z(16,17) <= 138`, entirely self-contained** — no published value anywhere in the derivation | **PROVED** (density chain from our own `z(11,17) <= 98`) |
 | `z(k,k)` for `k = 3..9` reproduced from scratch | **PROVED**, agrees with published values |
 | 32 small cells agree with a deliberately independent second searcher | **verified, both directions** |
 | A complete elementary reduction of `z(16,17)` to two finite enumerations | **derived** (§ `REDUCTION.md`), but *conditional* — see below |
 | `z(16,17) <= 134` by hand | **derived**, conditional on the published `z(15,17) <= 126` |
-| Self-contained re-derivation of `z(15,17) = 126` | **NOT achieved — measured infeasible by ~10 orders of magnitude** |
+| Self-contained re-derivation of `z(15,17) = 126` | **NOT achieved.** Best self-contained bound is `<= 130`. (An earlier claim of "infeasible by ~10 orders of magnitude" was based on a projection later contradicted by measurement and is **withdrawn** — see §Measured feasibility.) |
 | `z(16,17) <= 133` (criterion C) | **NOT achieved** |
 | `z(16,17) = 132` (full resolution) | **NOT achieved** |
 
-**Bottom line: the open problem is not resolved, and on this hardware it is
-not reachable.** The value of the work is (a) a rigorous reduction, (b) a
-validated and genuinely certifying toolchain, (c) two from-scratch exact
-values, and (d) a *quantified* infeasibility result that explains precisely
-where the wall is and why.
+**Bottom line: the open problem is not resolved.** Full resolution (settling
+133 vs 132) remains out of reach on this hardware. But the picture is less
+closed than an earlier version of this document claimed: the self-contained
+upper bound has moved `144 -> 138`, and one further refutation at `k=12`
+— now measured at roughly 6-16 hours rather than the week previously
+projected — would reach **`z(16,17) <= 134` with no citation anywhere in the
+derivation**, matching the hand-derived bound while depending on nothing but
+our own proved values.
+
+The value of the work is (a) a rigorous reduction, (b) a validated and
+genuinely certifying toolchain, (c) three from-scratch exact-or-bound values
+(`z(9,17)=81`, `z(10,17)=90`, `z(11,17)<=98`), (d) a self-contained
+`z(16,17) <= 138`, and (e) a *quantified*, and now twice-corrected, account
+of exactly where the wall is and why.
 
 ### The three findings that most changed the plan
 
@@ -48,14 +59,25 @@ where the wall is and why.
    symmetry that CDCL cannot exploit, and the symmetry-breaking clauses
    intended to fight it made a *known-satisfiable* instance unsolvable that
    otherwise solved in 213 s.
-2. **The density-lemma ladder does not close from below**
-   (§`search/orderly/ORDERLY_LOG.md` §5). To reach `z(15,17) <= 126` the
-   chain needs `z(9,17) <= 78`. The true value, which this project *proved*,
-   is **81**. So our own chain yields only `z(15,17) <= 135`, and the entire
-   remaining obstruction localises to levels `k = 11, 12, 13`. The published
-   values are strictly stronger than any counting argument available to us —
-   which retrospectively explains why the 2016 paper needed serious
-   computation and why it stopped where it did.
+2. **The density-lemma ladder does not close from below — and the reason is
+   a one-edge divisor cliff, not a general leak.** (§5 and §11.4a of the
+   orderly log.) The chain step is
+   `f(j) <= max{e : e - floor(e/j) <= f(j-1)}`. Starting from our proved
+   `f(9) = 81`, the `k=10` value is 90, `floor(90/10) = 9`, and the whole
+   chain then runs on divisor 9: `81, 90, 99, ..., 144`. Starting from
+   `f(9) = 80` it would run on divisor **8** throughout and land at 136.
+
+   So `f(9) = 81` sits **exactly one edge on the expensive side of a cliff
+   worth eight edges at the target.** And that door is *mathematically*
+   shut, not merely expensive: `f(9) = 81` is proved exactly — UNSAT at 82
+   and 83, plus an explicit certified 9-regular 81-edge witness. No amount
+   of compute improves it. This is the clearest place in the project where
+   the obstruction is mathematical rather than computational.
+
+   Consequence: all remaining progress must be bought edge-by-edge at
+   `k = 11, 12`, where the chain propagates 1:1 (`+8` per level, so one
+   edge saved at `k=11` is one edge saved at `k=16`). Buying one such edge
+   is what took the self-contained bound from 144 to **138**.
 3. **My "narrow ladder" reformulation was wrong** (§6.3 of the orderly log).
    I proposed climbing `Ext(13,110) -> Ext(14,118) -> Ext(15,126)` on the
    grounds each rung needs only degree-8 extension rows. It is *the same
@@ -105,15 +127,22 @@ intersection on the transpose, and a `networkx` adjacency-based check. All
 must agree; disagreement raises `CheckerDisagreement` rather than picking a
 winner. Underlying lemma: for a fixed 3-row set, a `K_{3,3}` exists iff at
 least 3 columns are 1 in all three rows.
-*Known weakness, named not hidden:* two of the three detectors rest on the
-same row-triple lemma, so they cannot catch an error in that lemma. Mitigated
-by a fourth, code-independent pure-Python ground truth used only in tests.
+*Known weakness, named not hidden:* all three detectors rest on that same
+characterisation, so they are independent in implementation but NOT in
+mathematics — their agreement is evidence about the code, not the lemma.
 
-**`verify/test_checker.py`** — 15 tests: hand-verified positive and negative
-cases (with the hand reasoning in comments), malformed-input rejection, and
-500 random trials at 16x17 and 8x9 cross-checked against the independent
-ground truth. **Result: 15/15 pass**, re-run independently by the coordinator
-rather than taken on report.
+**`verify/test_checker.py`** — 18 tests. Includes the lemma guard that the
+above weakness requires: `_brute_force_definition_literal` enumerates
+row-triples CROSSED with column-triples and tests all 9 cells, i.e. the
+definition with no intersection reformulation, so it *can* detect a wrong
+characterisation. The equivalence is checked exhaustively over all `2^9`
+3x3 and all `2^12` 3x4 matrices, plus randomised shapes to 16x17. Also
+hand-verified small cases (reasoning in comments), malformed-input
+rejection, and 500 random trials.
+**Result: 18/18 pass**, re-run independently by the coordinator rather than
+taken on report. (An earlier revision claimed a "definition-based" 4th
+ground truth that was in fact the same characterisation in different code;
+the reviewer caught this and it was replaced with a real one.)
 
 **`verify/test_known_witnesses.py`** — checks all six literature witness
 matrices. **Result: all six verified** (13x18=116, 14x17=118, 14x18=124,
@@ -225,7 +254,7 @@ M-series unless noted.
 
 | # | program / run | parameters | outcome |
 |---|---|---|---|
-| R1 | `verify/test_checker.py` | 15 tests, 500 random trials | **15/15 pass** |
+| R1 | `verify/test_checker.py` | 18 tests incl. exhaustive lemma check over all 3x3/3x4 matrices | **18/18 pass** |
 | R2 | `verify/test_known_witnesses.py` | 6 literature matrices | **all 6 verified** |
 | R3 | `local_search_attack.py` ph.1 | 150 restarts x 20k iters, seeded | 0/150 at 133; floor energy 2 |
 | R4 | `local_search_attack.py` ph.2 | 80 restarts x 30k iters, from scratch | 0/80; best 122 edges |
@@ -247,31 +276,87 @@ M-series unless noted.
 | R20 | `orderly.c` | `z(9,17)`: SAT at 81, UNSAT at 82 | **`f(9) = 81` PROVED**, 2.41M nodes, 74.9 s |
 | R21 | `orderly.c` | `z(10,17)` | **`f(10) = 90` PROVED**, 7.55M nodes, 302 s |
 | R22 | `orderly.c --countlevel` | 15x17, dfloor 8, emax 126 | exact widths L1..L6: 6 / 67 / 1,395 / 43,447 / 1,966,099 / 81,381,805 |
+| R25 | `orderly` | 11x17, `--decide 99` | **EXHAUSTED, 32,034,663 nodes, 3,255.8 s -> `f(11) <= 98`** |
+| R26 | `orderly` | 10x17, `--enum 90 --extend 9` | **EXHAUSTED, 24 parents, 0 extensions -> `f(11) <= 98` by a SECOND independent route** |
+| R27 | `orderly2` | 11x17, `--decide 99`, re-run of R25 | reproduced exactly -- 32,034,663 nodes |
+| R28 | `orderly2` | 9x17, `--decide 83` / `--decide 82` | regression vs log: 347,899 / 2,412,355 nodes, both exact matches |
+| R29 | `orderly3` | 9x17 (R9 optimisation) | identical node counts to R28 -- optimisation verified non-semantic |
+| R30 | `orderly2` | 11x17, `--decide 98` | decides `f(11)=98` vs `<=97` -- running |
+| R31 | `orderly3 --countlevel` | 12x17, `--decide 106`, L=6..9 | exact `k=12` tree widths, to replace projection with measurement -- running |
 | R23 | kissat + DRAT | 16x17 **K=134**, at-least-K, no sym-break | **running** (primary certified target) |
 | R24 | kissat + DRAT | 13x18 **K=117**, no sym-break | **running** (would give us `z(13,18)=116` as our own certified result) |
 
-### Measured feasibility (the quantified wall)
+### Measured feasibility
 
-Growth of the hardest refutation per level, `n = 17`: level 7 = 21,437 nodes
-(0.49 s); level 8 = 73,007 (3.70 s, 7.6x); level 9 = 2,412,355 (74.9 s, 20x).
-At a conservative 20x per level, one refutation costs ~`2.4e6 * 20^(k-9)`
-nodes:
+> **An earlier version of this section was wrong and is withdrawn.** It
+> projected a uniform 20x-per-level growth from a `k <= 9` anchor, giving
+> `k=11` ≈ 8 h, `k=12` ≈ 7 days, `k=15` ≈ 160 years, and concluded the
+> bottom-up route was out of reach "by roughly 10 orders of magnitude."
+> The `k=11` refutation then *actually ran* in **0.9 h**, i.e. the anchor
+> was 9x too high. **That 10-orders-of-magnitude margin is retracted.**
+> Per-level growth in time is ~6.5x-17x, not ~21x. The lesson recorded:
+> the projection was built on an anchor two levels below where it was
+> being applied, and nothing flagged that as a risk until measurement
+> contradicted it.
 
-| `k` | est. nodes | est. single-core time |
+Measured refutation costs, `n = 17`, all EXHAUSTED and all using only this
+project's own values:
+
+| `k` | probe | nodes | time | nodes/s |
+|---|---|---|---|---|
+| 7 | whole level | 21,437 | 0.49 s | 44 k |
+| 8 | whole level | 73,007 | 3.70 s | 20 k |
+| 9 | `>= 83` | 347,899 | 19.3 s | 18 k |
+| 9 | `>= 82` (the hard one) | 2,412,355 | 74.9 s | 32 k |
+| 10 | `>= 91` | **0** | **0 s** | — (free: chain is tight here) |
+| 11 | `>= 99` | **32,034,663** | **3,255.8 s** | 9.8 k |
+
+Note "the refutation at level `k`" is not one thing — cost depends on how
+far the target sits above the true value, so the honest per-level factor
+is a range (3.6x-9.6x in nodes), and throughput *falls* with level
+(~0.55x per level) because constraints reject deeper inside the row
+enumeration.
+
+Revised projection for one refutation at the chain's bound:
+
+| `k` | projected nodes | projected 1-core time | old (withdrawn) |
+|---|---|---|---|
+| 12 | 1.2e8 - 3.1e8 | **6 h - 16 h** | ~7 days |
+| 13 | 4e8 - 3.0e9 | 1.6 d - 12 d | ~5 months |
+| 14 | 1.5e9 - 2.9e10 | 10 d - 6 mo | ~8 years |
+| 15 | 5e9 - 2.8e11 | 2 mo - 9 yr | ~160 years |
+
+**This changes the practical verdict at exactly one level:** `k = 12` moves
+from "a week, don't bother" to "about a day, worth attempting" — and it is
+being attempted (width measurement in progress). `k = 13` moves from
+impossible to plausible-with-patience but outside a session. `k >= 14`
+stays out of reach.
+
+### What each further edge would buy
+
+Because the chain step is `+8` throughout this range, the requirement
+inverts exactly:
+
+| goal | needs | status |
 |---|---|---|
-| 11 | 1e9 | ~8 h |
-| 12 | 2e10 | ~7 days |
-| 13 | 4e11 | ~5 months |
-| 15 | 1.5e14 | ~160 years |
+| `z(16,17) <= 138` | `f(11) <= 98` | **done** |
+| `z(16,17) <= 137` | `f(11) <= 97` or `f(12) <= 105` | one more refutation |
+| `z(16,17) <= 134` | `f(11) <= 94` or `f(12) <= 102` or `f(13) <= 110` | `k=12` route is ~6-16 h |
+| `z(16,17) <= 133` | `f(11) <= 93` or `f(12) <= 101` | see below |
 
-and `f(15)` needs several such refutations, not one. Independently, the
-`e=134` extremal-parent enumeration measured ~40x width growth per row, still
-`8.1e7` configurations at level 6 — optimistically ~40 core-hours if the
-width peaks at level 8, realistically `1e12`-`1e14` nodes. The tree *must*
-eventually collapse (from `k >= 13` the prefix is forced exactly extremal),
-but the peak sits at `k ~ 10..12`, exactly where the unavoidable refutations
-also live. Sharding across 3 free cores changes this by 3x, which does not
-matter at this scale.
+And the hard limit no compute fixes: **you cannot refute a value that is
+actually achievable.** If the published `8k+6` progression
+(`f(13)=110, f(14)=118, f(15)=126`) extrapolates down correctly, then
+`f(12) = 102` exactly — in which case `f(12) <= 102` is attainable and
+`z(16,17) <= 134` is reachable by a *single* `k=12` refutation, while
+`z(16,17) <= 133` would require `f(12) <= 101`, which would be **false**
+and therefore unreachable by this route at all. Reaching 133 would then
+need the extremal-enumeration route of `REDUCTION.md`, not the chain.
+
+Separately, the `e=134` extremal-parent enumeration measured ~40x width
+growth per row, still `8.1e7` configurations at level 6 — optimistically
+~40 core-hours if the width peaks at level 8, realistically `1e12`-`1e14`
+nodes.
 
 ---
 
@@ -282,7 +367,8 @@ Stated plainly, since the honest answer is "more than this machine has":
 1. **The reduction is sound but conditional.** `REDUCTION.md` reduces the
    problem to enumerating `Ext(15,17,126)` and `Ext(15,17,125)`. That
    reduction assumes `z(15,17) = 126`, which we can cite but *cannot*
-   self-derive (best self-contained bound: `<= 135`).
+   self-derive (best self-contained bound: `<= 130`, improved from `<= 135`
+   by the `f(11) <= 98` result).
 2. **Either accept the citation and buy compute** — the `e=134` enumeration
    at `1e12`-`1e14` nodes is a cluster-scale job, not a laptop one — **or
    close the `k = 11, 12, 13` refutations**, which is where the entire

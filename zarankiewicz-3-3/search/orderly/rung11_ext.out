@@ -1,0 +1,4 @@
+    level nodes: 0:1 1:1 2:9 3:242 4:13265 5:667671 6:12638706 7:15769672 8:533163 9:142 10:24
+ASSUMED f(9) <= 81   [DECLARED ASSUMPTION, not proved here]
+PARAMS n=17 m=10 triple_cap=1360
+RESULT mode=enum m=10 n=17 target=90 dcap=17 dfloor=9 emax=90 forced0=-1 split=0:0:1 status=EXHAUSTED nodes=29622896 solutions=24 ext_success=0 secs=2437.368 rss_mib=3.7
