@@ -41,6 +41,29 @@ Method 3 (`has_k33_networkx`): build the actual bipartite graph as a
 Edge counting is done via `count_ones_numpy` (numpy .sum()) and
 `count_ones_manual` (explicit Python-int double loop, immune to any
 numpy dtype/overflow surprise -- moot at 16x17 scale, but free to check).
+
+KNOWN LIMITATION -- read this before trusting the three-way agreement.
+All three methods above test the same underlying mathematical fact:
+
+    a K_{3,3} exists  <=>  some 3 rows have >= 3 columns in common
+                      <=>  some 3 columns have >= 3 rows in common
+
+Methods 1 and 3 both enumerate row-triples; Method 2 is the transposed
+dual. They are independent in *implementation* -- different libraries,
+different data structures, different traversal order -- which is what
+catches an indexing, axis, or off-by-one bug in any one of them. They are
+NOT independent in the *mathematics*: if the characterisation above were
+itself wrong, all three would be wrong together and their agreement would
+prove nothing. Their agreement is therefore evidence about the code, not
+about the lemma.
+
+What actually guards the lemma is external to this file: the test suite
+carries a fourth, deliberately code-independent brute-force ground truth
+(plain Python, no numpy, no networkx, written from the definition of a
+complete bipartite subgraph rather than from the characterisation above)
+and cross-checks it against this module over hundreds of random matrices.
+A reviewer wanting to attack this module's correctness should attack that
+lemma and that fourth implementation, not the three-way agreement.
 """
 
 from __future__ import annotations
@@ -328,11 +351,14 @@ def edge_count(matrix: MatrixLike, n_cols: int | None = None) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Literature-derived witness cross-check.
+# Known-value cross-check helper.
 #
-# Wired up 2026-08-25 against data/known_witnesses/ (see SOURCES.md there
-# for full provenance and independent-verification notes). This is used by
-# verify/test_known_witnesses.py, not just left as a hook.
+# This is a thin convenience wrapper over verify(); it is fully functional as
+# it stands and carries no dependency on any data outside this file. No
+# witness data ships in this commit -- the matrices it is intended to be
+# pointed at, and the test that does so, are added separately (see the
+# project charter's dependency-order rule). Nothing here claims to have been
+# run against them yet.
 # ---------------------------------------------------------------------------
 
 def check_against_known_exact_value(matrix: MatrixLike, published_value: int, n_cols: int | None = None) -> dict:
@@ -345,8 +371,7 @@ def check_against_known_exact_value(matrix: MatrixLike, published_value: int, n_
     exact same independent verify() pipeline as every other matrix checked
     by this module. What makes a call "a known-value cross-check" rather
     than an ordinary verification is purely how the caller uses the
-    result (see verify/test_known_witnesses.py), not anything special
-    this function does internally.
+    result, not anything special this function does internally.
     """
     result = verify(matrix, expected_edges=published_value, n_cols=n_cols)
     if result["has_k33"]:

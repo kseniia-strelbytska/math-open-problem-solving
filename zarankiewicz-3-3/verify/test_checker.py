@@ -126,37 +126,20 @@ def test_k44_minus_perfect_matching_is_free():
 
 
 # ---------------------------------------------------------------------------
-# Test 3b: K_{4,4} minus a perfect matching, PLUS one extra edge put back,
-# must become K_{3,3}-containing.
-#
-# Hand reasoning: restore edge (0,0). Now row 0 is adjacent to all 4
-# columns, rows 1,2,3 are still missing only columns 1,2,3 respectively.
-# Consider rows {0, 1, 2}: row 0 misses nothing, row 1 misses column 1,
-# row 2 misses column 2. Columns missing from at least one of these three
-# rows: {1, 2}. Common columns = complement = {0, 3} -- wait that's only
-# 2. Let's instead consider rows {1, 2, 3}: unaffected by the restored
-# edge (0,0) since row 0 isn't among them -- still only 1 common column,
-# as in the base case. So we must check ALL 4 row-triples that include
-# row 0: {0,1,2}: missing columns from the trio = {1,2} (row0 misses
-# nothing extra), common = {0,3}, size 2 -- still not enough with only 4
-# columns total (need to leave 3 free, but 2 other rows already forbid 2
-# distinct columns, leaving only 4-2=2). So actually restoring ONE edge
-# of a 4x4 grid is NOT enough to force a K_{3,3} -- 4 columns isn't wide
-# enough for 3 rows to jointly free up 3 common columns unless at least
-# two of the three chosen rows are matching-full. This sub-case instead
-# checks a DIFFERENT known-by-hand positive control: extend to a 4x5
-# grid (4 rows, 5 columns) built as [K_{4,4} minus matching] with a 5th
-# column added that is all-ones. Now consider rows {1,2,3} (all missing
-# their own diagonal column among 0..3, but all present in column 4):
-# common columns among {1,2,3} = (complement of {1,2,3} within {0,1,2,3})
-# UNION column 4 restricted to common = {0} plus column 4 = {0, 4}, size
-# 2 still. Try rows {0,1,2}: common = {3} plus column 4 = {3,4}, size 2.
-# Every 3-row subset still yields only 2 common columns (1 from the
-# 4x4 part + the all-ones column), so THIS still doesn't contain K_{3,3}
-# either -- it takes 3 wide-open columns. So instead we use the more
-# direct positive control below (a full 3x3 all-ones submatrix planted
-# inside a larger matrix), which by Test 1's reasoning obviously must be
+# Test 4: a K_{3,3} planted inside a larger, otherwise-empty matrix must be
 # detected regardless of what surrounds it.
+#
+# Hand reasoning: the planted rows {1,3,4} are each 1 in exactly the planted
+# columns {0,2,5}, so that row-triple has exactly 3 common columns, which by
+# the characterisation used throughout this module is precisely a K_{3,3}.
+# Every other row-triple includes at least one all-zero row and so has no
+# common columns at all. Surrounding zeros can therefore neither hide the
+# planted copy nor fabricate a second one.
+#
+# (A 4x4 or 4x5 variant was considered as a positive control and rejected:
+# with only 4 or 5 columns, no 3-row subset of K_{4,4}-minus-a-matching can
+# free up 3 common columns, so such a matrix is K_{3,3}-free and would not
+# exercise the positive path at all. The planted case below is used instead.)
 # ---------------------------------------------------------------------------
 
 def test_planted_k33_inside_larger_matrix_is_detected():
@@ -319,7 +302,7 @@ def test_convenience_wrappers():
 
 # ---------------------------------------------------------------------------
 # check_against_known_exact_value: basic behavior (real literature witness
-# cross-checks live in test_known_witnesses.py, not here).
+# cross-checks against real witness data are added separately).
 # ---------------------------------------------------------------------------
 
 def test_known_exact_value_accepts_matching_matrix():
