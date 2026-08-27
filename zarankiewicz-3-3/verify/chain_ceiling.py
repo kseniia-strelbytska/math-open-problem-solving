@@ -73,29 +73,44 @@ The bound `z(16,17) <= 134` *is* reachable, and by the same computation is
 the exact ceiling: **the density chain's limit for this cell is 134, and it
 is attained.**
 
-## The corollary, which corroborates a literature claim by pure arithmetic
+## The corollary — and it splits into an unconditional and a conditional half
 
 The 2016 paper tabulates `133` for this cell, and separately describes an
-arithmetic `z_bound` algorithm that chains its Lemmas 2-4 over a table of
-lower levels. The theorem above says that algorithm **cannot** output `133`
-here — its ceiling is `134`. Therefore the `133` entry must have been
-obtained by their exhaustive computation, not by their arithmetic.
+arithmetic `z_bound` algorithm chaining its Lemmas 2-4 over a table of lower
+levels. That algorithm has **two** possible final steps for this cell, and
+they are on different footings:
 
-That matters because it is reached by a completely different route than the
-project's earlier evidence for the same conclusion. Previously this was
-argued from *typography*: the paper's table legend distinguishes bold
-(exact) from italic (exhaustive computation) from upright (lemmas only), and
-the embedded PDF font for the `133` cell was found to be `PJYSJE+CMTI10`,
-i.e. italic. That is a fact about a PDF. The argument here is a fact about
-arithmetic, needs no access to the paper at all, and agrees. Two independent
-kinds of evidence converging is the strongest form this claim can take short
-of the authors confirming it.
+- **Row step — ruled out unconditionally.** By Theorem A it would need
+  `z(15,17) <= 125`, and `126` is witnessed by a matrix verified here.
+- **Column step — ruled out only conditionally.** It would need
+  `z(16,16) <= 126`, so ruling it out requires `z(16,16) >= 127`, which this
+  project has **not** established (its own best is exactly `126`).
 
-**Scope, stated precisely.** The corollary concludes only that the `133`
-entry did not come from chaining the density lemma. It does *not* establish
-that `133` is correct, nor that their exhaustive computation was correct.
-The upper bound remains uncertified by anyone, which is exactly why this
-project treats certifying it as a target rather than an input.
+**Therefore the combined claim "their `133` must have come from exhaustive
+computation" is NOT asserted.** It requires the undischarged premise.
+
+An earlier version of this docstring stated that combined claim
+unconditionally, while `CHAIN_CEILING.md` in the same commit stated it
+correctly — so the two contradicted each other, and the docstring carried the
+stronger, false-as-stated version. That is the *same* row/column scoping error
+this module narrates catching for Theorem A itself, reappearing in the
+corollary; a reviewer found it. No test inspects docstring prose, so nothing in
+CI would have caught it. See `CHAIN_CEILING.md` for the authoritative wording,
+which this section is now aligned to.
+
+**What still stands unconditionally, and is worth having.** The row half alone
+agrees with the project's earlier *typographic* evidence for the same
+conclusion: the paper's legend distinguishes bold (exact) from italic
+(exhaustive computation) from upright (lemmas only), and the embedded PDF font
+for the `133` cell was found to be `PJYSJE+CMTI10`, i.e. italic. One argument
+is about a PDF's fonts; the other is about arithmetic and needs no access to
+the paper. They agree on the row step, and that convergence is the durable
+part.
+
+**Scope.** Nothing here establishes that `133` is correct, nor that the 2016
+exhaustive computation was correct. The upper bound remains uncertified by
+anyone — which is why this project treats certifying it as a target rather
+than an input.
 
 ## Where the chain is tight, and where it is not
 
@@ -220,8 +235,16 @@ def theorem_133_unreachable() -> dict:
 
 
 # Best 16x16 lower bound this project can produce from its OWN verified data:
-# delete the unique minimum-degree (6) column from the verified 132-edge 16x17
-# witness. Exactly one short of what theorem_133_column_route needs.
+# delete a minimum-degree (6) column from the verified 132-edge 16x17 witness.
+# Exactly one short of what theorem_133_column_route needs.
+#
+# NOT "the unique" such column: the witness's column degrees are
+# [8,6,8,8,8,9,8,9,8,8,6,8,6,8,8,8,8] -- THREE columns have degree 6 (indices
+# 1, 10, 12), not one. An earlier comment here said "unique", which was simply
+# wrong; deleting any of the three gives 126 edges, so the value is unaffected,
+# but the wording was false and a reviewer caught it. Recorded because the
+# degree sequence had already been printed in this project before the word
+# "unique" was written -- the data was in hand and I did not read it.
 VERIFIED_LOWER_BOUND_16_16 = 126
 
 # An UNVERIFIED ASSUMPTION, not a citation.

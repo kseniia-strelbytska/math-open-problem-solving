@@ -16,6 +16,7 @@ split into three groups:
 from __future__ import annotations
 
 import csv
+from pathlib import Path
 
 import pytest
 
@@ -321,6 +322,71 @@ def test_133_is_blocked_at_every_level_by_a_strict_shortfall():
             f"k={r['k']}: required {r['required_input']} vs true "
             f"{r['true_value']} -- not a strict shortfall"
         )
+
+
+def test_no_document_asserts_the_unconditional_combined_claim():
+    """Prose consistency between the module docstring and CHAIN_CEILING.md.
+
+    This test exists because a reviewer found the module docstring asserting,
+    unconditionally, that the 2016 paper's 133 "must have been obtained by
+    their exhaustive computation" -- while CHAIN_CEILING.md in the same commit
+    correctly split that into an unconditional row half and a conditional
+    column half. The two documents contradicted each other and the docstring
+    carried the stronger, false-as-stated version. Nothing in CI inspected
+    prose, so nothing caught it.
+
+    The claim is only licensed given z(16,16;3) >= 127, which this project has
+    not established. So neither document may assert it bare.
+    """
+    root = Path(__file__).resolve().parent.parent
+    texts = {
+        "chain_ceiling.py": (root / "verify" / "chain_ceiling.py").read_text(),
+        "CHAIN_CEILING.md": (root / "CHAIN_CEILING.md").read_text(),
+    }
+    for name, text in texts.items():
+        low = text.lower()
+        # The forbidden shape: asserting the conclusion without the hedge.
+        for phrase in ("must have been obtained by their exhaustive",
+                       "must have come from their exhaustive"):
+            idx = low.find(phrase)
+            while idx != -1:
+                window = low[max(0, idx - 400):idx + 200]
+                hedged = any(h in window for h in
+                             ("not asserted", "conditional", "row-deleting",
+                              "row step", "an earlier version"))
+                assert hedged, (
+                    f"{name}: '{phrase}' appears without nearby scoping -- "
+                    "this is the unconditional combined claim, which requires "
+                    "the undischarged z(16,16;3) >= 127 premise"
+                )
+                idx = low.find(phrase, idx + 1)
+
+
+def test_the_16x16_degree_6_column_count_is_stated_correctly():
+    """Three columns have degree 6, not one.
+
+    Both documents said "the unique minimum-degree (6) column". The witness's
+    column degrees are [8,6,8,8,8,9,8,9,8,8,6,8,6,8,8,8,8] -- three 6s, at
+    indices 1, 10 and 12. The value 126 is unaffected (deleting any of the
+    three gives 126), but the wording was false. Pinned so it cannot recur.
+    """
+    path = lb.WITNESS_DIR / "z16_17_132_witness_seed201.csv"
+    with open(path, newline="") as fh:
+        matrix = [[int(x) for x in row] for row in csv.reader(fh) if row]
+    m, n = len(matrix), len(matrix[0])
+    col_deg = [sum(matrix[r][c] for r in range(m)) for c in range(n)]
+    sixes = [c for c, d in enumerate(col_deg) if d == 6]
+    assert len(sixes) == 3, f"expected 3 degree-6 columns, got {len(sixes)}"
+    assert sixes == [1, 10, 12]
+    # And every one of them yields exactly 126 on deletion.
+    for c in sixes:
+        sub = [[matrix[r][cc] for cc in range(n) if cc != c] for r in range(m)]
+        res = verify(sub, expected_edges=126)
+        assert res["is_k33_free"] and res["shape"] == (16, 16)
+    # So "unique" is wrong in both documents.
+    for f in ("verify/chain_ceiling.py", "CHAIN_CEILING.md"):
+        text = (Path(__file__).resolve().parent.parent / f).read_text()
+        assert "unique minimum-degree" not in text, f"{f} still says 'unique'"
 
 
 def test_gap_table_matches_the_committed_log():

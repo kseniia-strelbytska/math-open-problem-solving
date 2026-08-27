@@ -412,9 +412,12 @@ rather than quietly fixed.
 
 - **The whole "the chain is blocked" story: not claimed.** That would need
   both theorems unconditionally, and one of them isn't. What *is* claimed
-  unconditionally is Theorem A and the corollary about the 2016 paper's
-  algorithm — the latter because it reasons from that paper's own table
-  rather than from facts we must establish.
+  unconditionally is **Theorem A** and the **row half** of the corollary —
+  nothing more. An earlier version of this bullet said "and the corollary",
+  full stop, justifying it by "it reasons from that paper's own table". That
+  justification does not survive dropping the uncited `z(16,16;3) = 128`: with
+  no established value for that cell, the column half of the corollary has no
+  footing at all, from their table or ours. Corrected.
 
 **Postscript on how the scoping error was found.** I wrote Theorem A first
 as a claim about "the density chain", full stop, and only caught the missing
