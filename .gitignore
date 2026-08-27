@@ -1,0 +1,13 @@
+# Compiled search binaries. Build them with search/orderly/Makefile instead of
+# committing them: they are redundant with the sources, add non-diffable blobs
+# to history, and nothing would enforce that a committed binary still matches
+# the .c file next to it. An earlier version of this PR committed `orderly` and
+# `brute`; a reviewer flagged it.
+zarankiewicz-3-3/search/orderly/orderly
+zarankiewicz-3-3/search/orderly/brute
+zarankiewicz-3-3/search/orderly/extend
+
+# Enumeration dumps and search outputs: large, regenerable, not evidence on
+# their own (the run log in EXACT_VALUES.md records the node counts).
+zarankiewicz-3-3/search/orderly/*.txt
+zarankiewicz-3-3/search/orderly/*.out

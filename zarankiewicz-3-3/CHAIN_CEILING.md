@@ -283,8 +283,8 @@ as used elsewhere in this repo:
 
 - **[VERIFIED HERE]** — from a matrix or computation in this PR's reach.
 - **[CITED]** — precise source given, landed in this repository.
-- **[CITED, NOT LANDED]** — precise source given, but not yet recorded in
-  this repo's own `LITERATURE.md`.
+- **[CITED]** — precise source given, and recorded in this repo's own
+  `LITERATURE.md`.
 - **[NOT ESTABLISHED]** — this repo does not support the value.
 
 | start at `k` | value used | provenance | chain yields `z(16,17;3) <=` |
@@ -292,7 +292,7 @@ as used elsewhere in this repo:
 | 9  | 81  | **[NOT ESTABLISHED]** in this PR (proved by this project on an unmerged branch) | 144 |
 | 10 | 90  | **[NOT ESTABLISHED]** in this PR (same) | 144 |
 | 11 | 96  | **[CITED]** — Collins et al. arXiv:1604.01257 Table 4, row `m=11` col `n=17`, boldface; also Tan arXiv:2203.02283 Table 3 | **136** |
-| 12 | 103 | **[CITED, NOT LANDED]** — Collins et al. Table 4, row `m=12` col `n=17`, boldface + superscript `*`; not recorded in this repo's `LITERATURE.md` | **135** |
+| 12 | 103 | **[CITED]** — Collins et al. Table 4, row `m=12` col `n=17`, boldface + superscript `*`; recorded in `LITERATURE.md`, which also notes it has **never been independently re-proved** | **135** |
 | 13 | 110 | **[NOT ESTABLISHED]** — this repo's `LITERATURE.md` states `z(13,17;3) = 110` **remains open** (that cell is *italic* = "exhaustive computations", not bold = exact) | **134** |
 | 14 | 118 | **[CITED]** — Afrasyab arXiv:2608.08154, exact, per landed `LITERATURE.md` | 134 |
 | 15 | 126 | **[CITED]** — Afrasyab arXiv:2608.08154, exact; lower half **[VERIFIED HERE]** by our 126-edge witness | 134 |
