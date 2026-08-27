@@ -164,43 +164,56 @@ Until one of these lands, this document claims Theorem A unconditionally and
 Theorem B conditionally, and does **not** claim that the density chain as a
 whole is blocked.
 
-## Corollary: the published 133 did not come from their arithmetic
+## Corollary: the row half of their arithmetic cannot produce 133
 
 The 2016 paper tabulates `133` for this cell and separately describes the
-arithmetic `z_bound` algorithm, which chains Lemmas 2–4 over a table of
-lower cells. That algorithm cannot output `133` here, by **both** routes:
+arithmetic `z_bound` algorithm, which chains Lemmas 2-4 over a table of
+lower cells. Their algorithm has two possible final steps for this cell, and
+the two are on **different epistemic footing**:
 
-- **Row step.** Theorem A, unconditionally. It would need
-  `z(15,17;3) <= 125`, and `126` is witnessed.
-- **Column step.** It would need `z(16,16;3) <= 126`. **Their own table
-  gives `z(16,16;3) = 128`**, so their algorithm cannot derive `<= 126`
-  from it.
+- **Row step — ruled out unconditionally.** By Theorem A it would need
+  `z(15,17;3) <= 125`, and `126` is witnessed by a matrix verified here.
+- **Column step — ruled out only conditionally.** It would need
+  `z(16,16;3) <= 126`. Ruling that out requires knowing `z(16,16;3) >= 127`.
 
-The column half of this corollary is on firmer footing than Theorem B,
-and for a reason worth being explicit about: the corollary is a claim about
-what *their* algorithm could derive from *their* table, so using their
-`z(16,16;3) = 128` is internally consistent rather than a borrowed
-assumption. Theorem B, by contrast, is a claim about what is actually true,
-so it may not lean on an unverified citation — which is why it stays
-conditional while this corollary does not.
+**On the second half, this document previously overreached and it has been
+corrected.** An earlier version asserted "their own table gives
+`z(16,16;3) = 128`" as a fact, inside a section framed as *unconditional*.
+No source for that value has been established in this project — no paper, no
+table, no row or column, and nothing at the PDF-glyph level of rigour that
+was applied to the `(11,17) = 96` and `(16,17) = 133` cells. Under this
+project's own charter it must therefore be an **unverified assumption**, not
+a citation, and the constant in the code is now named
+`UNVERIFIED_ASSUMED_16_16` so that every use site says so.
 
-Therefore the `133` entry must have come from their exhaustive computation,
-not from their arithmetic.
+So the corollary as it actually stands:
 
-This is worth stating because it reaches, by a completely different route, a
-conclusion this project had previously argued from **typography**: the
-paper's table legend distinguishes bold (exact) from italic (exhaustive
+> **Unconditionally:** the 2016 authors' arithmetic could not have reached
+> `133` by a row-deleting final step.
+>
+> **Conditionally on `z(16,16;3) >= 127`** — which this project has *not*
+> established, its own best being exactly `126` — it could not have reached
+> it by a column-deleting final step either.
+
+Combining the two into "their `133` must have come from exhaustive
+computation" therefore requires the unverified premise, and that combined
+claim is **not** asserted here.
+
+**What is still worth noting.** The unconditional row half already agrees
+with the project's earlier *typographic* evidence for the same conclusion:
+the paper's legend distinguishes bold (exact) from italic (exhaustive
 computation) from upright (lemmas only), and the embedded PDF font for the
-`133` cell was found to be `PJYSJE+CMTI10`, i.e. italic. That is a fact
-about a PDF file, established by parsing it. The argument here is a fact
-about arithmetic, needs no access to the paper at all, and agrees.
+`133` cell was found to be `PJYSJE+CMTI10`, i.e. italic. One argument is
+about a PDF's fonts; the other is about arithmetic and needs no access to the
+paper. They agree on the row step. That convergence is the durable part.
 
-**Scope, stated precisely.** The corollary concludes *only* that the `133`
-entry did not come from chaining the density lemma. It does **not**
-establish that `133` is correct, nor that their exhaustive computation was
-correct, nor anything about the true value of `z(16,17;3)`. The upper bound
-remains uncertified by anyone — which is exactly why certifying it is a
-target of this project rather than an input to it.
+**Scope.** None of this says whether `133` is *correct*. It remains
+uncertified by anyone.
+
+**What would make the corollary unconditional.** A precise citation for
+`z(16,16;3)` at the same standard used elsewhere here, or — better, and
+within this project's reach — an explicit 127-edge `K_{3,3}`-free `16x16`
+matrix verified here. See the next section for what was already tried.
 
 ## Where the chain is tight, and where it is not
 

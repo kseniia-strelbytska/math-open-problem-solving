@@ -21,7 +21,10 @@ floor(e/m)` edges. Hence
 
 Hypotheses, each checked rather than assumed:
 
-1. `m >= 1`, so a row exists to delete. Enforced.
+1. `m >= 2`. A row must exist to delete, and at `m = 1` the rule is
+   *vacuous* rather than merely weak (`e - floor(e/1) = 0 <= z(0,n) = 0` for
+   every `e`), so no maximum exists. `density_ceiling` rejects `m < 2`; see
+   its own docstring.
 2. `G` is `K_{3,3}`-free, and deletion preserves that — this is
    row-deletion monotonicity, machine-checked by exhaustion in
    `test_lower_bounds.py`.
@@ -221,10 +224,21 @@ def theorem_133_unreachable() -> dict:
 # witness. Exactly one short of what theorem_133_column_route needs.
 VERIFIED_LOWER_BOUND_16_16 = 126
 
-# Published, and used ONLY inside the corollary about what the 2016 authors'
-# own algorithm could derive from their own table. Never used to support a
-# claim about what is actually true.
-PUBLISHED_16_16 = 128
+# An UNVERIFIED ASSUMPTION, not a citation.
+#
+# This project has repeatedly seen "z(16,16;3) = 128" referred to as a
+# published value, but no precise source for it has been established here --
+# no paper, no table, no row/column, and nothing at the PDF-glyph level of
+# rigour applied to the (11,17)=96 and (16,17)=133 cells. Under this
+# project's charter ("No citation without certainty ... mark it an unverified
+# assumption rather than asserting it") it must therefore be treated as an
+# assumption, and the name says so.
+#
+# Consequence: NOTHING unconditional may rest on this. The corollary about
+# the 2016 authors' algorithm has a column-deletion half that does depend on
+# it, and that half is stated conditionally in CHAIN_CEILING.md for exactly
+# this reason.
+UNVERIFIED_ASSUMED_16_16 = 128
 
 
 def theorem_133_column_route() -> dict:
@@ -247,9 +261,12 @@ def theorem_133_column_route() -> dict:
         "blocked_by_our_own_data": needed is not None
         and needed < VERIFIED_LOWER_BOUND_16_16,
         "blocked_if_z16_16_at_least": (needed + 1) if needed is not None else None,
-        "published_16_16_would_block": needed is not None
-        and needed < PUBLISHED_16_16,
-        "ceiling_from_published": density_ceiling(PUBLISHED_16_16, 17),
+        # Named to make the epistemic status unmissable at every use site.
+        "unverified_assumed_16_16_would_block": needed is not None
+        and needed < UNVERIFIED_ASSUMED_16_16,
+        "ceiling_from_unverified_assumption": density_ceiling(
+            UNVERIFIED_ASSUMED_16_16, 17
+        ),
     }
 
 
@@ -342,8 +359,10 @@ def main() -> None:
           f"{c['verified_lower_bound_on_z16_16']}  <-- exactly the threshold")
     print(f"  blocked by our own data: {c['blocked_by_our_own_data']} "
           f"(would need z(16,16;3) >= {c['blocked_if_z16_16_at_least']})")
-    print(f"  the published z(16,16;3) = {PUBLISHED_16_16} would block it "
-          f"(giving z(16,17) <= {c['ceiling_from_published']}), but that is a citation\n")
+    print(f"  IF z(16,16;3) = {UNVERIFIED_ASSUMED_16_16} (an UNVERIFIED "
+          f"assumption -- no source established here) it would block it,")
+    print(f"  giving z(16,17) <= {c['ceiling_from_unverified_assumption']}. "
+          f"Nothing unconditional rests on this.\n")
 
     print("Where the chain is tight (gap 0) and where it loses edges:")
     for row in tight_gaps():

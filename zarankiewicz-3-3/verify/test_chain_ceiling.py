@@ -226,9 +226,10 @@ def test_column_route_is_analysed_and_is_NOT_blocked_by_our_own_data():
         "unconditional and the document must be updated to say so"
     )
     assert t["blocked_if_z16_16_at_least"] == 127
-    # The published value would discharge it, but that is a citation.
-    assert t["published_16_16_would_block"] is True
-    assert t["ceiling_from_published"] == 136
+    # An unverified assumption of 128 WOULD discharge it -- recorded, but
+    # nothing unconditional may rest on it.
+    assert t["unverified_assumed_16_16_would_block"] is True
+    assert t["ceiling_from_unverified_assumption"] == 136
 
 
 def test_our_16x16_lower_bound_is_backed_by_a_real_matrix():
@@ -257,24 +258,27 @@ def test_our_16x16_lower_bound_is_backed_by_a_real_matrix():
     )
 
 
-def test_published_16_16_is_not_used_to_support_a_truth_claim():
-    """PUBLISHED_16_16 may inform the corollary, never Theorem B.
+def test_unverified_16_16_assumption_supports_no_provable_claim():
+    """The 128 constant must not underwrite anything we assert as proved.
 
-    Recomputes the column-route analysis with the published constant set to
-    an absurd value. Everything about what we can *prove* must be unchanged;
-    only the corollary-facing fields may move. If this fails, a citation has
-    leaked into a claim about what is true.
+    An earlier version of this module named it PUBLISHED_16_16 and let it
+    underwrite the corollary's column-deletion half, which the document then
+    framed as unconditional -- while no source for the value had ever been
+    established in this project. A reviewer caught that. It is now named
+    UNVERIFIED_ASSUMED_16_16, and this test recomputes the whole column-route
+    analysis with it set to an absurd value: every field describing what we
+    can *prove* must be unchanged.
     """
-    saved = cc.PUBLISHED_16_16
+    saved = cc.UNVERIFIED_ASSUMED_16_16
     try:
-        cc.PUBLISHED_16_16 = 9999
+        cc.UNVERIFIED_ASSUMED_16_16 = 9999
         t = cc.theorem_133_column_route()
         assert t["required_bound_on_z16_16"] == 126
         assert t["verified_lower_bound_on_z16_16"] == 126
         assert t["blocked_by_our_own_data"] is False
         assert t["blocked_if_z16_16_at_least"] == 127
     finally:
-        cc.PUBLISHED_16_16 = saved
+        cc.UNVERIFIED_ASSUMED_16_16 = saved
 
 
 def test_entry_level_map_matches_the_committed_log():
