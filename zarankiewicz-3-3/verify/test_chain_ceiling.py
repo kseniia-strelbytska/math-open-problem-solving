@@ -210,21 +210,29 @@ def test_theorem_would_fail_loudly_if_the_witness_were_weaker():
     )
 
 
-def test_column_route_is_analysed_and_is_NOT_blocked_by_our_own_data():
-    """The honest state of Theorem B: our own bound is exactly one edge short.
+def test_column_route_IS_now_blocked_by_our_own_data():
+    """Theorem B is unconditional. This test previously asserted the opposite.
 
-    This test asserts a *gap in our own result*. It exists so the gap cannot
-    quietly disappear: if someone later strengthens the 16x16 lower bound to
-    127, this test fails and forces CHAIN_CEILING.md to be updated to claim
-    the stronger, unconditional result -- rather than the repo silently
-    holding a proof it no longer states.
+    Its earlier form asserted `blocked_by_our_own_data is False`, recording
+    that our own 16x16 bound (126) was exactly one edge short of the 127
+    Theorem B needs. The docstring said: "if someone later strengthens the
+    16x16 lower bound to 127, this test fails and forces CHAIN_CEILING.md to
+    be updated to claim the stronger, unconditional result -- rather than the
+    repo silently holding a proof it no longer states."
+
+    That is exactly what happened. The Z_4 x Z_4 translate construction in
+    verify/constructions.py gives z(16,16;3) >= 128, the test failed, and the
+    document was upgraded. Recorded here because a test designed to fail on
+    good news actually doing so is the mechanism working as intended -- and
+    this project has had several claims go stale precisely because nothing
+    forced a re-read.
     """
     t = cc.theorem_133_column_route()
     assert t["required_bound_on_z16_16"] == 126
-    assert t["verified_lower_bound_on_z16_16"] == 126
-    assert t["blocked_by_our_own_data"] is False, (
-        "our 16x16 bound now blocks the column route -- Theorem B is "
-        "unconditional and the document must be updated to say so"
+    assert t["verified_lower_bound_on_z16_16"] == 128
+    assert t["blocked_by_our_own_data"] is True, (
+        "the column route is no longer blocked -- Theorem B has regressed to "
+        "conditional and CHAIN_CEILING.md must say so"
     )
     assert t["blocked_if_z16_16_at_least"] == 127
     # An unverified assumption of 128 WOULD discharge it -- recorded, but
@@ -253,14 +261,28 @@ def test_our_16x16_lower_bound_is_backed_by_a_real_matrix():
         assert res["is_k33_free"], "column deletion created a K33 -- impossible"
         assert res["shape"] == (16, 16)
         best = max(best, res["edges"])
-    assert best == cc.VERIFIED_LOWER_BOUND_16_16, (
-        f"best 16x16 subgraph has {best} edges, module says "
-        f"{cc.VERIFIED_LOWER_BOUND_16_16}"
+    # Column deletion alone gives 126 -- one edge short of Theorem B's 127.
+    # That is why the algebraic construction was needed; the module's constant
+    # is now 128, from verify/constructions.py, not from this route.
+    assert best == 126, f"best 16x16 column-deletion subgraph has {best} edges"
+    assert cc.VERIFIED_LOWER_BOUND_16_16 == 128, (
+        "the module's 16x16 bound should come from the Z_4 x Z_4 construction "
+        "(128), not from column deletion (126)"
+    )
+    assert cc.VERIFIED_LOWER_BOUND_16_16 > best, (
+        "the construction must beat column deletion, else Theorem B is "
+        "conditional again"
     )
 
 
 def test_unverified_16_16_assumption_supports_no_provable_claim():
-    """The 128 constant must not underwrite anything we assert as proved.
+    """The 128 ASSUMPTION must not underwrite anything we assert as proved.
+
+    Note the constant is now doubly redundant: Theorem B is discharged by our
+    own construction (z(16,16;3) >= 128, verify/constructions.py), so nothing
+    needs the assumed value at all. It is kept only so the historical record
+    of what was once leaned on stays legible, and this test still pins that
+    nothing provable moves when it changes.
 
     An earlier version of this module named it PUBLISHED_16_16 and let it
     underwrite the corollary's column-deletion half, which the document then
@@ -275,8 +297,10 @@ def test_unverified_16_16_assumption_supports_no_provable_claim():
         cc.UNVERIFIED_ASSUMED_16_16 = 9999
         t = cc.theorem_133_column_route()
         assert t["required_bound_on_z16_16"] == 126
-        assert t["verified_lower_bound_on_z16_16"] == 126
-        assert t["blocked_by_our_own_data"] is False
+        # Our own established bound, now from the construction -- unaffected
+        # by whatever the unverified constant is set to.
+        assert t["verified_lower_bound_on_z16_16"] == 128
+        assert t["blocked_by_our_own_data"] is True
         assert t["blocked_if_z16_16_at_least"] == 127
     finally:
         cc.UNVERIFIED_ASSUMED_16_16 = saved

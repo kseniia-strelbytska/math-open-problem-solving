@@ -45,18 +45,21 @@ of lower levels, no enumeration) has available at the top step.
 *row* proves `z(16,17) <= 133` — regardless of how much computation is spent
 at levels `k <= 15`, and even if every value there is determined exactly.
 
-**Theorem B (column deletion), conditional.** The problem is symmetric under
-transposition, so a final step may instead delete a *column*, giving
+**Theorem B (column deletion) — now unconditional.** The problem is symmetric
+under transposition, so a final step may instead delete a *column*, giving
 `e - floor(e/17) <= z(16,16)`. That route reaches `133` iff
-`z(16,16) <= 126`, so it fails **provided `z(16,16) >= 127`**. This project
-can currently prove only `z(16,16) >= 126` from its own data — exactly one
-edge short. See `theorem_133_column_route` and `CHAIN_CEILING.md`.
+`z(16,16) <= 126`, so it fails provided `z(16,16) >= 127`. And
+`z(16,16) >= 128`, by the explicit `Z_4 x Z_4` translate construction in
+`verify/constructions.py`. So the route fails.
+
+**Together: no sound density chain proves `z(16,17) <= 133` by either final
+step.** The ceiling is `134` and it is attained.
 
 Theorem A was originally written without the "row" qualifier, which was an
-error: it silently assumed the transposed step away. The qualifier is not
-cosmetic, and the column analysis is not a formality — our own bound lands
-precisely on the threshold, so the column route is genuinely open on
-self-contained data.
+error: it silently assumed the transposed step away. The qualifier earned its
+keep — for a long stretch the column route was genuinely open on
+self-contained data, our own bound sitting exactly on the threshold at 126,
+one edge short. It took a construction rather than a search to close it.
 
 *Proof.* Whatever the chain does below, its final step must apply the rule
 at `m = 16` to some upper bound `B` on `z(15,17)`, and must obtain
@@ -234,9 +237,17 @@ def theorem_133_unreachable() -> dict:
     }
 
 
-# Best 16x16 lower bound this project can produce from its OWN verified data:
-# delete a minimum-degree (6) column from the verified 132-edge 16x17 witness.
-# Exactly one short of what theorem_133_column_route needs.
+# Best 16x16 lower bound this project can produce from its OWN verified data.
+#
+# Now 128, by the explicit Z_4 x Z_4 translate construction in
+# verify/constructions.py: rows and columns indexed by Z_4 x Z_4, each row a
+# translate of a fixed 8-element subset. 8-regular in both directions, 128
+# edges, and all 96 such solutions are re-verified by checker.py.
+#
+# This was 126 until that construction was found -- obtained by deleting a
+# degree-6 column from the verified 132-edge 16x17 witness, exactly ONE short
+# of the 127 theorem_133_column_route needs. That one-edge gap is what made
+# Theorem B conditional. It is now closed.
 #
 # NOT "the unique" such column: the witness's column degrees are
 # [8,6,8,8,8,9,8,9,8,8,6,8,6,8,8,8,8] -- THREE columns have degree 6 (indices
@@ -245,7 +256,7 @@ def theorem_133_unreachable() -> dict:
 # but the wording was false and a reviewer caught it. Recorded because the
 # degree sequence had already been printed in this project before the word
 # "unique" was written -- the data was in hand and I did not read it.
-VERIFIED_LOWER_BOUND_16_16 = 126
+VERIFIED_LOWER_BOUND_16_16 = 128
 
 # An UNVERIFIED ASSUMPTION, not a citation.
 #
@@ -375,17 +386,18 @@ def main() -> None:
         print(f"  z(15,17) <= {B}  ->  z(16,17) <= {density_ceiling(B, 16)}")
 
     c = theorem_133_column_route()
-    print("\nTHEOREM B (conditional): the transposed final step, 16x17 -> 16x16")
+    print("\nTHEOREM B (now UNCONDITIONAL): the transposed step, 16x17 -> 16x16")
     print(f"  to reach 133 that way, the chain needs z(16,16;3) <= "
           f"{c['required_bound_on_z16_16']}")
-    print(f"  our own verified lower bound is z(16,16;3) >= "
-          f"{c['verified_lower_bound_on_z16_16']}  <-- exactly the threshold")
+    print(f"  our own established lower bound is z(16,16;3) >= "
+          f"{c['verified_lower_bound_on_z16_16']}  (Z_4 x Z_4 construction)")
     print(f"  blocked by our own data: {c['blocked_by_our_own_data']} "
-          f"(would need z(16,16;3) >= {c['blocked_if_z16_16_at_least']})")
-    print(f"  IF z(16,16;3) = {UNVERIFIED_ASSUMED_16_16} (an UNVERIFIED "
-          f"assumption -- no source established here) it would block it,")
-    print(f"  giving z(16,17) <= {c['ceiling_from_unverified_assumption']}. "
-          f"Nothing unconditional rests on this.\n")
+          f"(needed z(16,16;3) >= {c['blocked_if_z16_16_at_least']}; we have "
+          f"{c['verified_lower_bound_on_z16_16']})")
+    print(f"  (The assumed value {UNVERIFIED_ASSUMED_16_16}, never sourced in "
+          f"this project, is now redundant --")
+    print(f"   our own construction discharges the hypothesis. Kept only so "
+          f"the record stays legible.)\n")
 
     print("Where the chain is tight (gap 0) and where it loses edges:")
     for row in tight_gaps():
