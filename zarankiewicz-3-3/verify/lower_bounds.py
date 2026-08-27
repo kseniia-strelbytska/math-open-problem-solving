@@ -53,13 +53,24 @@ actually needs:
 
 ## A caution against reading these as tight
 
-The bounds are only as good as the witnesses. This module reports
-`z(10,17;3) >= 86`, but this project separately *proved* `z(10,17;3) = 90`
-by exhaustive search — the witnesses' 10-row subgraphs are four edges short
-of optimal, because a witness optimised for `m = 14` or `15` need not
-contain an optimal 10-row subgraph. So agreement between one of these
-bounds and a conjectured value is evidence, not proof, and a gap between
-this bound and an upper bound must not be read as "nearly closed".
+The bounds are only as good as the witnesses, and they are demonstrably not
+tight. This module reports `z(11,17;3) >= 94`, while the published value is
+`96` — Collins-Riasanovsky-Wallace-Radziszowski arXiv:1604.01257 Table 4,
+row `m=11` column `n=17`, in boldface (their legend: "a boldfaced entry is an
+exact value"), independently boldface in Tan arXiv:2203.02283 Table 3. A
+witness optimised for `m = 14` or `15` need not contain an optimal `k`-row
+subgraph for smaller `k`, and here it does not: the shortfall is 2 edges.
+
+That comparison value is **cited, not derived here.** So is every other
+comparison in this module's documentation. Nothing in this file re-derives a
+`z(k,17;3)` value; it only produces lower bounds from matrices in
+`data/known_witnesses/`.
+
+Consequence: agreement between one of these bounds and a conjectured value
+is evidence, not proof, and a gap between one of these bounds and an upper
+bound must never be read as "nearly closed" — least of all at a `k` where no
+comparison value is available, since absence of a known shortfall is not
+evidence of tightness.
 """
 
 from __future__ import annotations

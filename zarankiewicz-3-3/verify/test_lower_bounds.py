@@ -213,15 +213,47 @@ def test_lower_bound_forbids_refutation_at_that_target():
     pytest.fail("no witness exhibited an 11-row subgraph with >= 94 edges")
 
 
-def test_witness_bound_is_known_to_be_loose_at_k_10():
+def test_lower_bound_is_known_to_be_loose_at_k_11():
     """Records, as a test, that these bounds are NOT tight.
 
-    This project proved z(10,17;3) = 90 by exhaustive search, but the
-    witnesses only yield 86. The gap is asserted here so that nobody later
-    reads a witness-derived bound as an exact value -- if a future witness
-    closes it, this test fails and forces the claim to be re-examined
-    deliberately rather than absorbed silently.
+    The comparison value 96 is CITED, not derived here: Collins-Riasanovsky-
+    Wallace-Radziszowski arXiv:1604.01257 Table 4, row m=11 column n=17, in
+    boldface (their legend: "a boldfaced entry is an exact value"), and
+    independently boldface in Tan arXiv:2203.02283 Table 3, row 11 column 17.
+
+    An earlier version of this test asserted the gap at k=10 against the
+    value 90, described as "proved by this project". A reviewer correctly
+    pointed out that no artifact supporting 90 is reachable from this PR --
+    it was proved on a branch this series never carried over -- so the test
+    was baking an unverifiable number into an assert. It is replaced with the
+    k=11 comparison, whose comparison value at least has a precise citation
+    a reader can check.
+
+    Asserted so that if a future witness closes the gap, the suite fails and
+    the tightness question is re-opened deliberately rather than absorbed.
     """
+    CITED_Z_11_17 = 96
     best = lb.best_known_lower_bounds()
-    assert best[10] == 86
-    assert best[10] < 90, "witness bound now reaches the proved value -- re-read the docs"
+    assert best[11] == 94
+    assert best[11] < CITED_Z_11_17, (
+        "row deletion now reaches the cited value at k=11 -- re-read the docs "
+        "before treating any of these bounds as tight"
+    )
+
+
+def test_no_unlanded_value_is_asserted_as_fact():
+    """Guard: this module must not hardcode values it cannot support.
+
+    Specifically 81 and 90 (z(9,17) and z(10,17)), which are proved elsewhere
+    in this project but on a branch not present in this PR series. They may
+    appear in prose as explicitly-labelled unlanded claims, but must not be
+    the subject of an assert -- which is exactly the defect a reviewer found
+    in the previous version of this file.
+    """
+    src = (Path(__file__).parent / "test_lower_bounds.py").read_text()
+    body = src.split("def test_no_unlanded_value_is_asserted_as_fact")[0]
+    for forbidden in ("== 81", "== 90", "assert best[9] ==", "assert best[10] =="):
+        assert forbidden not in body, (
+            f"found {forbidden!r} asserted in this file -- that value is not "
+            "verifiable from this PR"
+        )

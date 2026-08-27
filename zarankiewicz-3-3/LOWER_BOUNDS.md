@@ -5,110 +5,119 @@
 Applying row-deletion monotonicity to the witness matrices re-verified in
 this repo yields, with no search at all:
 
-| `k` | lower bound from row deletion | upper bound proved in this project | true value, where known | shortfall of the lower bound |
-|---|---|---|---|---|
-| 9  | 78  | `<= 81` (exhaustive) | **81** | **3** |
-| 10 | 86  | `<= 90` (exhaustive) | **90** | **4** |
-| 11 | **94**  | `<= 97` (exhaustive) | **96** (published, twice) | **2** |
-| 12 | 102 | `<= 105` (density chain) | **103** (published once, never re-proved) | **1** |
-| 13 | 110 | `<= 113` (density chain) | 110 (published) | 0 |
-| 14 | 118 | `<= 121` (density chain) | 118 (published) | 0 |
-| 15 | 126 | `<= 129` (density chain) | 126 (published) | 0 |
+| `k` | lower bound from row deletion | verified in this PR? |
+|---|---|---|
+| 9  | 78  | **yes** |
+| 10 | 86  | **yes** |
+| 11 | **94** | **yes** |
+| 12 | 102 | **yes** |
+| 13 | 110 | **yes** |
+| 14 | 118 | **yes** |
+| 15 | 126 | **yes** |
 
-The last column is the point of the table, and it is bad news, not good:
-**wherever the true value is known, this method undershoots it** — by 3 and
-4 at `k = 9, 10` (values proved here), and by 2 and 1 at `k = 11, 12`
-(values published; see the section below). It happens to be tight at
-`k = 13, 14, 15`, which is exactly where the witnesses were optimised.
+Every number in the second column is produced by this PR's code from a
+matrix in this PR's data directory, and re-checked by the three-detector
+checker on every test run. **Nothing else in this document is on that
+footing, and the rest of this section is explicit about which is which.**
 
-The apparent agreement of the lower bounds with `8k+6` at `k = 11, 12` is
-therefore **not evidence that the true values are `94` and `102`** — and
-indeed they are not; they are `96` and `103`.
+> ### Provenance notice — read before using any comparison value below
+>
+> An earlier version of this document carried a "true value, where known"
+> column comparing these bounds against `81, 90, 96, 103, 110, 118, 126`,
+> and built a "shortfall" narrative on it. A reviewer correctly rejected
+> that, on three counts, all of which were right:
+>
+> 1. **`k=12` (`103`) was uncited** — no paper, no table, no row. That
+>    directly violates this project's own charter rule ("No citation without
+>    certainty").
+> 2. **`k=13` (`110`) was presented as a settled published value with
+>    shortfall 0, contradicting `LITERATURE.md`** — already merged, and
+>    which states that `z(13,17;3) = 110` *remains open*, because the
+>    2016 table sets that cell in *italic* (= "determined with exhaustive
+>    computations") and **not** bold (= exact). That was a factual error on
+>    my part, not merely a missing citation: I conflated "appears in a table
+>    as an upper bound" with "published as an exact value".
+> 3. **`k=9, 10` (`81`, `90`) have no supporting artifact reachable from
+>    this PR.** They were proved elsewhere in this project, on the abandoned
+>    107-file branch that `README.md` itself describes as unreviewable and
+>    superseded. That work was never carried into this restarted PR series,
+>    and this PR does not add it. A reader who trusts only this repository
+>    cannot check them.
+>
+> Accordingly, the comparison table is **removed**, not repaired. What
+> follows uses only values whose provenance is stated precisely at the point
+> of use, with the following labels used consistently:
+>
+> - **[VERIFIED HERE]** — derived by this PR's code from this PR's data.
+> - **[CITED]** — a published value with paper, table, and cell given, and
+>   with the marking convention stated. Not re-derived here.
+> - **[CLAIMED ELSEWHERE, NOT LANDED]** — proved by this project on a branch
+>   not yet in this PR series. **Not verifiable from this PR.** Treated as an
+>   unverified assumption wherever it is used, and never as a fact.
 
-### The `8k+6` reading is worse than weak — it is the wrong model
+### The one comparison this PR can make on its own footing
 
-Worth spelling out, because the plan briefly rested on it. The values this
-project actually *proved* are `z(9,17;3) = 81` and `z(10,17;3) = 90`. Those
-are not `8k+6` (which gives 78 and 86); they are `9k` — i.e. **9-regular**,
-the densest thing the shape allows. The published values at the top of the
-range, `110`, `118`, `126`, are `8k+6`. So the sequence changes regime
-somewhere in between, and `k = 11` is inside the transition, which is
-exactly where a formula fitted to either end is least trustworthy.
+At `k = 11`, row deletion gives `94` **[VERIFIED HERE]**, and the published
+value is `96` **[CITED**: Collins–Riasanovsky–Wallace–Radziszowski,
+arXiv:1604.01257, J. Algorithms and Computation 47(1) (2016) 63–78,
+**Table 4**, row `m=11`, column `n=17`, set in **boldface**, which their
+legend defines as "a boldfaced entry is an exact value"; independently
+**boldface** in Jeremy Tan, arXiv:2203.02283, **Table 3**, row 11 column 17,
+whose legend reads "a bold value is exact, proven by the methods in this
+paper"**]**.
 
-What we know at `k = 11` narrows it from both sides:
+So at the one cell where this PR has both halves on a stated footing, the
+row-deletion bound **undershoots by 2**. That single data point is the whole
+of the honest version of the old "shortfall" narrative, and it is enough for
+the operational conclusion in the last section: these bounds must not be
+read as tight.
 
-- 9-regular would be `99`. Ruled out: `--decide 98` at `k = 11` returned
-  EXHAUSTED, so `z(11,17;3) <= 97`. The 9-regular regime therefore ends at
-  `k = 10`, and it ends by at least 2 edges.
-- Independently, extending the 24 extremal 9-regular `10x17` graphs by a
-  degree-9 row returned `ext_success = 0` — no 99-edge `11x17` graph has a
-  9-regular extremal parent. Consistent, and reached by a different code
-  path.
-- Row deletion gives `>= 94`.
+### The `8k+6` reading is the wrong model — restated without the unlanded values
 
-So `z(11,17;3)` is in `[94, 97]`, and the honest reading is that the
-**bottom of that bracket is the least likely value**, since `94` is where a
-formula fitted to the far end of the range lands and the near end (`k = 9`,
-`10`) sits 3-4 edges above what the same construction yields. This matters
-because, as the last section shows, `z(16,17;3) <= 134` through `k = 11`
-needs precisely `z(11,17;3) = 94` — the one value in the bracket the
-evidence points away from.
+The original argument here leaned on `z(9,17;3) = 81` and `z(10,17;3) = 90`
+being `9k` rather than `8k+6`. Those are **[CLAIMED ELSEWHERE, NOT LANDED]**,
+so the argument cannot be made in this PR on that basis.
 
-### Settled by the literature while this was being written: it is 96
+What survives without them, and it is enough: at `k = 11` the row-deletion
+bound is `94 = 8*11 + 6` **[VERIFIED HERE]**, and the true value is `96`
+**[CITED]**. So the `8k+6` line is **demonstrably not the true value at
+`k = 11`**, and any plan that assumed it was — as one of mine did — was
+unsound. That conclusion needs no unlanded input.
 
-A literature check completed after the analysis above was written, and it
-resolves the bracket from outside:
+### The upper-bound side, and why it is not asserted in this PR
 
-> **`z(11,17;3) = 96` is a published exact value.** Collins–Riasanovsky–
-> Wallace–Radziszowski, *Zarankiewicz Numbers and Bipartite Ramsey Numbers*,
-> arXiv:1604.01257 (J. Algorithms and Computation 47(1) (2016) 63–78),
-> **Table 4**, row `m=11`, column `n=17`, set in **boldface**, which their
-> legend defines as "a boldfaced entry is an exact value". Independently,
-> Jeremy Tan, *An attack on Zarankiewicz's problem through SAT solving*,
-> arXiv:2203.02283, **Table 3**, row 11 column 17, also **bold**, which his
-> legend defines as "a bold value is exact, proven by the methods in this
-> paper".
+Elsewhere this project ran exhaustive refutations at `k = 11` and recorded
+`z(11,17;3) <= 97`, later `<= 96`, plus an independent degree-9-extension
+argument. All of that is **[CLAIMED ELSEWHERE, NOT LANDED]** -- the
+generator, its logs, and its output files sit on a branch this PR series has
+not yet carried over, so a reader of this PR cannot check any of it.
 
-Two independent computational proofs, in two papers, six years apart. Both
-markings were read at the glyph level from the embedded PDF fonts, not from
-a rendering — the same method that earlier established the `133` cell of the
-same table is italic (`PJYSJE+CMTI10`), and reproducing that known result
-was used to confirm the column alignment.
+It is therefore **not used here**, not even as supporting colour. The
+bracket `[94, 97]` that an earlier version of this document reasoned about,
+and the argument that `94` was the least likely value in it, both depended
+on that unlanded upper bound. They are removed rather than restated with a
+caveat, because a bracket whose top is unverifiable is not a bracket.
 
-**This is recorded rather than used to edit the reasoning above.** The
-bracket `[94, 97]` and the argument about the `8k+6` regime change were
-derived from this project's own computations and remain exactly as valid as
-they were; the published value simply lands inside the bracket, at `96`.
-Keeping both is the point — the prediction was that `94` is the least likely
-value in the bracket, and that prediction was right.
+What this PR can say about `k = 11`, and all it can say:
 
-**Consequences, all bad for the shortcut and good for the honesty of the
-record:**
+- `z(11,17;3) >= 94` **[VERIFIED HERE]**, from a matrix in this repository.
+- `z(11,17;3) = 96` **[CITED]**, per the two sources given above.
+- Therefore row deletion undershoots the published value by 2 at this cell,
+  and `8k+6` is not the true value here.
 
-1. **`z(16,17;3) <= 134` via `k = 11` is dead.** It required
-   `z(11,17;3) = 94`. If `96` is correct, a 96-edge graph exists, so
-   `--decide 95` and `--decide 96` can only return SAT. The `--decide 95`
-   run was killed for this reason, with the reasoning written into its
-   output file rather than left as a silent corpse.
-2. **Our own bounds are weaker than the literature at this cell**, in both
-   directions: our `>= 94` against a published `96`, and our `<= 97` against
-   a published `96`. Stating that plainly matters more than the bounds
-   themselves.
-3. **The self-contained target becomes `z(11,17;3) = 96` exactly**, which is
-   now reachable: `--decide 97` returning EXHAUSTED gives `<= 96`, and
-   `--decide 96` returning SAT hands us our own 96-edge matrix, giving
-   `>= 96` from a witness we checked rather than from a citation. That is a
-   re-derivation of a twice-published value, not a new result — and it is
-   labelled as such.
+**Consequence for the plan, with its dependency visible.** A route to
+`z(16,17;3) <= 134` through `k = 11` requires `z(11,17;3) <= 94`. A 94-edge
+graph exists **[VERIFIED HERE]**, so that route needs `z(11,17;3)` to equal
+exactly `94`, and the **[CITED]** value says `96`. The route is dead **if
+the citation is correct** -- which is the strongest form available in this
+PR, and deliberately weaker than the unconditional claim the earlier version
+made.
 
-**A caveat on the caveat.** If `--decide 96` returns EXHAUSTED, that would
-*contradict* the published value, and the correct response is to suspect our
-generator before suspecting two independent papers. That check is worth
-having precisely because it is a check.
-
-Every bound in the second column is backed by an explicit matrix that
-`verify/checker.py` re-checked with all three of its independent `K_{3,3}`
-detectors. Nothing here is cited.
+**And a caveat on the citation itself.** Two independent papers agreeing is
+strong but not proof. If a from-scratch search here ever contradicted `96`,
+the correct first response would be to suspect our own generator, not two
+independent papers -- but the possibility is why the **[CITED]** label exists
+rather than being silently promoted to fact.
 
 ## The one lemma
 
@@ -155,74 +164,68 @@ the two methods agree, which is the actual check on the reasoning.
 
 ## The step I am least confident in
 
-Not the mathematics — the lemma is elementary and now machine-checked by
-exhaustion. The risk is **interpretive**: reading these bounds as tight.
+Not the mathematics -- the lemma is elementary and machine-checked by
+exhaustion over all `2^16` matrices on `4x4`. The risk is **interpretive**:
+reading these bounds as tight.
 
-The table above contains its own refutation of that reading. At `k = 10`
-the witnesses give `86`, but this project *proved* `z(10,17;3) = 90` by
-exhaustive search. So a witness optimised for `m = 14` or `15` need not
-contain an optimal 10-row subgraph, and the shortfall here is **4 edges**.
-At `k = 9` the gap is `81 - 78 = 3`.
+The one comparison this PR can make on its own footing already refutes that
+reading. At `k = 11` row deletion gives `94` **[VERIFIED HERE]** while the
+published value is `96` **[CITED]** -- a shortfall of **2**. A witness
+optimised for `m = 14` or `15` need not contain an optimal `k`-row subgraph
+for smaller `k`, and here it demonstrably does not.
 
-`test_witness_bound_is_known_to_be_loose_at_k_10` asserts the `k = 10` gap
-as a live test, so if a future witness closes it, the suite fails and forces
-that to be examined deliberately instead of absorbed silently.
+`test_lower_bound_is_known_to_be_loose_at_k_11` asserts that shortfall as a
+live test against the cited value, so if a future witness closes it the suite
+fails and forces the claim to be re-examined deliberately rather than
+absorbed silently.
 
-**Therefore: `z(11,17;3) >= 94` must not be read as `z(11,17;3) = 94`.**
-The proved bracket is `94 <= z(11,17;3) <= 97`, and given a 3-4 edge
-shortfall at `k = 9,10`, the true value being `95`, `96` or `97` is entirely
-consistent with the data.
+**Therefore: `z(k,17;3) >= b_k` must never be read as `z(k,17;3) = b_k`.**
+That applies at every `k` in the table, including the ones where no
+comparison value is available in this PR -- absence of a known shortfall is
+not evidence of tightness.
 
 ## Why this is worth having anyway
 
 These are lower bounds derived from published constructions, so they are not
 new mathematics. Two concrete uses:
 
-1. **They supply the lower half of every exactness claim.** An upper bound
-   of `v` proved by our own search, paired with a lower bound of `v` from a
-   matrix we checked ourselves, gives `z = v` with nothing cited. That is
-   the standard this project set for itself in `README.md`.
+1. **They supply the lower half of any future exactness claim.** An upper
+   bound of `v` proved by a from-scratch search, paired with a lower bound of
+   `v` from a matrix checked here, gives `z = v` with nothing cited. That is
+   the standard `README.md` sets. This PR supplies only the lower halves; the
+   matching upper bounds are **[CLAIMED ELSEWHERE, NOT LANDED]** and are not
+   combined with these bounds anywhere in this document.
 
-2. **They bound in advance what the upper-bound search can achieve, which
-   changes what is worth running.** If `z(k,17;3) >= v`, then no exhaustive
-   search can refute `v` edges at that `k` — such a run is guaranteed to
-   return a witness, and its cost is wasted if the goal was a refutation.
-   Concretely, at the time of writing this reshaped the plan:
+2. **They rule out searches that cannot succeed, which is directly
+   operational.** If `z(k,17;3) >= v` **[VERIFIED HERE]**, then no exhaustive
+   search can refute `v` edges at that `k` -- such a run is guaranteed to
+   return a witness, so its cost is wasted if the goal was a refutation.
+   Concretely: `z(11,17;3) >= 94` means a `--decide 94` run at `k = 11` can
+   never legitimately come back UNSAT, so `95` is the smallest target at that
+   level worth attempting. `test_lower_bound_forbids_refutation_at_that_target`
+   exhibits the 94-edge matrix rather than caching the number, so the claim
+   stays falsifiable.
 
-   - `z(11,17;3) >= 94` means **`--decide 94` at `k = 11` cannot come back
-     UNSAT** — a 94-edge graph demonstrably exists. So the smallest target
-     with any chance of refutation is `95`.
-   - `z(16,17;3) <= 134` via the density chain requires `z(11,17;3) <= 94`,
-     i.e. exactly `z(11,17;3) = 94`. Combined with the bracket above, the
-     `k = 11` route reaches `134` **if and only if** the lower bound is
-     tight — and the `k = 9, 10` shortfalls are direct evidence that
-     tightness is not to be assumed.
-   - The three jobs launched on this basis (`--decide 95/96/97`) would
-     therefore resolve `z(11,17;3)` exactly, since the bracket has only four
-     values in it.
+### What the density chain does with these numbers
 
-   **Update after the literature check (see the section above).**
-   `z(11,17;3) = 96` is published, twice. So `--decide 95` can only return
-   SAT and was killed as subsumed; the surviving pair `--decide 96` (expect
-   SAT, handing us our own 96-edge witness) and `--decide 97` (expect
-   EXHAUSTED, giving `<= 96`) still pin the value exactly, now as a
-   **self-contained re-derivation of a published result** rather than a new
-   one. The `134` row of the table below is unreachable.
+The chain step `f(j) <= max{e : e - floor(e/j) <= f(j-1)}` is pure
+arithmetic and is computed and asserted in this PR
+(`test_density_chain_table_in_the_log_is_correct`), so the mapping below is
+**[VERIFIED HERE]** as arithmetic. What is *not* verified here is any claim
+about which row is the true one -- that depends on the value of
+`z(11,17;3)`, which this PR only has **[CITED]**.
 
-   Chain values for each outcome, computed from
-   `f(j) <= max{e : e - floor(e/j) <= f(j-1)}` (divisor 8 throughout this
-   range, so the propagation is 1:1 from `k = 11` to `k = 16`):
+| if `z(11,17;3) =` | then the chain gives `z(16,17;3) <=` |
+|---|---|
+| 97 | 137 |
+| 96 | 136 |
+| 95 | 135 |
+| 94 | 134 |
 
-   | if `z(11,17;3) =` | then chain gives `z(16,17;3) <=` | status |
-   |---|---|---|
-   | 97 | 137 | already proved self-contained |
-   | **96** | **136** | **the real value** — the best this route can give |
-   | 95 | 135 | unreachable (a 96-edge graph exists) |
-   | 94 | 134 | unreachable |
-
-   So the `k = 11` route's true ceiling is `z(16,17;3) <= 136`, one better
-   than we have, and it cannot do better no matter how much compute is
-   spent at that level. Improving past `136` requires going to `k = 12`.
+On the **[CITED]** value `96`, the `k = 11` route's ceiling is
+`z(16,17;3) <= 136`, and no amount of compute at that level improves it --
+improving past `136` requires going to `k = 12`. Stated as a conditional
+because its input is a citation, not a result of this PR.
 
 ## Reproducing
 
