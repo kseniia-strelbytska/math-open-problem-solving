@@ -121,6 +121,116 @@ resting on the same published computation whose independence is the point.
 Which of the two this project delivers is a fact about the eventual
 enumeration code, not something this document can assert in advance.
 
+## The `n = 17` column below `k = 13`, read cell by cell
+
+The document above covers the `k >= 13` cells and `(16,17)`. This section
+records the rest of the column, because several of this project's own results
+sit there and their novelty cannot be assessed without it.
+
+**Source and method.** Collins–Riasanovsky–Wallace–Radziszowski,
+*Zarankiewicz Numbers and Bipartite Ramsey Numbers*, arXiv:1604.01257;
+published as J. Algorithms and Computation **47**(1) (2016) 63–78,
+DOI 10.22059/jac.2016.7943. **Table 4** ("Bounds on Zarankiewicz numbers
+`z(m, n; 3)`"). Markings were read by extracting the PDF content streams and
+resolving the embedded font for each digit — the same method that established
+the `(16,17)` cell is italic `PJYSJE+CMTI10`, and reproducing that known
+result was used to confirm column alignment before reading anything new.
+
+Their legend, verbatim:
+
+> "A boldfaced entry is an exact value. A superscript ∗ indicates that there
+> exists a unique (m, n, z(m, n; s))ₛ-graph. A superscript † indicates that
+> there is also a unique (m, n, z(m, n; s)−1)ₛ-graph. An italicized entry
+> indicates that the bound or value was determined with exhaustive
+> computations. Otherwise, an undecorated number indicates that the bound was
+> obtained by using Lemmas 2, 3 and 4, and without exhaustive enumeration."
+
+Cross-check source: Jeremy Tan, *An attack on Zarankiewicz's problem through
+SAT solving*, arXiv:2203.02283, **Table 3**. His legend: "A bold value is
+exact, proven by the methods in this paper; other values are the upper bounds
+given by theorem 2.2." **Tan's non-bold entries are his own generic bound,
+not best-known**, so a non-bold Tan entry never contradicts a tighter Collins
+value.
+
+| cell | Collins Table 4 | marking | Tan Table 3 | status |
+|---|---|---|---|---|
+| `z(9,17;3)`  | **81**  | **boldface**, no ∗ | **81** bold | exact, **two independent proofs** |
+| `z(10,17;3)` | **90**  | **boldface + ∗** (unique extremal graph) | **90** bold | exact, two independent proofs |
+| `z(11,17;3)` | **96**  | **boldface**, no ∗ | **96** bold | exact, two independent proofs |
+| `z(12,17;3)` | **103** | **boldface + ∗** (unique extremal graph) | 108 (non-bold — Tan's own generic bound, *weaker*, not a contradiction) | exact **per Collins only** — see below |
+
+**A limitation of their convention worth knowing.** Only three number fonts
+are embedded on that page: `CMBX10` (bold), `CMTI10` (italic), `CMR10`
+(roman). There is **no bold-italic**. So an entry can be marked *either*
+"exact" *or* "obtained by exhaustive computation", never both — and therefore
+**for a bold entry the marking says it is exact but says nothing about how it
+was obtained.**
+
+Their own text draws the line at `k = 13` (immediately before the
+Acknowledgment): "The interested reader may note other weak-looking bounds in
+Table 4, such as for z(k, 17; 3) for 13 ≤ k ≤ 17." That is consistent with
+`k <= 12` being exact in this column.
+
+### `z(12,17;3) = 103` has never been independently re-proved
+
+This is the one cell in the column where a genuine contribution is available,
+and it is worth stating carefully:
+
+- **Collins et al. publish it as exact with a unique extremal graph** (bold
+  + ∗).
+- **Tan's method did not reach it.** His Table 3 shows `108`, his own generic
+  Theorem 2.2 bound, which is *weaker* than `103` and so is not a second
+  opinion on the value.
+- **Davies, Gill & Horsley** (arXiv:2411.18842, *Discrete Mathematics* 2025)
+  have no entry at `(12,17)`; their Table 2 covers `m = 13, 14, 15, 16` in
+  this column only.
+- **Bhan, Nobili & Langer** (arXiv:2605.01120, May 2026) treat the cell as
+  **open**, `102 <= z <= 108`. Their stated sources are Tan and
+  Davies–Gill–Horsley, **not** Collins — which is exactly why the cell looks
+  open to them.
+- **Hou** (arXiv:2608.08549, Aug 2026) *depends* on it, stating that "the
+  only external mathematical dependency in the exceptional upper-bound
+  argument is the published uniqueness of the (12, 17, 103) extremal graph",
+  and quoting Collins' entry verbatim: "Table 4 of Collins et al. [2] records
+  z(12, 17; 3) = 103 and marks the extremal (12, 17, 103) graph as unique up
+  to isomorphism."
+
+So: **a single 2016 source asserts it, a 2026 paper's result rests on it, and
+a 2026 paper lists the same cell as open.** If Collins' entry were wrong,
+nothing currently in the literature would catch it, and Hou's
+`z(12,18;3) = 108` would inherit the error.
+
+That makes the first independent confirmation of `z(12,17;3) = 103` a
+worthwhile target under acceptance criterion **(D)**, and it is why this
+project is spending compute at `k = 12`.
+
+### Correction to this document's own earlier statement about `z(13,17;3)`
+
+An earlier section of this file states that `z(13,17;3) = 110` "remains
+open". That was correct with respect to **Collins et al. alone**, where the
+cell is *italic* (exhaustive computation) and **not** bold, i.e. a bound
+never claimed exact. It is **now out of date**: Hou (arXiv:2608.08549,
+9 Aug 2026), *Seven Exact Finite Zarankiewicz Numbers from a Single 13×18
+Core*, proves `z(13,17;3) = 110` exactly, along with `z(12,18;3) = 108`,
+`z(13,18;3) = 116`, `z(14,17;3) = 118`, `z(14,18;3) = 124`,
+`z(15,17;3) = 126`, `z(15,18;3) = 132`.
+
+The earlier sentence is left in place rather than edited away, since a reader
+tracing this project's reasoning chronologically will find claims that
+depended on it; this correction is the authoritative version.
+
+### `z(8,17;3)` — deliberately not recorded
+
+This project proved `z(8,17;3) = 74` from scratch. **The corresponding
+Collins Table 4 cell has not been read**, so nothing is recorded here for it.
+It is left explicitly blank rather than guessed, and the project's own value
+is presented as of unknown novelty until this gap is closed.
+
+Note for whoever closes it: `74` breaks the `9k` pattern that holds at
+`k = 9` (81) and `k = 10` (90), since `9 * 8 = 72`. If the published entry
+reads `72`, that is a **disagreement to investigate**, and the first
+suspicion should fall on our own generator rather than on the table.
+
 ## Approaches confirmed *not* to work for this cell
 
 - **LP / ILP relaxation bounds are too weak.** Roman's bound (S. Roman,
