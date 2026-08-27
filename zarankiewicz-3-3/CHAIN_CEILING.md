@@ -22,10 +22,13 @@ every test run.
 **Theorem B's hypothesis is not yet discharged here, and this is stated up
 front rather than buried.** The best `16x16` lower bound this project can
 produce from its own verified data is exactly **126** — one edge short of
-what Theorem B needs. The published value is `z(16,16;3) = 128`, which would
-discharge it comfortably, but that is a citation, and this project's
-standard is not to rest a result on one. See "The column route, and the one
-edge we are missing" below for what was tried and what it would take.
+what Theorem B needs. A value of `z(16,16;3) = 128` has been referred to in
+this project as published, and would discharge the hypothesis comfortably --
+but **no source for it has ever been established here**: no paper, no table,
+no row or column. Under this project's own charter it is therefore an
+**unverified assumption**, not a citation, and it discharges nothing. See
+"The column route, and the one edge we are missing" below for what was tried
+and what it would take.
 
 So the combined claim "*the* density chain cannot reach 133" is **fully
 proved for the row direction and conditional for the column direction**. It
@@ -152,13 +155,18 @@ repeated.
 **What would discharge the hypothesis.** Any one of:
 
 1. An explicit 127-edge `K_{3,3}`-free `16x16` matrix, verified here. This is
-   the cheapest and most likely route — the published `z(16,16;3) = 128`
-   implies such a matrix exists, so this is a search problem, not an open
-   one.
+   the most direct route. (If `z(16,16;3) = 128` is true, such a matrix
+   certainly exists and this is a search problem rather than an open one --
+   but that value is an unverified assumption here, so the route's difficulty
+   is genuinely unknown to us.)
 2. An exhaustive refutation of `z(16,16;3) <= 126` by the project's own
    generator.
-3. Accepting the published `z(16,16;3) = 128` as an input, which discharges
-   it immediately but makes the combined claim conditional on a citation.
+3. Establishing a precise citation for `z(16,16;3)` at the standard used
+   elsewhere in this repo (paper, table, row/column). That would discharge
+   the hypothesis, at the cost of making the combined claim rest on a
+   citation rather than on our own verification. Simply *asserting* `128`
+   without such a citation -- which an earlier version of this document did
+   -- is not an option.
 
 Until one of these lands, this document claims Theorem A unconditionally and
 Theorem B conditionally, and does **not** claim that the density chain as a
@@ -254,9 +262,11 @@ false), the picture for the density-chain route is now closed:
   `m=11`, and independently bold in Tan arXiv:2203.02283 Table 3. So `134`
   is **not reachable via `k = 11` at all**. See the entry-level map below,
   which replaces this bullet's guesswork with the complete answer.
-- `z(16,17;3) <= 133` is **unreachable** by the chain, twice over: by this
-  theorem at the top of the chain, and by the `f(11) >= 94` floor at the
-  bottom.
+- `z(16,17;3) <= 133` is **unreachable** by a row-deleting chain: Theorem A
+  settles the top of the chain unconditionally, from our own witness. The
+  additional "no entry point reaches it either" claim is conditional on the
+  inputs tabulated in the entry-level map, several of which this PR does not
+  establish -- see the provenance column there.
 
 ### The entry-level map: how deep you must go for each target
 
@@ -267,20 +277,29 @@ The answer is fully determined by arithmetic plus the known values, and it
 is worth tabulating because it says exactly how deep the expensive
 computation has to go.
 
-Starting the chain at level `k` from that level's true value:
+**Every value fed into this map carries its provenance**, because the map is
+only as good as its inputs and they are on four different footings. Labels
+as used elsewhere in this repo:
 
-| start at `k` | true `z(k,17;3)` | chain yields `z(16,17;3) <=` |
-|---|---|---|
-| 9  | 81  | 144 |
-| 10 | 90  | 144 |
-| 11 | 96  | **136** |
-| 12 | 103 | **135** |
-| 13 | 110 | **134** |
-| 14 | 118 | 134 |
-| 15 | 126 | 134 |
+- **[VERIFIED HERE]** — from a matrix or computation in this PR's reach.
+- **[CITED]** — precise source given, landed in this repository.
+- **[CITED, NOT LANDED]** — precise source given, but not yet recorded in
+  this repo's own `LITERATURE.md`.
+- **[NOT ESTABLISHED]** — this repo does not support the value.
+
+| start at `k` | value used | provenance | chain yields `z(16,17;3) <=` |
+|---|---|---|---|
+| 9  | 81  | **[NOT ESTABLISHED]** in this PR (proved by this project on an unmerged branch) | 144 |
+| 10 | 90  | **[NOT ESTABLISHED]** in this PR (same) | 144 |
+| 11 | 96  | **[CITED]** — Collins et al. arXiv:1604.01257 Table 4, row `m=11` col `n=17`, boldface; also Tan arXiv:2203.02283 Table 3 | **136** |
+| 12 | 103 | **[CITED, NOT LANDED]** — Collins et al. Table 4, row `m=12` col `n=17`, boldface + superscript `*`; not recorded in this repo's `LITERATURE.md` | **135** |
+| 13 | 110 | **[NOT ESTABLISHED]** — this repo's `LITERATURE.md` states `z(13,17;3) = 110` **remains open** (that cell is *italic* = "exhaustive computations", not bold = exact) | **134** |
+| 14 | 118 | **[CITED]** — Afrasyab arXiv:2608.08154, exact, per landed `LITERATURE.md` | 134 |
+| 15 | 126 | **[CITED]** — Afrasyab arXiv:2608.08154, exact; lower half **[VERIFIED HERE]** by our 126-edge witness | 134 |
 
 Equivalently, the shallowest level from which each target is reachable at
-all:
+all (arithmetic **[VERIFIED HERE]**; which rows are *true* depends on the
+provenance column above):
 
 | target | reachable from | blocked at |
 |---|---|---|
@@ -289,19 +308,31 @@ all:
 | `<= 134` | `k >= 13` | `k <= 12` |
 | **`<= 133`** | **nowhere** | **every level `k = 9 .. 15`** |
 
-**This strengthens Theorem A.** Theorem A shows the final step cannot
-deliver `133`. The last row here shows more: *no entry point* into the chain
-delivers `133`. At every level from 9 to 15, the input the chain would need
-is strictly below that level's true value — `<= 109` at `k = 13` against a
-true `110`, `<= 117` at `k = 14` against `118`, `<= 125` at `k = 15` against
-`126`, and so on down. Each of those inputs is false, so each such chain is
-unsound.
+**How much of the strengthening actually stands.** Theorem A shows the final
+step cannot deliver `133`. The last row above says more — *no entry point*
+delivers it — because at every level the input the chain would need is
+strictly below that level's value: `<= 109` at `k = 13` against `110`,
+`<= 117` at `k = 14` against `118`, `<= 125` at `k = 15` against `126`, and
+so on down.
 
-The row-based part of that strengthening carries the same caveat as
-Theorem A about the transposed step, and the entries for `k <= 12` lean on
-published values (`96`, `103`) rather than on values proved here. The
-`k = 15` entry — the one that matters, and the only one Theorem A itself
-needs — rests on our own verified 126-edge witness.
+But that conclusion is only as strong as the weakest input it uses, so:
+
+- **The `k = 15` row is the one that matters, and it is the solid one.** It
+  needs only `z(15,17;3) >= 126`, which is **[VERIFIED HERE]** from our own
+  witness. This is exactly Theorem A, and it stands unconditionally.
+- The `k = 14` row is **[CITED]** and landed.
+- The `k = 11` row is **[CITED]** and landed.
+- The `k = 12`, `13` rows and the `k = 9, 10` rows are **not** on that
+  footing. So the sweeping phrase "no entry point reaches 133" is
+  **conditional** on those inputs and is not asserted unconditionally here.
+
+An earlier version of this document presented the whole map as settled fact.
+That repeated, in a different file, exactly the defect a reviewer had already
+caught on the PR below this one — in particular asserting `110` as a true
+value when this repo's own `LITERATURE.md` says that cell is open. Same
+error, second occurrence: the lesson is that a table of numbers with no
+provenance column is the shape the mistake takes, so the column is now
+mandatory here.
 
 **What this changes operationally.** It converts a vague "go deeper" into a
 priced menu:
@@ -372,10 +403,12 @@ rather than quietly fixed.
   here.** The arithmetic (`133` reachable iff `z(16,16;3) <= 126`) is as
   solid as Theorem A's and is machine-asserted the same way. The exposure is
   entirely in the premise `z(16,16;3) >= 127`, which this project cannot yet
-  prove — its own best is `126`. Given the published `z(16,16;3) = 128` and
-  that a 127-edge matrix therefore certainly exists, I'd put ~0.97 on the
-  premise being true, but truth is not the standard here: it is undischarged,
-  and the document treats it as such.
+  prove — its own best is `126`. I have seen `z(16,16;3) = 128` referred to
+  as published, which if true would make the premise hold and a 127-edge
+  matrix certain to exist; but no source for it has been established here, so
+  it is an **unverified assumption** and not grounds for a confidence number.
+  The honest statement is that the premise is **undischarged**, and the
+  document treats it as such throughout.
 
 - **The whole "the chain is blocked" story: not claimed.** That would need
   both theorems unconditionally, and one of them isn't. What *is* claimed
