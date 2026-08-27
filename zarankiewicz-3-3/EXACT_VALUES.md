@@ -116,12 +116,28 @@ pytest verify/test_our_witnesses.py        # re-verifies all four witnesses
 
   1. `brute.c`, landed alongside it, is a deliberately independent and
      deliberately simple searcher written to cross-check small cells.
-     `make cross-check` runs the sweep and reports either agreement or the
-     first disagreement; the exact range swept is in the run log below.
-     (An earlier draft of this document said "32 small cells" — a figure
-     carried over from a different sweep in an earlier session, which this
-     PR does not run. Replaced with a pointer to the sweep that is actually
-     here, so the claim cannot go stale against the code.)
+     `make cross-check` sweeps n=4..7, m=3..6, targets 6..24 and compares
+     verdicts. **Result: 144 cells compared, 144 agreed (107 FOUND, 37
+     EXHAUSTED).**
+
+     **This target was broken and is now fixed -- read this before trusting
+     it.** The earlier version invoked `./brute -n $n -m $m --decide $t`, but
+     `brute.c` parses argv *positionally*, so every cell silently ran as
+     `n=0, m=<n>, T=0`. It also grepped brute's output for `status=`, a
+     substring brute never prints. Either bug alone made the target print
+     "agree on every small cell" **unconditionally**, whatever the two
+     programs computed -- and that empty result was cited in this PR as
+     load-bearing evidence. A reviewer found both.
+
+     Guards added so it cannot silently pass again: it counts cells and fails
+     on zero; it fails on a *missing* verdict rather than skipping the cell;
+     and it fails unless **both** FOUND and EXHAUSTED occur in the sweep, so a
+     degenerate range that only ever yields one verdict is rejected.
+
+     The validator was then itself validated: comparing `orderly` at target 18
+     against `brute` at target 16 on `(n=5,m=4)` -- which straddles a genuine
+     verdict boundary -- correctly reports EXHAUSTED vs FOUND. So the check
+     provably distinguishes verdicts rather than being blind.
   2. Every `EXHAUSTED` in the table above is bracketed by a `FOUND` one edge
      below. A search too constrained to find anything would fail to produce
      the witness, and the witness is independently checked. This is the
@@ -129,15 +145,30 @@ pytest verify/test_our_witnesses.py        # re-verifies all four witnesses
      refutations.
   3. `--nocanon` disables the column-canonicity pruning rule for validation.
 
-- **Is `--assume` smuggling in an input?** `orderly` accepts
-  `--assume k:v` to declare `z(k,17;3) <= v` and prints it loudly as a
-  declared assumption. Two of the runs above use `--assume 9:81`, which is
-  **this project's own proved value from the same table**, not a citation,
-  and it can only *tighten* pruning — i.e. it can cause a false `EXHAUSTED`
-  if wrong, never a false `FOUND`. Since `z(9,17;3) = 81` is proved here
-  independently (row 2 of the table, which uses no `--assume` at all), the
-  dependency is internal and acyclic. The `-m 8` and `-m 9` runs use no
-  assumptions.
+- **Is `--assume` smuggling in an input? No -- and not for the reason an
+  earlier version of this document gave.** That version argued at length that
+  `--assume 9:81` "can only tighten pruning, never cause a false FOUND", and
+  that the dependency was internal and acyclic. A reviewer traced the code and
+  found the argument analyses a mechanism that **never runs**:
+
+    * `hassume[]` is read in exactly one place, `hub()` (`orderly.c:211`).
+    * But `suffix_bound()` (`:223`) and the prefix check in `gen()` (`:381`)
+      both select `hval()` -- the *exact* recursive sub-search -- whenever
+      `h_exact && j <= hcap_level`. `h_exact` defaults to 1 and `hcap_level`
+      defaults to `MAXM` = 24.
+    * Every `j` in these runs is `<= 11 <= 24`, and neither `--hmode ub` nor
+      `--hcap` is passed anywhere. So `hub()` is never called, `hassume[]` is
+      never read, and **`--assume` has no effect on any run in this PR.**
+
+  This is *better* for soundness than the argument it replaces: the bounds
+  actually used are exact, so they need no assumption to be valid. The flag is
+  **vestigial here** and is retained in the reproduction commands only so they
+  match the command lines that were actually run. It could be dropped with no
+  change to any result.
+
+  The general lesson is the one this document keeps relearning: an argument
+  about why a mechanism is safe is worthless if the mechanism is not the one
+  in the path. The check is to read the code, not the flag.
 
 - **Degenerate cases.** `--decide 0` and empty targets: an early version of
   a *shell loop* here passed an empty `--decide` argument (zsh does not
@@ -148,12 +179,24 @@ pytest verify/test_our_witnesses.py        # re-verifies all four witnesses
   Recorded because it is a good argument for always asserting the edge count
   and never only the freeness.
 
-- **Reproducibility.** `-m 9 --decide 82` re-run in this session returned
-  EXHAUSTED at **2,412,355 nodes**, matching the archived count from an
-  earlier session exactly. Node counts are the reproducible invariant here;
-  wall-clock and CPU seconds are **not** comparable across sessions (an
-  identical re-run of one `k=11` search took 7,760 s against 3,255 s for the
-  same 32,034,663 nodes, under different load).
+- **Reproducibility.** Two node counts in this PR were reproduced exactly:
+  `-m 8 --decide 75` returned **50,175** from the Makefile-built binary here,
+  and `-m 9 --decide 82` returned **2,412,355**, matching a count archived in
+  an earlier session from a different build.
+
+  An earlier version of this paragraph also cited "32,034,663 nodes" as a
+  re-run of "one k=11 search" while the run-log table gives **32,073,855** for
+  `-m 11 --decide 97`. A reviewer flagged the mismatch. Both figures are
+  correct but they are **different searches**: 32,073,855 is `--decide 97`
+  (this PR), and 32,034,663 is `--decide 99` from an earlier session, which is
+  not landed here. Juxtaposing them read as one number contradicting itself,
+  in the very paragraph arguing that node counts are the trustworthy
+  invariant. The unlanded figure is removed rather than explained, since it
+  cannot be checked from this PR.
+
+  Wall-clock is deliberately not tabulated: the same k=11 search took 7,760 s
+  in one session and 3,255 s in another for an identical node count, so
+  seconds carry no information here.
 
 ## The step I am least confident in
 

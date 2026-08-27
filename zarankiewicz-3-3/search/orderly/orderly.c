@@ -1,7 +1,7 @@
 /* orderly.c -- bottom-up isomorph-reduced exhaustive generation for
  * z(m,n;3) = max edges of an m x n bipartite graph with no K_{3,3}.
  *
- * See ORDERLY_LOG.md in this directory for the full soundness argument for
+ * See SOUNDNESS.md in this directory for the full soundness argument for
  * every pruning / canonicity rule used here. Summary of the rules, each
  * justified there:
  *
