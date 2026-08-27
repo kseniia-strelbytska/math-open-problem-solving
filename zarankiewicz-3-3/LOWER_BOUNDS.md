@@ -15,6 +15,11 @@ this repo yields, with no search at all:
 | 14 | 118 | **yes** |
 | 15 | 126 | **yes** |
 
+The sweep stops at `k = 15` because `k = 16` would only reproduce
+`z(16,17;3) >= 132` from the 16-row witness already in
+`data/known_witnesses/` -- a bound that directory's `SOURCES.md` already
+documents, and which is not what this module is for.
+
 Every number in the second column is produced by this PR's code from a
 matrix in this PR's data directory, and re-checked by the three-detector
 checker on every test run. **Nothing else in this document is on that
@@ -271,5 +276,5 @@ because its input is a citation, not a result of this PR.
 ```
 cd zarankiewicz-3-3
 python verify/lower_bounds.py      # prints the table above
-pytest verify/test_lower_bounds.py # 16 passed, 3 skipped (18-column witnesses)
+pytest verify/test_lower_bounds.py # 23 passed, 3 skipped (18-column witnesses)
 ```
