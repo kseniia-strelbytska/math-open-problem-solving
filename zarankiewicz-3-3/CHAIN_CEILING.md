@@ -10,43 +10,29 @@
 > **Sharpness.** `z(16,17;3) <= 134` *is* reachable that way, so `134` is
 > the row chain's exact ceiling for this cell, and it is attained.
 >
-> **Theorem B (column deletion) — now UNCONDITIONAL.** A chain whose final
-> step deletes a *column* (`16x17 -> 16x16`) reaches `133` only from
-> `z(16,16;3) <= 126`. And `z(16,16;3) >= 128`, by the explicit
-> `Z_4 x Z_4` translate construction in `verify/constructions.py`
-> (8-regular, 128 edges, checker-verified). So that route fails too.
->
-> **Corollary — now UNCONDITIONAL.** No sound density chain proves
-> `z(16,17;3) <= 133`, by either final step. Its exact ceiling for this cell
-> is `134`, and it is attained.
+> **Theorem B (column deletion; conditional).** A chain whose final step
+> deletes a *column* (`16x17 -> 16x16`) reaches `133` only from
+> `z(16,16;3) <= 126`. So it too fails **provided `z(16,16;3) >= 127`.**
 
 Theorem A needs nothing but this repository: the lemma is re-derived below,
 and the one fact it consumes is a 126-edge `K_{3,3}`-free `15x17` matrix
 that `verify/checker.py` re-verifies with three independent detectors on
 every test run.
 
-**Theorem B's hypothesis is now discharged, by construction rather than by
-citation.** Earlier versions of this document reported it as an open gap: the
-best `16x16` lower bound obtainable by deleting a column from our 132-edge
-`16x17` witness is exactly **126**, one edge short of the **127** Theorem B
-needs, and 1,020 greedy-augmentation runs all saturated at 126.
+**Theorem B's hypothesis is not yet discharged here, and this is stated up
+front rather than buried.** The best `16x16` lower bound this project can
+produce from its own verified data is exactly **126** — one edge short of
+what Theorem B needs. A value of `z(16,16;3) = 128` has been referred to in
+this project as published, and would discharge the hypothesis comfortably --
+but **no source for it has ever been established here**: no paper, no table,
+no row or column. Under this project's own charter it is therefore an
+**unverified assumption**, not a citation, and it discharges nothing. See
+"The column route, and the one edge we are missing" below for what was tried
+and what it would take.
 
-The fix was to stop searching and look for structure. `128 = 8 * 16` suggests
-an 8-regular graph, and 8-regular objects of this kind usually come from a
-group. Indexing rows and columns by `Z_4 x Z_4` and taking each row as a
-translate of a fixed 8-element subset gives **96** distinct `K_{3,3}`-free
-solutions, every one re-verified by `verify/checker.py` as a 128-edge
-`16x16` graph, 8-regular in both directions. See
-`verify/constructions.py`.
-
-`128 >= 127`, so **both Theorem B and the corollary below are now
-unconditional**, and the combined claim "*the* density chain cannot reach
-133" holds outright.
-
-**What remains cited.** This establishes only `z(16,16;3) >= 128`. The
-*exact* value would need `z(16,16;3) <= 128` as well; `-n 16 -m 16
---decide 129` is running for that. Nothing in this document depends on the
-exact value — Theorem B needs only the lower bound.
+So the combined claim "*the* density chain cannot reach 133" is **fully
+proved for the row direction and conditional for the column direction**. It
+is not asserted unconditionally anywhere in this document.
 
 ## Definitions
 
@@ -145,13 +131,7 @@ Doing so:
 So the column route reaches `133` **iff** `z(16,16;3) <= 126`, and is
 blocked exactly when `z(16,16;3) >= 127`.
 
-**Superseded: we can now prove `z(16,16;3) >= 128`.** The paragraphs below
-record the column-deletion route that fell one edge short, and are kept
-because the failed attempt is the reason the algebraic route was tried at
-all. The gap they describe is **closed** — see
-`verify/constructions.py` and the summary above.
-
-**What column deletion alone gives: `z(16,16;3) >= 126`. Exactly one short.**
+**What we can prove ourselves: `z(16,16;3) >= 126`. Exactly one short.**
 
 Column deletion is monotone for the same reason row deletion is, so deleting
 any column from our verified 132-edge `16x17` witness gives a `K_{3,3}`-free
@@ -167,18 +147,10 @@ threshold value, and therefore **does not block the column route**.
 
 **What was tried to close the gap, and failed.** Greedy edge augmentation
 with 60 randomised restarts on each of the 17 possible column deletions
-(1,020 runs): every one saturated at **126**, never reaching 127.
-
-**What worked instead, and the lesson.** Not a better search — a different
-question. Asking "can I push this 126-edge graph to 127?" kept failing;
-asking "what would a 128-edge graph *look like*?" answered immediately, since
-`128 = 8 * 16` forces 8-regularity and that points at a group action. The
-search space went from `2^256` matrices to `C(16,8) = 12,870` subsets.
-
-Notably the group choice was decisive rather than incidental: `Z_16`
-(circulant) and `(Z_2)^4` (XOR) both give **zero** 8-regular solutions, and
-only `Z_4 x Z_4` works. Two of the three obvious choices fail, so this was
-not a case where any reasonable structure would have done.
+(1,020 runs): every one saturated at **126**, never reaching 127. That is a
+negative search result, not a proof — a better search, or a different seed
+witness, may well find 127. It is recorded so the attempt is not silently
+repeated.
 
 **What would discharge the hypothesis.** Any one of:
 
