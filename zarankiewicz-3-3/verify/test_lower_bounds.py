@@ -149,19 +149,24 @@ def test_k_equals_m_and_k_equals_one_behave():
     assert len(rows_one) == 1
 
 
-def test_k_14_and_k_15_bounds_match_the_cited_exact_values():
-    """The two rows that ARE tight, per Afrasyab arXiv:2608.08154.
+def test_k_13_14_15_bounds_match_the_cited_exact_values():
+    """The three rows that ARE tight, per the landed literature.
 
-    The comparison values are CITED, not derived here -- LITERATURE.md
-    (already merged) records that Afrasyab proves Z(14,17,3,3) = 118 and
-    Z(15,17,3,3) = 126 as exact. What this test pins is that OUR lower bound
+    The comparison values are CITED, not derived here. LITERATURE.md (already
+    merged) records that Afrasyab arXiv:2608.08154 proves Z(14,17,3,3) = 118
+    and Z(15,17,3,3) = 126 exactly, and that Hou arXiv:2608.08549 proves
+    z(13,17;3) = 110 exactly. What this test pins is that OUR lower bound
     equals them, which is the half this PR supplies.
+
+    k=13 was added after the literature PR merged: an earlier round of this
+    PR asserted 110 as exact with no source, which was a real error even
+    though the value turned out correct.
 
     Added because a reviewer noted that deleting the whole comparison column
     threw out these two correct, properly-sourced conclusions along with the
     three bad ones -- trading an overclaim for an underclaim.
     """
-    CITED_EXACT = {14: 118, 15: 126}
+    CITED_EXACT = {13: 110, 14: 118, 15: 126}
     best = lb.best_known_lower_bounds()
     for k, v in CITED_EXACT.items():
         assert best[k] == v, (

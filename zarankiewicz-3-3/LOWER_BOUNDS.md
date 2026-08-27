@@ -77,28 +77,29 @@ of the honest version of the old "shortfall" narrative, and it is enough for
 the operational conclusion in the last section: these bounds must not be
 read as tight.
 
-### Two rows ARE certified exact, and deleting the column obscured that
+### Three rows ARE certified exact, and deleting the column obscured that
 
 A reviewer pointed out that the previous fix over-corrected. The comparison
-column was deleted because three of its seven entries were bad — but two of
-them, `k = 14` and `k = 15`, were never in question and have precise
+column was deleted because three of its seven entries were bad — but three of
+them — `k = 13`, `k = 14` and `k = 15` — are not in question and have precise
 citations *already landed in this repository*:
 
-> `LITERATURE.md` (merged in the PR this one stacks on) states that Afrasyab,
-> arXiv:2608.08154 (Aug 2026), proves `Z(14,17,3,3) = 118` and
-> `Z(15,17,3,3) = 126` as **exact** values. `data/known_witnesses/SOURCES.md`
-> records that `z14_17_118_witness.csv` and `z15_17_126_witness.csv` were
-> copied from that same paper's repository, at a pinned commit, and
-> re-verified here.
+> `LITERATURE.md`, already merged, records that Afrasyab arXiv:2608.08154
+> (Aug 2026) proves `Z(14,17,3,3) = 118` and `Z(15,17,3,3) = 126` as **exact**
+> values, and that Hou arXiv:2608.08549 (Aug 2026) proves
+> `z(13,17;3) = 110` exactly. `data/known_witnesses/SOURCES.md` records that
+> `z14_17_118_witness.csv` and `z15_17_126_witness.csv` were copied from
+> Afrasyab's own repository, at a pinned commit, and re-verified here.
 
 Combining that with this PR's own output:
 
 | `k` | row-deletion bound | published exact value | conclusion |
 |---|---|---|---|
+| 13 | `110` **[VERIFIED HERE]** | `110` **[CITED**: Hou arXiv:2608.08549**]** | **`z(13,17;3) = 110`**, lower half verified here |
 | 14 | `118` **[VERIFIED HERE]** | `118` **[CITED**: Afrasyab arXiv:2608.08154**]** | **`z(14,17;3) = 118`**, lower half verified here |
 | 15 | `126` **[VERIFIED HERE]** | `126` **[CITED**: Afrasyab arXiv:2608.08154**]** | **`z(15,17;3) = 126`**, lower half verified here |
 
-So at these two cells the row-deletion bound is **tight**, and this PR
+So at these **three** cells the row-deletion bound is **tight**, and this PR
 supplies the lower half of the exactness claim from a matrix checked here
 rather than from a citation — which is precisely the first stated purpose of
 this module. The general caution below ("never read `>= b_k` as `= b_k`")
