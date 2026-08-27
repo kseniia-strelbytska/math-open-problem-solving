@@ -72,6 +72,41 @@ of the honest version of the old "shortfall" narrative, and it is enough for
 the operational conclusion in the last section: these bounds must not be
 read as tight.
 
+### Two rows ARE certified exact, and deleting the column obscured that
+
+A reviewer pointed out that the previous fix over-corrected. The comparison
+column was deleted because three of its seven entries were bad — but two of
+them, `k = 14` and `k = 15`, were never in question and have precise
+citations *already landed in this repository*:
+
+> `LITERATURE.md` (merged in the PR this one stacks on) states that Afrasyab,
+> arXiv:2608.08154 (Aug 2026), proves `Z(14,17,3,3) = 118` and
+> `Z(15,17,3,3) = 126` as **exact** values. `data/known_witnesses/SOURCES.md`
+> records that `z14_17_118_witness.csv` and `z15_17_126_witness.csv` were
+> copied from that same paper's repository, at a pinned commit, and
+> re-verified here.
+
+Combining that with this PR's own output:
+
+| `k` | row-deletion bound | published exact value | conclusion |
+|---|---|---|---|
+| 14 | `118` **[VERIFIED HERE]** | `118` **[CITED**: Afrasyab arXiv:2608.08154**]** | **`z(14,17;3) = 118`**, lower half verified here |
+| 15 | `126` **[VERIFIED HERE]** | `126` **[CITED**: Afrasyab arXiv:2608.08154**]** | **`z(15,17;3) = 126`**, lower half verified here |
+
+So at these two cells the row-deletion bound is **tight**, and this PR
+supplies the lower half of the exactness claim from a matrix checked here
+rather than from a citation — which is precisely the first stated purpose of
+this module. The general caution below ("never read `>= b_k` as `= b_k`")
+therefore has two explicit exceptions, and they are named rather than left
+under a blanket warning.
+
+**Why this needed a reviewer to catch.** The previous round's finding was
+that the comparison column mixed verified, cited, and unverifiable numbers in
+identical formatting. Deleting the whole column removed the defect but also
+removed two true, properly-sourced conclusions — trading an overclaim for an
+underclaim. Both are errors; the second is just quieter. The fix is per-row
+labelling, which is what the rest of this document already does.
+
 ### The `8k+6` reading is the wrong model — restated without the unlanded values
 
 The original argument here leaned on `z(9,17;3) = 81` and `z(10,17;3) = 90`
@@ -151,8 +186,12 @@ the two methods agree, which is the actual check on the reasoning.
   deciding. A random 12x17 version does the same where `K_{3,3}`s are
   plentiful.
 - **Boundary cases.** `k = m` (delete nothing) and `k = 1` (a single row)
-  are included in the sweep and behave. `k > m` raises rather than silently
-  returning something.
+  are included in the sweep and behave. `k > m` and `k = 0` raise rather than
+  silently returning something — now actually covered by
+  `test_out_of_range_k_raises`. (An earlier version of this document listed
+  that bullet under "each now a test" when no test passed an out-of-range
+  `k` at all. The behaviour was real; the coverage claim was not. A reviewer
+  caught the mismatch.)
 - **The transposition trap.** A bug that selected *columns* while believing
   they were rows would still produce `K_{3,3}`-free matrices with plausible
   edge counts, so the checker alone would not catch it — what it would

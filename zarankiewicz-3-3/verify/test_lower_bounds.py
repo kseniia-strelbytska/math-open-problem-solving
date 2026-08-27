@@ -116,6 +116,60 @@ def test_deleting_columns_is_not_what_this_module_does():
         assert all(len(r) == n for r in sub), "column count changed -- transposition bug"
 
 
+def test_out_of_range_k_raises():
+    """`k > m` and `k < 1` must raise, not return something plausible.
+
+    This test exists because a reviewer noticed the document listed this
+    boundary under "each now a test" while no test actually passed an
+    out-of-range k. The behaviour was already correct; the coverage claim was
+    false. Silently returning a bound for k > m would be the dangerous
+    failure -- a caller would get a number for a subgraph that cannot exist.
+    """
+    matrix = lb.load_matrix(WITNESS_FILES[0])
+    m = len(matrix)
+    for bad in (m + 1, m + 5, 0, -1):
+        with pytest.raises(ValueError):
+            lb.best_k_row_subgraph(matrix, bad)
+
+
+def test_k_equals_m_and_k_equals_one_behave():
+    """The in-range boundaries, asserted rather than assumed.
+
+    k = m must return every row (the full edge count) and k = 1 must return
+    the maximum single row degree.
+    """
+    matrix = lb.load_matrix(WITNESS_FILES[0])
+    m = len(matrix)
+    total = sum(sum(r) for r in matrix)
+    edges_all, rows_all = lb.best_k_row_subgraph(matrix, m)
+    assert edges_all == total
+    assert sorted(rows_all) == list(range(m))
+    edges_one, rows_one = lb.best_k_row_subgraph(matrix, 1)
+    assert edges_one == max(sum(r) for r in matrix)
+    assert len(rows_one) == 1
+
+
+def test_k_14_and_k_15_bounds_match_the_cited_exact_values():
+    """The two rows that ARE tight, per Afrasyab arXiv:2608.08154.
+
+    The comparison values are CITED, not derived here -- LITERATURE.md
+    (already merged) records that Afrasyab proves Z(14,17,3,3) = 118 and
+    Z(15,17,3,3) = 126 as exact. What this test pins is that OUR lower bound
+    equals them, which is the half this PR supplies.
+
+    Added because a reviewer noted that deleting the whole comparison column
+    threw out these two correct, properly-sourced conclusions along with the
+    three bad ones -- trading an overclaim for an underclaim.
+    """
+    CITED_EXACT = {14: 118, 15: 126}
+    best = lb.best_known_lower_bounds()
+    for k, v in CITED_EXACT.items():
+        assert best[k] == v, (
+            f"row-deletion bound at k={k} is {best[k]}, cited exact value is "
+            f"{v} -- if these ever differ, one of them is wrong"
+        )
+
+
 def test_bounds_are_monotone_in_k():
     """z(k,17;3) >= b_k with b_k nondecreasing: adding a row cannot lose edges."""
     for path in WITNESS_FILES:
