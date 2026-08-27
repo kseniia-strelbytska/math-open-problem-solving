@@ -1,0 +1,401 @@
+"""The exact ceiling of the density-lemma chain, and why it stops at 134.
+
+This module formalises one negative result and one corollary about it. Both
+are self-contained: they need nothing but the density lemma (restated and
+re-derived below) and the 126-edge `15x17` witness this repo re-verifies.
+
+## The inference rule
+
+Write `z(m,n) := z(m,n;3,3)` for the maximum number of edges in a
+`K_{3,3}`-free bipartite graph with `m` rows and `n` columns.
+
+**Density lemma** (Collins-Riasanovsky-Wallace-Radziszowski, *Zarankiewicz
+Numbers and Bipartite Ramsey Numbers*, arXiv:1604.01257, Lemma 3;
+re-derived here so the argument does not depend on the citation). Let `G` be
+`K_{3,3}`-free on `m x n` with `e` edges. Its minimum row degree `d` is at
+most the mean `e/m`, and being an integer, at most `floor(e/m)`. Deleting
+that row leaves a `K_{3,3}`-free `(m-1) x n` graph with `e - d >= e -
+floor(e/m)` edges. Hence
+
+    e - floor(e/m)  <=  z(m-1, n).
+
+Hypotheses, each checked rather than assumed:
+
+1. `m >= 2`. A row must exist to delete, and at `m = 1` the rule is
+   *vacuous* rather than merely weak (`e - floor(e/1) = 0 <= z(0,n) = 0` for
+   every `e`), so no maximum exists. `density_ceiling` rejects `m < 2`; see
+   its own docstring.
+2. `G` is `K_{3,3}`-free, and deletion preserves that — this is
+   row-deletion monotonicity, machine-checked by exhaustion in
+   `test_lower_bounds.py`.
+3. `d <= floor(e/m)`: a minimum is at most a mean, and degrees are
+   integers. No further structure needed.
+
+Read as an inference rule, from an upper bound `z(m-1,n) <= B` it licenses
+
+    z(m,n)  <=  CEIL(B, m)  :=  max{ e : e - floor(e/m) <= B }.
+
+`CEIL` is exactly what `density_ceiling` computes. This is the *only* rule
+the "chain" (the `z_bound` style of argument: pure arithmetic from a table
+of lower levels, no enumeration) has available at the top step.
+
+## The negative result
+
+**Theorem A (row deletion).** No sound chain whose final step deletes a
+*row* proves `z(16,17) <= 133` — regardless of how much computation is spent
+at levels `k <= 15`, and even if every value there is determined exactly.
+
+**Theorem B (column deletion), conditional.** The problem is symmetric under
+transposition, so a final step may instead delete a *column*, giving
+`e - floor(e/17) <= z(16,16)`. That route reaches `133` iff
+`z(16,16) <= 126`, so it fails **provided `z(16,16) >= 127`**. This project
+can currently prove only `z(16,16) >= 126` from its own data — exactly one
+edge short. See `theorem_133_column_route` and `CHAIN_CEILING.md`.
+
+Theorem A was originally written without the "row" qualifier, which was an
+error: it silently assumed the transposed step away. The qualifier is not
+cosmetic, and the column analysis is not a formality — our own bound lands
+precisely on the threshold, so the column route is genuinely open on
+self-contained data.
+
+*Proof.* Whatever the chain does below, its final step must apply the rule
+at `m = 16` to some upper bound `B` on `z(15,17)`, and must obtain
+`CEIL(B,16) <= 133`. Now `CEIL(126,16) = 134`, because `134 - floor(134/16)
+= 134 - 8 = 126 <= 126` while `135 - 8 = 127 > 126`. Since `CEIL` is
+nondecreasing in `B`, obtaining `CEIL(B,16) <= 133` forces `B <= 125`.
+
+But `z(15,17) >= 126`: this repo contains an explicit 126-edge `K_{3,3}`-free
+`15x17` matrix, re-verified by three independent detectors. So `B <= 125` is
+not a true upper bound on `z(15,17)`, and any chain asserting it is unsound.
+Hence no sound chain reaches `133`. []
+
+The bound `z(16,17) <= 134` *is* reachable, and by the same computation is
+the exact ceiling: **the density chain's limit for this cell is 134, and it
+is attained.**
+
+## The corollary — and it splits into an unconditional and a conditional half
+
+The 2016 paper tabulates `133` for this cell, and separately describes an
+arithmetic `z_bound` algorithm chaining its Lemmas 2-4 over a table of lower
+levels. That algorithm has **two** possible final steps for this cell, and
+they are on different footings:
+
+- **Row step — ruled out unconditionally.** By Theorem A it would need
+  `z(15,17) <= 125`, and `126` is witnessed by a matrix verified here.
+- **Column step — ruled out only conditionally.** It would need
+  `z(16,16) <= 126`, so ruling it out requires `z(16,16) >= 127`, which this
+  project has **not** established (its own best is exactly `126`).
+
+**Therefore the combined claim "their `133` must have come from exhaustive
+computation" is NOT asserted.** It requires the undischarged premise.
+
+An earlier version of this docstring stated that combined claim
+unconditionally, while `CHAIN_CEILING.md` in the same commit stated it
+correctly — so the two contradicted each other, and the docstring carried the
+stronger, false-as-stated version. That is the *same* row/column scoping error
+this module narrates catching for Theorem A itself, reappearing in the
+corollary; a reviewer found it. No test inspects docstring prose, so nothing in
+CI would have caught it. See `CHAIN_CEILING.md` for the authoritative wording,
+which this section is now aligned to.
+
+**What still stands unconditionally, and is worth having.** The row half alone
+agrees with the project's earlier *typographic* evidence for the same
+conclusion: the paper's legend distinguishes bold (exact) from italic
+(exhaustive computation) from upright (lemmas only), and the embedded PDF font
+for the `133` cell was found to be `PJYSJE+CMTI10`, i.e. italic. One argument
+is about a PDF's fonts; the other is about arithmetic and needs no access to
+the paper. They agree on the row step, and that convergence is the durable
+part.
+
+**Scope.** Nothing here establishes that `133` is correct, nor that the 2016
+exhaustive computation was correct. The upper bound remains uncertified by
+anyone — which is why this project treats certifying it as a target rather
+than an input.
+
+## Where the chain is tight, and where it is not
+
+Running `CEIL` on the values this project proved (`z(9,17) = 81`,
+`z(10,17) = 90`) together with the published ones gives a sharp pattern: the
+density lemma is **exactly tight** — gap 0 — at every step where a
+comparison is possible, and has a gap of exactly **1** at `m = 16`. See
+`tight_gaps()` and `CHAIN_CEILING.md`.
+
+That `m = 16` is both the single cell where the cheap method first loses an
+edge and the single cell still open is unlikely to be coincidence: the
+frontier of what is known is sitting exactly where the cheap method stops
+working. It is a suggestive observation and nothing more — it is not
+evidence about the *value* of `z(16,17)`, and this module makes no such
+claim.
+"""
+
+from __future__ import annotations
+
+# Values this project proved from scratch by exhaustive search, with its own
+# witnesses. Not citations.
+PROVED_HERE: dict[int, int] = {9: 81, 10: 90}
+
+# Published values, treated strictly as citations. Used only to *locate* the
+# tight/loose pattern; the theorem above does not depend on any of them.
+PUBLISHED: dict[int, int] = {13: 110, 14: 118, 15: 126, 16: 133}
+
+# The lower bound that carries the whole theorem, backed by
+# data/known_witnesses/z15_17_126_witness.csv and re-verified on every test
+# run. This is the one number the proof actually needs.
+VERIFIED_LOWER_BOUND_15_17 = 126
+
+
+def density_ceiling(bound_below: int, m: int) -> int:
+    """max{e : e - floor(e/m) <= bound_below}: the best the lemma can give.
+
+    Args:
+        bound_below: a valid upper bound on z(m-1, n).
+        m: the number of rows at the level being bounded; must be >= 2.
+
+    **`m = 1` is rejected, and the reason is mathematical, not defensive.**
+    At `m = 1` the expression collapses: `e - floor(e/1) = 0`, which is `<=
+    bound_below` for *every* `e`, so the set has no maximum and the rule
+    carries no information. That is the honest content of the lemma at
+    `m = 1` -- deleting the only row leaves a 0-row graph with 0 edges, and
+    `0 <= z(0,n) = 0` is vacuously true. An earlier version of this function
+    accepted `m = 1` and silently returned the top of its own search window,
+    i.e. a number manufactured by an implementation detail. The boundary
+    test `test_density_ceiling_rejects_vacuous_m_equals_1` found that, which
+    is why it is worth keeping even though the chain never calls `m = 1`.
+
+    For `m >= 2` the maximum exists, and the search window is *derived*
+    rather than guessed. Since `floor(e/m) <= e/m`,
+
+        e - floor(e/m)  >=  e - e/m  =  e * (m-1) / m,
+
+    so any feasible `e` satisfies `e * (m-1)/m <= bound_below`, i.e.
+    `e <= bound_below * m / (m-1)`. The window therefore runs to
+    `bound_below * m // (m-1) + m + 2`, which is that bound plus slack.
+
+    An earlier version used the fixed window `bound_below + 4m + 8`, which is
+    wrong for small `m`: at `m = 2` the true answer is `2 * bound_below`, so
+    the window silently truncated the answer for every `bound_below > 15`.
+    It happened to be correct at `m = 16` -- the only value this project
+    actually uses -- which is exactly why it survived until
+    `test_search_window_never_binds` swept the small-`m` range. A window that
+    is right only where you look is not a window, it is a coincidence.
+    """
+    if m < 2:
+        raise ValueError(
+            f"m must be >= 2, got {m}: at m=1 the density lemma is vacuous "
+            "(e - floor(e/1) = 0 for all e), so no maximum exists"
+        )
+    if bound_below < 0:
+        raise ValueError(f"bound_below must be >= 0, got {bound_below}")
+    window_top = bound_below * m // (m - 1) + m + 2
+    best = None
+    for e in range(0, window_top + 1):
+        if e - e // m <= bound_below:
+            best = e
+    if best is None:
+        raise AssertionError(f"no admissible e for bound_below={bound_below}, m={m}")
+    return best
+
+
+def max_input_for_target(target: int, m: int) -> int | None:
+    """Largest B with density_ceiling(B, m) <= target, or None if none exists.
+
+    This is the quantity the theorem turns on: what the chain would *need*
+    to know one level down in order to reach `target`.
+    """
+    admissible = [
+        B for B in range(1, target + 2) if density_ceiling(B, m) <= target
+    ]
+    return max(admissible) if admissible else None
+
+
+def chain(start_bound: int, start_m: int, end_m: int) -> list[int]:
+    """Propagate a bound upward through the density chain, inclusive of both ends."""
+    if end_m < start_m:
+        raise ValueError(f"end_m={end_m} is below start_m={start_m}")
+    out = [start_bound]
+    v = start_bound
+    for m in range(start_m + 1, end_m + 1):
+        v = density_ceiling(v, m)
+        out.append(v)
+    return out
+
+
+def theorem_133_unreachable() -> dict:
+    """The theorem, as a checkable dict rather than a claim in prose."""
+    needed = max_input_for_target(133, 16)
+    return {
+        "target": 133,
+        "m": 16,
+        "required_bound_on_z15_17": needed,
+        "verified_lower_bound_on_z15_17": VERIFIED_LOWER_BOUND_15_17,
+        "required_bound_is_false": needed is not None
+        and needed < VERIFIED_LOWER_BOUND_15_17,
+        "ceiling_from_true_value": density_ceiling(VERIFIED_LOWER_BOUND_15_17, 16),
+    }
+
+
+# Best 16x16 lower bound this project can produce from its OWN verified data:
+# delete a minimum-degree (6) column from the verified 132-edge 16x17 witness.
+# Exactly one short of what theorem_133_column_route needs.
+#
+# NOT "the unique" such column: the witness's column degrees are
+# [8,6,8,8,8,9,8,9,8,8,6,8,6,8,8,8,8] -- THREE columns have degree 6 (indices
+# 1, 10, 12), not one. An earlier comment here said "unique", which was simply
+# wrong; deleting any of the three gives 126 edges, so the value is unaffected,
+# but the wording was false and a reviewer caught it. Recorded because the
+# degree sequence had already been printed in this project before the word
+# "unique" was written -- the data was in hand and I did not read it.
+VERIFIED_LOWER_BOUND_16_16 = 126
+
+# An UNVERIFIED ASSUMPTION, not a citation.
+#
+# This project has repeatedly seen "z(16,16;3) = 128" referred to as a
+# published value, but no precise source for it has been established here --
+# no paper, no table, no row/column, and nothing at the PDF-glyph level of
+# rigour applied to the (11,17)=96 and (16,17)=133 cells. Under this
+# project's charter ("No citation without certainty ... mark it an unverified
+# assumption rather than asserting it") it must therefore be treated as an
+# assumption, and the name says so.
+#
+# Consequence: NOTHING unconditional may rest on this. The corollary about
+# the 2016 authors' algorithm has a column-deletion half that does depend on
+# it, and that half is stated conditionally in CHAIN_CEILING.md for exactly
+# this reason.
+UNVERIFIED_ASSUMED_16_16 = 128
+
+
+def theorem_133_column_route() -> dict:
+    """The transposed final step: delete a column, 16x17 -> 16x16.
+
+    Theorem A silently assumed the chain's last step deletes a row. It need
+    not: the problem is symmetric under transposition, so
+    `e - floor(e/17) <= z(16,16)` is an equally valid final step, and it has
+    to be ruled out separately. This function does that analysis and reports
+    honestly whether our own data suffices (it does not, by one edge).
+    """
+    needed = max_input_for_target(133, 17)
+    return {
+        "target": 133,
+        "n": 17,
+        "required_bound_on_z16_16": needed,
+        "verified_lower_bound_on_z16_16": VERIFIED_LOWER_BOUND_16_16,
+        # The decisive question: is our own bound strong enough to falsify
+        # the required input? 126 <= 126 means NO -- exactly at the threshold.
+        "blocked_by_our_own_data": needed is not None
+        and needed < VERIFIED_LOWER_BOUND_16_16,
+        "blocked_if_z16_16_at_least": (needed + 1) if needed is not None else None,
+        # Named to make the epistemic status unmissable at every use site.
+        "unverified_assumed_16_16_would_block": needed is not None
+        and needed < UNVERIFIED_ASSUMED_16_16,
+        "ceiling_from_unverified_assumption": density_ceiling(
+            UNVERIFIED_ASSUMED_16_16, 17
+        ),
+    }
+
+
+# True values for the n=17 column. 81 and 90 were proved from scratch in this
+# project; 96, 103, 110, 118, 126 are published (Collins et al. 2016 Table 4,
+# boldface = exact; 96 independently bold in Tan arXiv:2203.02283 Table 3).
+# Used ONLY for the entry-level map, which is explicitly labelled as leaning
+# on published values except at k=15.
+TRUE_VALUES_17: dict[int, int] = {
+    9: 81, 10: 90, 11: 96, 12: 103, 13: 110, 14: 118, 15: 126,
+}
+
+
+def entry_level_map(target: int = 133, top: int = 16) -> list[dict]:
+    """For each level k: what the chain needs there, and whether that is true.
+
+    Theorem A rules out `target` by inspecting the chain's last step. This
+    asks the stronger question -- can ANY entry point into the chain reach
+    it? -- by comparing, at each level, the input the chain would require
+    against that level's true value.
+    """
+    rows = []
+    for k in sorted(TRUE_VALUES_17):
+        if k >= top:
+            continue
+        needed = None
+        for B in range(1, 4 * target + 8):
+            v = B
+            for m in range(k + 1, top + 1):
+                v = density_ceiling(v, m)
+            if v <= target:
+                needed = B
+        true_value = TRUE_VALUES_17[k]
+        rows.append(
+            {
+                "k": k,
+                "required_input": needed,
+                "true_value": true_value,
+                # Reachable iff the required input is not already falsified
+                # by the true value at that level.
+                "reachable": needed is not None and needed >= true_value,
+                "chain_from_true_value": chain(true_value, k, top)[-1],
+            }
+        )
+    return rows
+
+
+def tight_gaps() -> list[dict]:
+    """For each m where both z(m-1,17) and z(m,17) are known: the chain's gap."""
+    known = {**PROVED_HERE, **PUBLISHED}
+    rows = []
+    for m in sorted(known):
+        if m - 1 not in known:
+            continue
+        ceiling = density_ceiling(known[m - 1], m)
+        rows.append(
+            {
+                "m": m,
+                "input": known[m - 1],
+                "chain_ceiling": ceiling,
+                "true_value": known[m],
+                "gap": ceiling - known[m],
+                "input_proved_here": (m - 1) in PROVED_HERE,
+            }
+        )
+    return rows
+
+
+def main() -> None:
+    t = theorem_133_unreachable()
+    print("THEOREM A (row deletion): a row-deleting chain cannot prove "
+          "z(16,17;3) <= 133")
+    print(f"  to reach 133 at m=16, the chain needs z(15,17;3) <= "
+          f"{t['required_bound_on_z15_17']}")
+    print(f"  but a verified witness gives  z(15,17;3) >= "
+          f"{t['verified_lower_bound_on_z15_17']}")
+    print(f"  required input is false: {t['required_bound_is_false']}")
+    print(f"  the chain's actual ceiling here is z(16,17;3) <= "
+          f"{t['ceiling_from_true_value']}, and it is attained\n")
+
+    print("Sensitivity of the m=16 step to its input:")
+    for B in range(122, 130):
+        print(f"  z(15,17) <= {B}  ->  z(16,17) <= {density_ceiling(B, 16)}")
+
+    c = theorem_133_column_route()
+    print("\nTHEOREM B (conditional): the transposed final step, 16x17 -> 16x16")
+    print(f"  to reach 133 that way, the chain needs z(16,16;3) <= "
+          f"{c['required_bound_on_z16_16']}")
+    print(f"  our own verified lower bound is z(16,16;3) >= "
+          f"{c['verified_lower_bound_on_z16_16']}  <-- exactly the threshold")
+    print(f"  blocked by our own data: {c['blocked_by_our_own_data']} "
+          f"(would need z(16,16;3) >= {c['blocked_if_z16_16_at_least']})")
+    print(f"  IF z(16,16;3) = {UNVERIFIED_ASSUMED_16_16} (an UNVERIFIED "
+          f"assumption -- no source established here) it would block it,")
+    print(f"  giving z(16,17) <= {c['ceiling_from_unverified_assumption']}. "
+          f"Nothing unconditional rests on this.\n")
+
+    print("Where the chain is tight (gap 0) and where it loses edges:")
+    for row in tight_gaps():
+        src = "proved here" if row["input_proved_here"] else "published"
+        print(
+            f"  m={row['m']:2d}: from z({row['m']-1},17) = {row['input']:3d} "
+            f"({src:11s}) -> chain <= {row['chain_ceiling']:3d} ; "
+            f"true {row['true_value']:3d} ; gap {row['gap']}"
+        )
+
+
+if __name__ == "__main__":
+    main()
