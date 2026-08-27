@@ -29,6 +29,15 @@ EXPECTED = {
     "z9_17_81.csv": (9, 17, 81),
     "z10_17_90.csv": (10, 17, 90),
     "z11_17_96.csv": (11, 17, 96),
+    # Not an n=17 cell, and not from the generator: this one comes from the
+    # Z_4 x Z_4 translate construction in verify/constructions.py, and it
+    # establishes z(16,16;3) >= 128, which discharges Theorem B's hypothesis
+    # in CHAIN_CEILING.md. Registered here because this file's
+    # test_no_unexpected_witness_files guard requires every CSV in the
+    # directory to carry an explicit claim -- and that guard is what caught its
+    # omission. Its construction-specific properties (biregularity, membership
+    # in the 96-solution family) are tested in test_constructions.py.
+    "z16_16_128.csv": (16, 16, 128),
 }
 
 
