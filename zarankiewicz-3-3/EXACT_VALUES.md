@@ -31,27 +31,36 @@ labels are the ones this repo uses elsewhere, and they are mandatory in any
 table here that mixes derived and external values:
 
 - **[VERIFIED HERE]** — derived by code and data in this PR.
-- **[CITED, NOT LANDED]** — precise source given, but **not** recorded in
-  this repo's own `LITERATURE.md`, so a reader of this repository cannot
-  check it without fetching the paper.
+- **[CITED]** — precise source given (paper, table, row, column, and the
+  legend convention that gives the marking its meaning) **and** recorded in
+  this repo's own `LITERATURE.md`, so a reader can check it here.
 - **[NOT CHECKED]** — we have not read the source for this cell.
 
 | cell | our result | published status | label |
 |---|---|---|---|
 | `z(8,17;3) = 74`  | **[VERIFIED HERE]** | **we have not read this cell.** A literature query is outstanding. | **[NOT CHECKED]** |
-| `z(9,17;3) = 81`  | **[VERIFIED HERE]** | Collins–Riasanovsky–Wallace–Radziszowski, arXiv:1604.01257 (J. Algorithms and Computation 47(1) (2016) 63–78), **Table 4**, row `m=9` col `n=17`, **boldface** = "an exact value" per their legend; also **boldface** in Tan arXiv:2203.02283 **Table 3** | **[CITED, NOT LANDED]** |
-| `z(10,17;3) = 90` | **[VERIFIED HERE]** | same table, row `m=10`, **boldface + superscript `*`** ("a superscript `*` indicates that there exists a unique `(m,n,z(m,n;s))_s`-graph"); also **boldface** in Tan Table 3 | **[CITED, NOT LANDED]** |
-| `z(11,17;3) = 96` | **[VERIFIED HERE]** | same table, row `m=11`, **boldface**; also **boldface** in Tan Table 3 | **[CITED, NOT LANDED]** |
+| `z(9,17;3) = 81`  | **[VERIFIED HERE]** | Collins–Riasanovsky–Wallace–Radziszowski, arXiv:1604.01257 (J. Algorithms and Computation 47(1) (2016) 63–78), **Table 4**, row `m=9` col `n=17`, **boldface** = "an exact value" per their legend; also **boldface** in Tan arXiv:2203.02283 **Table 3** | **[CITED]** |
+| `z(10,17;3) = 90` | **[VERIFIED HERE]** | same table, row `m=10`, **boldface + superscript `*`** ("a superscript `*` indicates that there exists a unique `(m,n,z(m,n;s))_s`-graph"); also **boldface** in Tan Table 3 | **[CITED]** |
+| `z(11,17;3) = 96` | **[VERIFIED HERE]** | same table, row `m=11`, **boldface**; also **boldface** in Tan Table 3 | **[CITED]** |
 
-**On the `[CITED, NOT LANDED]` label, and why it is used here rather than
-plain `[CITED]`.** These three citations are precise — paper, table, row,
-column, and the legend convention that gives the marking its meaning — and
-they came from a glyph-level reading of the embedded PDF fonts. But none of
-them is recorded in this repo's `LITERATURE.md`, which currently covers the
-`k >= 13` cells and the `(16,17)` cell only. Until they are, a reader who
-trusts nothing but this repository cannot check them. Landing them in
-`LITERATURE.md` is a separate, small change and is deliberately not bundled
-into this PR.
+**Correction to an earlier version of this section.** These three rows were
+labelled `[CITED, NOT LANDED]`, on the stated grounds that "none of them is
+recorded in this repo's `LITERATURE.md`, which currently covers the `k >= 13`
+cells and the `(16,17)` cell only."
+
+**That was false, and a `grep` refutes it.** `LITERATURE.md` has a section
+"The `n = 17` column below `k = 13`" whose table gives exactly these three
+cells — plus `z(12,17;3) = 103` — with the same two sources cited here
+(Collins et al. arXiv:1604.01257 Table 4 with row and column, and Tan
+arXiv:2203.02283 Table 3), marked "exact, two independent proofs".
+
+Why the error happened, since it is instructive: the label was written before
+the literature PR merged, and correct at that moment. **I landed that PR
+myself and never re-checked the label afterwards.** A provenance label is a
+claim about repository state, so it goes stale exactly when the repository
+changes — which is the one moment nobody re-reads it. The labels are now
+`[CITED]`, and the same staleness was found by the same `grep` in
+`CHAIN_CEILING.md` (see below).
 
 **Nothing in this PR's own claims depends on any of them.** The four exact
 values are established entirely by the witnesses in `data/our_witnesses/`
@@ -253,7 +262,7 @@ different load, so seconds carry no information here.
 
 ### Independence cross-check
 
-`make cross-check` sweeps `n = 4..7`, `m = 3..6`, targets `6..20` and
+`make cross-check` sweeps `n = 4..7`, `m = 3..6`, targets `6..24` and
 compares `orderly`'s verdict against `brute`'s on every cell. Both are built
 from separate sources with no shared helpers, precisely so that agreement
 means something. Current status: **agree on every cell tried, in both

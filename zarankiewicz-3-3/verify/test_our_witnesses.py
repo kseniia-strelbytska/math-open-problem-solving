@@ -152,3 +152,71 @@ def test_74_is_two_above_the_9k_line():
     edges = sum(sum(row) for row in matrix)
     assert edges == 74
     assert edges - 9 * 8 == 2
+
+
+def test_provenance_labels_match_the_actual_literature_file():
+    """A [CITED] label must be true of LITERATURE.md as it stands right now.
+
+    This test exists because the same defect occurred three times. A provenance
+    label is a claim about repository *state*, so it goes stale precisely when
+    the repository changes -- and that is the one moment nobody re-reads it.
+    Concretely: these rows were labelled [CITED, NOT LANDED] on the grounds
+    that LITERATURE.md did not record them. That was true when written, then
+    the literature PR landed those exact cells (written by the same author),
+    and the label was never revisited. A reviewer refuted it with a grep.
+
+    So: for every cell this document labels [CITED], LITERATURE.md must
+    actually contain it. And the document must not claim any of them is absent.
+    """
+    root = Path(__file__).resolve().parent.parent
+    lit = (root / "LITERATURE.md").read_text()
+    doc = (root / "EXACT_VALUES.md").read_text()
+
+    # Cells EXACT_VALUES.md presents as [CITED] must be present in LITERATURE.md.
+    for cell, value in (("z(9,17;3)", "81"), ("z(10,17;3)", "90"),
+                        ("z(11,17;3)", "96")):
+        assert cell in lit, f"{cell} labelled [CITED] but absent from LITERATURE.md"
+        # and with the right value on the same line
+        line = next(l for l in lit.splitlines() if cell in l and value in l)
+        assert value in line, f"{cell} in LITERATURE.md without value {value}"
+
+    # The stale scope sentence must not come back.
+    forbidden = [
+        "covers the `k >= 13` cells and the `(16,17)` cell only",
+        "none of them is recorded in this repo's `LITERATURE.md`",
+    ]
+    for phrase in forbidden:
+        idx = doc.find(phrase)
+        while idx != -1:
+            window = doc[max(0, idx - 500):idx + 300]
+            assert ("was false" in window or "Correction" in window
+                    or "earlier version" in window), (
+                f"EXACT_VALUES.md asserts {phrase!r} without marking it as a "
+                "retracted claim -- LITERATURE.md does record those cells"
+            )
+            idx = doc.find(phrase, idx + 1)
+
+
+def test_cross_check_sweep_range_is_stated_consistently():
+    """Every statement of the sweep range must match the Makefile.
+
+    A prior round flagged '6..20' against the Makefile's actual '6..24'. That
+    fix patched only the GitHub PR description, leaving the landed file wrong
+    -- the same 'fixed the site I was pointed at' failure this project keeps
+    hitting. Pinned here so the file and the Makefile cannot drift.
+    """
+    root = Path(__file__).resolve().parent.parent
+    makefile = (root / "search" / "orderly" / "Makefile").read_text()
+    targets = [t for t in ("6", "8", "10", "12", "14", "16", "18", "20", "24")
+               if t in makefile]
+    assert "24" in targets, "Makefile no longer sweeps up to 24"
+    n_cells = 4 * 4 * len(targets)
+    for fname in ("EXACT_VALUES.md", "search/orderly/SOUNDNESS.md"):
+        text = (root / fname).read_text()
+        if "cross-check" not in text:
+            continue
+        assert "6..20" not in text, f"{fname} still says targets 6..20"
+        if "144 cells" in text:
+            assert n_cells == 144, (
+                f"Makefile now yields {n_cells} cells but {fname} says 144"
+            )
